@@ -1,4 +1,4 @@
-from question_maker_custom import *
+from backend.helpers import question_maker_custom as qmc
 from random import randint, choice, uniform
 import math
 import json
@@ -38,15 +38,15 @@ def populate_text(input_constants, question_text):
 			input_counter += 1
 		else:
 			result_string += next_word + " "
-
 	return result_string.strip()
+
 
 def get_new_question_instance(question_template):
 	input_type = question_template["input_type"]
 	if input_type == "custom":
-		return get_new_question_instance_custom(question_template)
+		return qmc.get_new_question_instance_custom(question_template)
 	else:
-		return get_new_question_instance_uncustom(question_template):
+		return get_new_question_instance_uncustom(question_template)
 
 
 def get_new_question_instance_uncustom(question_template):

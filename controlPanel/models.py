@@ -14,3 +14,6 @@ class Quiz(models.Model):
 	question_json = models.TextField()
 	course_ids = models.TextField(null=True)
 	created_on =  models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		db_table = "quizzes"

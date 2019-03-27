@@ -1,0 +1,6 @@
+[client]
+database = giokharc_essential_training_app
+host = giokhar.com
+user = giokharc_eta
+password = 12345679
+default-character-set = utf8

@@ -11,9 +11,41 @@ class Student(models.Model):
 class Quiz(models.Model):
 	id = models.AutoField(primary_key=True)
 	title = models.CharField(max_length=255)
-	question_json = models.TextField()
+	question_json = models.TextField(null=True)
 	course_ids = models.TextField(null=True)
 	created_on =  models.DateTimeField(auto_now_add=True)
 
 	class Meta:
 		db_table = "quizzes"
+
+class Course(models.Model):
+	id = models.AutoField(primary_key=True)
+	title = models.CharField(max_length=255)
+	hashes_json = models.TextField(null=True)
+	created_on =  models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		db_table = "courses"
+
+class QuestionTemplate(models.Model):
+	id = models.AutoField(primary_key=True)
+	type = models.CharField(max_length=255)
+	hashes_json = models.TextField(null=True)
+	created_on =  models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		db_table = "question_templates"
+
+class QuizLog(models.Model):
+	id = models.AutoField(primary_key=True)
+	student_hash = models.CharField(max_length=255)
+	quiz_id = models.IntegerField(null=True)
+	results_json = models.TextField(null=True)
+	num_questions = models.IntegerField(null=True)
+	num_incorrect = models.IntegerField(null=True)
+	start_time =  models.DateTimeField(null=True)
+	end_time = models.DateTimeField(null=True)
+
+	class Meta:
+		db_table = "quiz_logs"
+

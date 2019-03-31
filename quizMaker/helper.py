@@ -3,14 +3,15 @@ import math
 
 VARIABLE_LOW_RANGE = 0
 VARIABLE_HIGH_RANGE = 10
+
+#input example: ["asdfads", "$a", "$b=a"]
 #Parses the qeustion and returns a tuple containing two arrays:
 #input_array and output_command_array
-def parse_the_question(question_as_string):
+def parse_the_question(question_list):
 	input_array = []
 	output_command_array = []
-	question_to_list = question_as_string.split()
 
-	for next_word in question_to_list:
+	for next_word in question_list:
 		#it means that a varible is present
 		if next_word[0] == '$':
 			if len(next_word) > 2 and next_word[2] == '=':
@@ -20,7 +21,6 @@ def parse_the_question(question_as_string):
 				input_variable = next_word[1:]
 				input_array.append(input_variable)
 	return (input_array, output_command_array)
-
 
 #Checks if the user hasn't entered any malicious code.
 def isSafe(code):
@@ -34,11 +34,33 @@ def isSafe(code):
 		return False
 	return True
 
+def produce_new_question_instance(question_list):
+	lists = parse_the_question(question_list)
+	input_output_variables = produce_new_question_variables(lists[0], lists[1])
+	input_variables = input_output_variables[0]
+	output_variables = input_output_variables[1]
+
+	result_string = ""
+	input_counter = 0
+
+	for next_word in question_list:
+		#it means that a variable is present
+		if next_word[0] == '$':
+			if len(next_word) > 2 and next_word[2] == '=':
+				result_string += "$"
+
+			else:
+				result_string += str(input_variables[input_counter])
+				input_counter +=1
+		else:
+			result_string += next_word
+
+	return (result_string.strip(), output_variables)
 
 # input example:input_array = ['a', 'b', 'c', 'd', 'e']
 # output_command_array = ["math.sqrt(b+c)", "c+d"]
 
-def produce_new_question_instance(input_array, output_command_array):
+def produce_new_question_variables(input_array, output_command_array):
 	output_array = [0] * len(output_command_array)
 	#traverses through the input array
 	#and assigns random values from (VARIABLE_LOW_RANGE, VARIABLE_HIGH_RANGE)
@@ -67,7 +89,7 @@ def produce_new_question_instance(input_array, output_command_array):
 
 	return (input_array, output_array)  
 
-
+print(produce_new_question_instance(["The first number is ", "$a", ". The second one is ", "$b", ". The output should be ", "$c= b + a"]))
 #Example:
 # x = parse_the_question("The first variable is $a4 and the second is $b , return $g=a4+b ")
 # print(produce_new_question_instance(x[0], x[1]))

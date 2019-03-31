@@ -31,7 +31,7 @@ class Course(models.Model):
 class QuestionTemplate(models.Model):
 	id = models.AutoField(primary_key=True)
 	type = models.CharField(max_length=255)
-	hashes_json = models.TextField(null=True)
+	template_json = models.TextField(null=True)
 	created_on =  models.DateTimeField(auto_now_add=True)
 
 	class Meta:

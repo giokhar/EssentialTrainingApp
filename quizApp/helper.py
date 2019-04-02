@@ -32,3 +32,15 @@ def get_nats(how_many,a,b):
         raise ValueError("Natural numbers may not be negative. Please check the given range.")
     else:
         return (random.randint(a,b) for i in range(how_many))
+
+def get_numbers(*args,numeric_type = "real"):
+    numeric_type = numeric_type.lower()
+    if numeric_type == "real":
+        reals = get_reals(*args)
+        return reals
+    if numeric_type == "natural":
+        nats = get_nats(*args)
+        return nats
+    if numeric_type == "integer":
+        ints = get_ints(*args)
+        return ints

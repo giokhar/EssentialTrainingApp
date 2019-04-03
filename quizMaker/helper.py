@@ -34,28 +34,35 @@ def isSafe(code):
 		return False
 	return True
 
-def produce_new_question_instance(question_list):
-	lists = parse_the_question(question_list)
-	input_output_variables = produce_new_question_variables(lists[0], lists[1])
-	input_variables = input_output_variables[0]
-	output_variables = input_output_variables[1]
+def produce_new_question_instance(question_id):
+	#question_template = get_question_template(question_id)
+	question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"], "input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
+
+	# lists = parse_the_question(question_template)
+
+	input_variables = question_template["inputs"]
+	output_variables = question_template["outputs"]
+	text = question_template["text"].split()
+	output_template = question_template["output_template"]
+
+
+	input_output_constants = produce_new_question_variables(input_variables, output_variables)
+
+	input_constants = input_output_constants[0]
+	output_constants = input_output_constants[1]
 
 	result_string = ""
 	input_counter = 0
 
-	for next_word in question_list:
+	for next_word in text:
 		#it means that a variable is present
-		if next_word[0] == '$':
-			if len(next_word) > 2 and next_word[2] == '=':
-				result_string += "$"
-
-			else:
-				result_string += str(input_variables[input_counter])
-				input_counter +=1
+		if next_word == '$':
+			result_string += str(input_constants[input_counter])+" " 
+			input_counter += 1
 		else:
-			result_string += next_word
+			result_string += next_word + " "
 
-	return (result_string.strip(), output_variables)
+	return (result_string.strip(), output_template, output_constants)
 
 # input example:input_array = ['a', 'b', 'c', 'd', 'e']
 # output_command_array = ["math.sqrt(b+c)", "c+d"]
@@ -89,7 +96,7 @@ def produce_new_question_variables(input_array, output_command_array):
 
 	return (input_array, output_array)  
 
-print(produce_new_question_instance(["The first number is ", "$a", ". The second one is ", "$b", ". The output should be ", "$c= b + a"]))
+print(produce_new_question_instance(5))
 #Example:
 # x = parse_the_question("The first variable is $a4 and the second is $b , return $g=a4+b ")
 # print(produce_new_question_instance(x[0], x[1]))

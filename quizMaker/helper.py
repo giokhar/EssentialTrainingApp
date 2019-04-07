@@ -96,7 +96,7 @@ def produce_new_question_variables(input_array, output_command_array):
 
 	return (input_array, output_array)  
 
-print(produce_new_question_instance(5))
+# print(produce_new_question_instance(5))
 #Example:
 # x = parse_the_question("The first variable is $a4 and the second is $b , return $g=a4+b ")
 # print(produce_new_question_instance(x[0], x[1]))

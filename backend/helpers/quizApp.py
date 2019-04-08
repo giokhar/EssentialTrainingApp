@@ -7,7 +7,10 @@ modified_question_template = {"input_num": 4, "outputs":["a0+a1", "a0-a1"], "inp
 sample_question = {"input_constants":[50,75],"output_constants":[125 ,-25],"text":"Find 50 + 75 and 50 - 75"}
 ## changes:
 # inputs -> input_num
+##suggested changes:
 # input_values list of lists to list of tuples (not used for now!)
+# output_template -> solution_template
+# suggested, input_type -> numeric_type
 
 #Takes a json question template, and returns a question instance
 def new_question_instance(question_template_json_string):
@@ -17,11 +20,12 @@ def new_question_instance(question_template_json_string):
     input_type = question_template["input_type"]               # unused
     input_ranges = question_template["input_values"]           # unused
     text_template = question_template["text"]
+    solution_template = question_template["output_template"]
 
     input_constants = get_input_constants(input_num)
     output_constants = get_output_constants(input_constants,output_command_array)
     text_constants = populate_text(text_template,input_constants)
-    question_dict = {"text":text_constants,"solution":output_constants}
+    question_dict = {"text":text_constants,"solution":output_constants,"solution_template":solution_template}
     question_json = json.dumps(question_dict)
 
     return question_json

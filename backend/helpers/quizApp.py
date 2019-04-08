@@ -1,22 +1,6 @@
 import json
 import math
 import random
-from controlPanel.models import Quiz, Course, QuestionTemplate, Student
-
-
-def get_quiz(quiz_id):
-	output = {}
-	output['questions'] = {}
-	quiz = Quiz.objects.get(id=quiz_id, is_published=True)
-	question_json = json.loads(quiz.question_json)
-
-	for template_id, correct in question_json.items():
-		output['questions'][get_question(template_id)] = correct
-	return output
-
-
-def get_question(template_id):
-	return QuestionTemplate(id=template_id)
 
 # Get various kinds of numbers
 # TODO:  Implement keyword arguments: isNonZero,
@@ -140,7 +124,7 @@ def produce_new_question_variables(input_array, output_command_array):
 
     return (input_array, output_array)  
 
-print(produce_new_question_instance(5))
+# print(produce_new_question_instance(5))
 #Example:
 # x = parse_the_question("The first variable is $a4 and the second is $b , return $g=a4+b ")
 # print(produce_new_question_instance(x[0], x[1]))

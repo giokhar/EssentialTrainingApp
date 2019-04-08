@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .api import StudentViewSet, QuizViewSet, CourseViewSet, QuestionTemplateViewSet, QuizLogViewSet
+from backend.api import StudentViewSet, QuizViewSet, CourseViewSet, QuestionTemplateViewSet, QuizLogViewSet
 
 router = routers.DefaultRouter()
 router.register('api/students', StudentViewSet, 'students')

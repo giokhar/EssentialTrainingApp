@@ -3,7 +3,7 @@ import math
 import json
 
 question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"], "input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
-modified_question_template = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
+modified_question_template = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_range":[1,100]}
 sample_question = {"text": "Find the sum and difference of 79.84 and 74.89", "solution": [154.73, 4.95], "solution_template": "A = <154.73, 4.95>"}
 
 ## changes:
@@ -39,11 +39,8 @@ def populate_solution_template(solution_template,solution_constants):
     for char in [x for x in solution_template] :
         if char == '$':
             populated_template += str(next(solution_generator) )
-            # populated_template.append( next(solution_generator)  )
         else:
             populated_template += char
-            # populated_template.append(char)
-
     return populated_template
 
 def populate_text(text_template,input_constants):

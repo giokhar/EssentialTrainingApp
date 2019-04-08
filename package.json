@@ -1,0 +1,24 @@
+{
+  "name": "EssentialTrainingApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiorgiKharshiladze/EssentialTrainingApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GiorgiKharshiladze/EssentialTrainingApp/issues"
+  },
+  "homepage": "https://github.com/GiorgiKharshiladze/EssentialTrainingApp#readme",
+  "devDependencies": {
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  }
+}

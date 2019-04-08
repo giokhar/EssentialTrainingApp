@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./EssentialTrainingApp/frontend/src/index.js --output ./EssentialTrainingApp/frontend/static/main.js",
-    "build": "webpack --mode production ./EssentialTrainingApp/frontend/src/index.js --output ./EssentialTrainingApp/frontend/static/main.js"
+    "dev": "webpack --mode development ./frontend/src/index.js --output ./frontend/static/main.js",
+    "build": "webpack --mode production ./frontend/src/index.js --output ./frontend/static/main.js"
   },
   "repository": {
     "type": "git",

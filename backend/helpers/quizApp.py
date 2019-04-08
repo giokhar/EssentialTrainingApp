@@ -41,7 +41,6 @@ def get_input_constants(number_of_constants,lower_bound = 1, upper_bound = 100, 
     return input_constants
 
 #Takes a list of values and an array of commands, and returns the results of evaluating each expression
-#Currently we are only checking for safety when the import is created, not when it is accessed from the database
 def get_output_constants(input_values ,output_code_array, dec_places = 2 ):
     output_array = []
     how_many = len(input_values)

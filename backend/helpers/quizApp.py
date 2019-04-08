@@ -10,7 +10,7 @@ sample_question = {"input_constants":[50,75],"output_constants":[125 ,-25],"text
 # input_values list of lists to list of tuples (not used for now!)
 
 #Takes a json question template, and returns a question instance
-def get_new_question_instance(question_template_json_string):
+def new_question_instance(question_template_json_string):
     question_template = json.loads(question_template_json_string)
     input_num = question_template["input_num"]                 ###### CHANGED
     output_command_array = question_template["outputs"]

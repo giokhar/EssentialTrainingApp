@@ -3,16 +3,16 @@ import math
 import json
 
 question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"], "input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
-modified_question_template = {"input_num": 4, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
-sample_question = {"input_constants":[50,75],"output_constants":[125 ,-25],"text":"Find 50 + 75 and 50 - 75"}
+modified_question_template = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_values":[[1,100],[100,200]]}
+sample_question = {"text": "Find the sum and difference of 79.84 and 74.89", "solution": [154.73, 4.95], "solution_template": "A = <154.73, 4.95>"}
+
 ## changes:
 # inputs -> input_num
 ##suggested changes:
 # input_values list of lists to list of tuples (not used for now!)
-# output_template -> solution_template
+# output_tempalte -> solution_template
 # suggested, input_type -> numeric_type
 # add a new field for rounding, i.e. number of decimal places for inputs and outputs
-
 
 #Takes a json question template, and returns a question instance
 def new_question_instance(question_template_json):
@@ -25,19 +25,33 @@ def new_question_instance(question_template_json):
     solution_template = question_template["output_template"]
 
     input_constants = get_input_constants(input_num)
-    output_constants = get_output_constants(input_constants,output_command_array)
+    solution_constants = get_output_constants(input_constants,output_command_array)
     text_constants = populate_text(text_template,input_constants)
-    question_dict = {"text":text_constants,"solution":output_constants,"solution_template":solution_template}
+    populated_solution_template = populate_solution_template(solution_template,solution_constants)
+    question_dict = {"text":text_constants,"solution_list":solution_constants,"solution_string":populated_solution_template}
     question_json = json.dumps(question_dict)
 
     return question_json
 
+def populate_solution_template(solution_template,solution_constants):
+    solution_generator = (x for x in solution_constants)
+    populated_template = ""
+    for char in [x for x in solution_template] :
+        if char == '$':
+            populated_template += str(next(solution_generator) )
+            # populated_template.append( next(solution_generator)  )
+        else:
+            populated_template += char
+            # populated_template.append(char)
+
+    return populated_template
+
 def populate_text(text_template,input_constants):
     text_constants = ""
-    inputs = (x for x in input_constants)
+    input_generator = (x for x in input_constants)
     for word in str.split(text_template):
         if word == '$':
-            text_constants += " " + str(next(inputs))
+            text_constants += " " + str(next(input_generator))
         else:
             text_constants += " " + word
     return str(text_constants)

@@ -12,10 +12,10 @@ sample_question = {"input_constants":[50,75],"output_constants":[125 ,-25],"text
 #Takes a json question template, and returns a question instance
 def new_question_instance(question_template_json_string):
     question_template = json.loads(question_template_json_string)
-    input_num = question_template["input_num"]                 ###### CHANGED
+    input_num = question_template["input_num"]                 # CHANGED
     output_command_array = question_template["outputs"]
-    input_type = question_template["input_type"]
-    input_ranges = question_template["input_values"]
+    input_type = question_template["input_type"]               # unused
+    input_ranges = question_template["input_values"]           # unused
     text_template = question_template["text"]
 
     input_constants = get_input_constants(input_num)
@@ -24,12 +24,6 @@ def new_question_instance(question_template_json_string):
     question_dict = {"text":text_constants,"solution":output_constants}
     question_json = json.dumps(question_dict)
 
-    return question_json
-
-#takes fields and packs them into a json object
-def create_question_json(text_constants,output_constants):
-    question_dict = {"text":text_constants,"solution":output_constants}
-    question_json = json.dumps(question_dict)
     return question_json
 
 def populate_text(text_template,input_constants):

@@ -1,6 +1,12 @@
-from .models import Student, Quiz, Course, QuestionTemplate, QuizLog
-from .serializers import StudentSerializer, QuizSerializer, CourseSerializer, QuestionTemplateSerializer, QuizLogSerializer
+# models and serializers
+from controlPanel.models import Student, Quiz, Course, QuestionTemplate, QuizLog
+from controlPanel.serializers import StudentSerializer, QuizSerializer, CourseSerializer, QuestionTemplateSerializer, QuizLogSerializer
+# rest_framework
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import action
+from rest_framework.response import Response
+# helpers directory
+from controlPanel.helpers.api import get_quiz_details_json
 
 class StudentViewSet(viewsets.ModelViewSet):
 	queryset = Student.objects.all()
@@ -15,6 +21,11 @@ class QuizViewSet(viewsets.ModelViewSet):
 		permissions.AllowAny
 	]
 	serializer_class = QuizSerializer
+
+	@action(detail=True)
+	def details(self, request, *args, **kwargs):
+		"""Returns the detailed quiz object for front-end"""
+		return Response(get_quiz_details_json(self.get_object().id))
 
 class CourseViewSet(viewsets.ModelViewSet):
 	queryset = Course.objects.all()

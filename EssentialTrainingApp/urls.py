@@ -19,6 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('djangoAdmin/', admin.site.urls),
     path('', include('controlPanel.urls')),
-    path('', include('quizMaker.urls')),
-    path('', include('quizApp.urls')),
+    # path('', include('quizMaker.urls')),
+    # path('', include('quizApp.urls')),
 ]

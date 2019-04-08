@@ -8,6 +8,9 @@ class Student(models.Model):
 	class Meta:
 		db_table = "students"
 
+	def get_jigrebi():
+		return 5
+
 class Quiz(models.Model):
 	id = models.AutoField(primary_key=True)
 	title = models.CharField(max_length=255)

@@ -11,10 +11,12 @@ sample_question = {"input_constants":[50,75],"output_constants":[125 ,-25],"text
 # input_values list of lists to list of tuples (not used for now!)
 # output_template -> solution_template
 # suggested, input_type -> numeric_type
+# add a new field for rounding, i.e. number of decimal places for inputs and outputs
+
 
 #Takes a json question template, and returns a question instance
-def new_question_instance(question_template_json_string):
-    question_template = json.loads(question_template_json_string)
+def new_question_instance(question_template_json):
+    question_template = json.loads(question_template_json)
     input_num = question_template["input_num"]                 # CHANGED
     output_command_array = question_template["outputs"]
     input_type = question_template["input_type"]               # unused

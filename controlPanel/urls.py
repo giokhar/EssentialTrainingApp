@@ -1,6 +1,7 @@
-from django.urls import path
-from . import views
+from rest_framework import routers
+from .api import StudentViewSet
 
-urlpatterns = [
-	path('admin/', views.index, name = "index")
-]
+router = routers.DefaultRouter()
+router.register('api/students', StudentViewSet, 'students')
+
+urlpatterns = router.urls

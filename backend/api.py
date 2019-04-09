@@ -27,3 +27,7 @@ def hash_generator_view(request, amount, course_id):
 @api_view(["POST"])
 def create_quiz_view(request):
     return Response(post.create_quiz(request.data))
+
+@api_view(['POST'])
+def create_question_template_view(request):
+	return Response(post.create_question_template(request.data))

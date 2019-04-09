@@ -10,3 +10,9 @@ def create_quiz(data):
 	if serializer.is_valid():
 		serializer.save()
 	return {"success":serializer.is_valid()}
+
+def create_question_template(data):
+	serializer = QuestionTemplateSerializer(data=data)
+	if serializer.is_valid():
+		serializer.save()
+	return {"success":serializer.is_valid()}

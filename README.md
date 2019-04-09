@@ -1,9 +1,8 @@
 # Essential Training App
 
 
-
-### POST REQUESTS API -> returns `{"success":True/False}`<br>
 ___
+### POST REQUESTS API -> returns `{"success":True/False}`<br>
 ### Create a new quiz:
 **Callback url:** `/api/create/quiz` with data:<br>
 `
@@ -23,4 +22,4 @@ ___
 	"template_json":"{'inputs':['a','b'], 'outputs':['a+b', 'a-b'], 'input_type':'regular','text':'I have $ apples, somebody gave me $ apples. How many apples do I have?','output_template':'A = <$, $>','input_values':[[1,100],[100,200]]}"
 }
 `<br>
-
+___

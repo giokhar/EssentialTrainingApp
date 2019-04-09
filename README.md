@@ -3,7 +3,7 @@
 
 ___
 ### Following POST Requests return `{"success":True/False}`<br>
-### Create a new quiz:
+* ### Create a new quiz:
 **Callback url:** `/api/create/quiz` with data:<br>
 `
 {
@@ -14,7 +14,7 @@ ___
 }
 `<br>
 
-### Create a new question template:
+* ### Create a new question template:
 **Callback url:** `/api/create/question_template` with data:<br>
 `
 {

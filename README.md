@@ -4,7 +4,7 @@
 
 
 ### Creating a new quiz:
-**Callback url:** `/api/create/quiz` with data:
+**Callback url:** `/api/create/quiz` with data:<br>
 `
 {
 	"title":"New Quiz",

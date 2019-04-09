@@ -2,6 +2,9 @@
 
 ## Front & Back communication
 
+
+### Creating a new quiz:
+**Callback url:** `/api/create/quiz` with data:
 `
 {
 	"title":"New Quiz",

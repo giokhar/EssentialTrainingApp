@@ -1,11 +1,9 @@
 # Essential Training App
 
-## Front & Back communication
-
 
 
 ### POST REQUESTS API -> returns `{"success":True/False}`<br>
----
+___
 ### Create a new quiz:
 **Callback url:** `/api/create/quiz` with data:<br>
 `

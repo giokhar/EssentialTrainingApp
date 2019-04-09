@@ -1,12 +1,9 @@
-from rest_framework import routers
-from backend.api import StudentViewSet, QuizViewSet, CourseViewSet, QuestionTemplateViewSet, QuizLogViewSet
-
-router = routers.DefaultRouter()
-router.register('api/students', StudentViewSet, 'students')
-router.register('api/quizzes',  QuizViewSet, 'quizzes')
-router.register('api/courses',  CourseViewSet, 'courses')
-router.register('api/question_templates', QuestionTemplateViewSet, 'question_templates')
-router.register('api/quiz_logs', QuizLogViewSet, 'quiz_logs')
+from django.conf.urls import url
+from backend import views
 
 
-urlpatterns = router.urls
+urlpatterns = [
+	url(r'^api/students/$', views.StudentList.as_view(), name='student_list_api'),
+	url(r'^api/students/(?P<hash>[0-9]+)/$', views.StudentDetail.as_view(), name='student_details_api'),
+	url(r'^api/quizzes/(?P<quiz_id>[0-9]+)/$', views.QuizDetail.as_view(), name='quiz_details_api'),
+]

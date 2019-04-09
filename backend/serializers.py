@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from backend.models import Student, Quiz, Course, QuestionTemplate, QuizLog
+from backend.models import *
 
 #Student Serializer
 class StudentSerializer(serializers.ModelSerializer):

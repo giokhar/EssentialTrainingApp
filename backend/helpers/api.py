@@ -1,7 +1,15 @@
-from backend.models import Student, Quiz, Course, QuestionTemplate, QuizLog
+from backend.models import *
+from backend.serializers import *
 import json
 
-def get_quiz_details_json(quiz_id):
+
+def get_all_students():
+	return StudentSerializer(Student.objects.all(), many=True).data
+
+def get_student_details(hash):
+	return StudentSerializer(Student.objects.get(pk=hash)).data
+
+def get_quiz_details(quiz_id):
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
 	# TODO: Check if this hash is registered for this course and if this quiz allowed
 	details = {"title":quiz_obj.title, "questions":[],"is_published":quiz_obj.is_published}

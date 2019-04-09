@@ -1,6 +1,6 @@
 from backend.models import *
 from backend.serializers import *
-import json
+import json, time
 
 
 def get_all_students():
@@ -20,12 +20,25 @@ def get_quiz_details(quiz_id):
 
 	return details
 
+def generate_hashes(amount, course_id):
+	"""Generate a json student hashes based on the amount of students(int) and the course_id"""
+	hashes = []
+	my_hash = 0
+	for i in range(amount):
+		my_hash = hash(time.time())
+		serializer = StudentSerializer(data={"hash":my_hash,"course_id":course_id})
+		if serializer.is_valid(): # if data matches all the columns
+			serializer.save() # insert into db
+		hashes.append(my_hash)
+		time.sleep(0.001) # sleep for a bit to let it make the time.time() value unique
+	return {"hashes":hashes,"course_id":course_id}
+
 
 # ================
 # POST REQUESTS
 # ================
-def validate_student_hashes(data):
-	serializer = StudentSerializer(data=data)
-	if serializer.is_valid():
-		serializer.save()
-	return {"success":serializer.is_valid()}
+# def validate_student_hashes(data):
+# 	serializer = StudentSerializer(data=data)
+# 	if serializer.is_valid():
+# 		serializer.save()
+# 	return {"success":serializer.is_valid()}

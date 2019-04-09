@@ -16,3 +16,8 @@ def student_details_view(request, hash):
 @api_view(["GET"])
 def quiz_details_view(request, quiz_id):
 	return Response(api.get_quiz_details(quiz_id))
+
+
+@api_view(["POST"])
+def create_students_view(request):
+    return Response(api.validate_student_hashes(request.data))

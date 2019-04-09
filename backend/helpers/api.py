@@ -19,3 +19,13 @@ def get_quiz_details(quiz_id):
 		details['questions'].append({"template":json.loads(template_obj.template_json),"type":template_obj.type,"amount":amount})
 
 	return details
+
+
+# ================
+# POST REQUESTS
+# ================
+def validate_student_hashes(data):
+	serializer = StudentSerializer(data=data)
+	if serializer.is_valid():
+		serializer.save()
+	return {"success":serializer.is_valid()}

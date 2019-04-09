@@ -13,7 +13,6 @@ class StudentDetail(APIView):
 	def get(self, request, hash):
 		return Response(api.get_student_details(hash))
 
-
 class QuizDetail(APIView):
 	def get(self, request, quiz_id):
 		return Response(api.get_quiz_details(quiz_id))

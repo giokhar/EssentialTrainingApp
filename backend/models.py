@@ -14,7 +14,7 @@ class Quiz(models.Model):
 	title = models.CharField(max_length=255)
 	question_json = models.TextField(null=True)
 	is_published = models.BooleanField(default=False)
-	course_ids = models.TextField(null=True)
+	course_id = models.IntegerField(null=True)
 	created_on =  models.DateTimeField(auto_now_add=True)
 
 	class Meta:
@@ -23,6 +23,7 @@ class Quiz(models.Model):
 class Course(models.Model):
 	id = models.AutoField(primary_key=True)
 	title = models.CharField(max_length=255)
+	semester = models.CharField(max_length=255, null=True) 
 	created_on =  models.DateTimeField(auto_now_add=True)
 
 	class Meta:

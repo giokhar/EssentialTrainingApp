@@ -1,9 +1,10 @@
 from django.conf.urls import url
+from django.urls import path
 from backend import views
 
 
 urlpatterns = [
-	url(r'^api/students/$', views.StudentList.as_view(), name='student_list_api'),
-	url(r'^api/students/(?P<hash>[0-9]+)/$', views.StudentDetail.as_view(), name='student_details_api'),
-	url(r'^api/quizzes/(?P<quiz_id>[0-9]+)/$', views.QuizDetail.as_view(), name='quiz_details_api'),
+	path('api/students/', views.StudentList.as_view()),
+	path('api/students/<str:hash>/', views.StudentDetail.as_view()),
+	path('api/quizzes/<int:quiz_id>/', views.QuizDetail.as_view()),
 ]

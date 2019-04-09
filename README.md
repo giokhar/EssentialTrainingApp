@@ -2,7 +2,7 @@
 
 
 ___
-### Following POST Requests return `{"success":True/False}`<br>
+### Following POST requests return `{"success":True/False}`<br>
 * ### Create a new quiz:
 > **Callback url:** `/api/create/quiz` with data:<br>
 > `
@@ -23,3 +23,7 @@ ___
 }
 `<br>
 ___
+
+### GET requests <br>
+* ### Get quiz details
+> **Callback url:** `/api/quizzes/<int:quiz_id>`

@@ -1,15 +1,15 @@
 from django.conf.urls import url
 from django.urls import path
-from backend import views
+from backend import api
 
 
 urlpatterns = [
 	# GET METHODS
-	path('api/students/', views.student_list_view),
-	path('api/students/<str:hash>/', views.student_details_view),
-	path('api/quizzes/<int:quiz_id>/', views.quiz_details_view),
-	path('api/hashes/<int:amount>/<int:course_id>/', views.hash_generator_view),
+	path('students/', api.student_list_view),
+	path('students/<str:hash>/', api.student_details_view),
+	path('quizzes/<int:quiz_id>/', api.quiz_details_view),
+	path('hashes/<int:amount>/<int:course_id>/', api.hash_generator_view),
 
 	# POST METHODS
-	# path('api/create/students/', views.create_students_view),
+	path('create/quiz', api.create_quiz_view)
 ]

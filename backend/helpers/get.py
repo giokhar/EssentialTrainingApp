@@ -2,14 +2,20 @@ from backend.models import *
 from backend.serializers import *
 import json, time
 
+# * ================ *
+# * GET REQUESTS API *
+# * ================ *
 
-def get_all_students():
+def all_students():
+	"""Return serialized all student objects"""
 	return StudentSerializer(Student.objects.all(), many=True).data
 
-def get_student_details(hash):
+def student_details(hash):
+	"""Return serialized student object by hash"""
 	return StudentSerializer(Student.objects.get(pk=hash)).data
 
-def get_quiz_details(quiz_id):
+def quiz_details(quiz_id):
+	"""Return the JSON of quiz details"""
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
 	# TODO: Check if this hash is registered for this course and if this quiz allowed
 	details = {"title":quiz_obj.title, "questions":[],"is_published":quiz_obj.is_published}
@@ -17,7 +23,6 @@ def get_quiz_details(quiz_id):
 	for template_id, amount in questions.items():
 		template_obj = QuestionTemplate.objects.get(pk=template_id)
 		details['questions'].append({"template":json.loads(template_obj.template_json),"type":template_obj.type,"amount":amount})
-
 	return details
 
 def generate_hashes(amount, course_id):
@@ -32,13 +37,3 @@ def generate_hashes(amount, course_id):
 		hashes.append(my_hash)
 		time.sleep(0.001) # sleep for a bit to let it make the time.time() value unique
 	return {"hashes":hashes,"course_id":course_id}
-
-
-# ================
-# POST REQUESTS
-# ================
-# def validate_student_hashes(data):
-# 	serializer = StudentSerializer(data=data)
-# 	if serializer.is_valid():
-# 		serializer.save()
-# 	return {"success":serializer.is_valid()}

@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Student(models.Model):
 	hash = models.CharField(primary_key=True, unique=True, max_length=255)
 	course_id = models.IntegerField(null=True)

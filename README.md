@@ -2,7 +2,7 @@
 
 
 ___
-### POST REQUESTS API -> returns `{"success":True/False}`<br>
+### Following POST Requests return `{"success":True/False}`<br>
 ### Create a new quiz:
 **Callback url:** `/api/create/quiz` with data:<br>
 `

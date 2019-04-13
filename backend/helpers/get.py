@@ -6,6 +6,13 @@ import json, time
 # * GET REQUESTS API *
 # * ================ *
 
+
+#TO BE DONE
+#def new_question(question_template_id)
+#find question_id in database
+#call 
+
+
 def all_students():
 	"""Return serialized all student objects"""
 	return StudentSerializer(Student.objects.all(), many=True).data

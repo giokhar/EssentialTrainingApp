@@ -1,5 +1,6 @@
 from backend.models import *
 from backend.serializers import *
+from backend.helpers import question_maker as qm
 import json, time
 
 # * ================ *
@@ -8,10 +9,10 @@ import json, time
 
 
 #TO BE DONE
-#def new_question(question_template_id)
-#find question_id in database
-#call 
-
+def new_question(question_template_id):
+	question_template_obj = QuestionTemplateSerializer(QuestionTemplate.objects.get(pk=question_template_id)).data
+	question_template = json.loads(question_template_obj["template_json"])
+	return qm.get_new_question_instance(question_template)
 
 def all_students():
 	"""Return serialized all student objects"""

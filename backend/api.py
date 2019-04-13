@@ -4,6 +4,11 @@ from backend.helpers import get, post
 
 
 @api_view(["GET"])
+def new_question_view(request, question_template_id):
+	"""Return JSON response of student details by hash"""
+	return Response(get.new_question(question_template_id))
+
+@api_view(["GET"])
 def student_list_view(request):
 	"""Return JSON response of all students"""
 	return Response(get.all_students())

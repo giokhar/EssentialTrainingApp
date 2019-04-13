@@ -5,24 +5,6 @@ import json
 DEFAULT_LOWER_BOUND = -100
 DEFAULT_UPPER_BOUND = 100
 
-#input example: ["asdfads", "$a", "$b=a"]
-#Parses the qeustion and returns a tuple containing two arrays:
-#input_array and output_command_array
-def parse_the_question(question_list):
-	input_array = []
-	output_command_array = []
-
-	for next_word in question_list:
-		#it means that a varible is present
-		if next_word[0] == '$':
-			if len(next_word) > 2 and next_word[2] == '=':
-				output_command = next_word[3:]
-				output_command_array.append(output_command)
-			else:
-				input_variable = next_word[1:]
-				input_array.append(input_variable)
-	return (input_array, output_command_array)
-
 #Checks if the user hasn't entered any malicious code.
 def isSafe(code):
 	if "import" in code:
@@ -58,12 +40,12 @@ def populate_text(input_constants, question_text):
 
 	return result_string.strip()
 
-def get_new_question_instance(question_id):
+def get_new_question_instance(question_template):
 	#question_template = get_question_template(question_id)
-	question_template_json = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,3],[5,7]], "variable_type": "bla"}
+	# question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,3],[5,7]], "variable_type": "bla"}
+
 
 	#question_template = json.loads(question_template_json) #NEEDED AFTER CONNECTING TO DATABASE
-	question_template = question_template_json
 
 	#parse the question template
 	input_variables = question_template["inputs"]
@@ -84,8 +66,7 @@ def get_new_question_instance(question_id):
 	populated_question_text = populate_text(input_constants, question_text)
 
 	#create a json object and store the information that is needed on the front
-	return_dict = {"text":populated_question_text,"solution_list":output_constants, "output_template":output_template} # question text and a solution
-	final_question_json = json.dumps(return_dict)
+	final_question_json = {"text":populated_question_text,"solution_list":output_constants, "output_template":output_template} # question text and a solution
 
 	return final_question_json
 
@@ -125,7 +106,7 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 	return (input_array, output_array)
 
 def get_reals(how_many, variable_ranges, dec_places = 2):
-	return [round(uniform(*choice(variable_ranges)),dec_places) for i in range(how_many)]
+	return [round(uniform(*choice(variable_ranges)), dec_places) for i in range(how_many)]
 
 def get_ints(how_many, variable_ranges):
 	return [randint(*choice(variable_ranges)) for i in range(how_many)]
@@ -161,4 +142,4 @@ def get_numbers(how_many, variable_ranges, variable_type = "integers"):
 
 	return list_of_numbers
 
-print(get_new_question_instance(5))
+# print(get_new_question_instance(5))

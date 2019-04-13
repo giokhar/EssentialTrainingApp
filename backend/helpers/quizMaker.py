@@ -2,8 +2,8 @@ from random import randint, choice, uniform
 import math
 import json
 
-DEFAULT_LOWER_BOUND = 0
-DEFAULT_UPPER_BOUND = 10
+DEFAULT_LOWER_BOUND = -100
+DEFAULT_UPPER_BOUND = 100
 
 #input example: ["asdfads", "$a", "$b=a"]
 #Parses the qeustion and returns a tuple containing two arrays:
@@ -37,6 +37,13 @@ def isSafe(code):
 		return False
 	return True
 
+#converts string to a number: int or float, depending on type
+def num(s):
+	try:
+		return int(s)
+	except ValueError:
+		return float(s)
+
 def populate_text(input_constants, question_text):
 	result_string = ""
 	input_counter = 0
@@ -53,12 +60,10 @@ def populate_text(input_constants, question_text):
 
 def get_new_question_instance(question_id):
 	#question_template = get_question_template(question_id)
-	question_template_json = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,100],[105,200]], "variable_type": "reals"}
+	question_template_json = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,3],[5,7]], "variable_type": "bla"}
 
 	#question_template = json.loads(question_template_json) #NEEDED AFTER CONNECTING TO DATABASE
 	question_template = question_template_json
-
-
 
 	#parse the question template
 	input_variables = question_template["inputs"]
@@ -98,7 +103,7 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 	for i in range(len(input_array)):
 		next_num = str(input_constants[i])
 		next_command = input_array[i] + "=" + next_num
-		input_array[i] = int(next_num)
+		input_array[i] = num(next_num)
 		
 		exec(next_command)#example: exec("a=rand.randint()")
 
@@ -141,7 +146,7 @@ def get_numbers(how_many, variable_ranges, variable_type = "integers"):
 	variable_type = variable_type.lower()
 	#in case if no ranges were specified, we are using default values
 	if not variable_ranges:
-		variable_ranges = [DEFAULT_LOWER_BOUND, DEFAULT_UPPER_BOUND]
+		variable_ranges = [[DEFAULT_LOWER_BOUND, DEFAULT_UPPER_BOUND]] #NOTE: MUST BE LIST OF LISTS
 
 	#variable_ranges example: [0, 5], [10, 15]
 
@@ -156,9 +161,4 @@ def get_numbers(how_many, variable_ranges, variable_type = "integers"):
 
 	return list_of_numbers
 
-#print(get_numbers(5, 0, 6, variable_type = "natural"))
-
-# print(produce_new_question_instance(5))
-#Example:
-# x = parse_the_question("The first variable is $a4 and the second is $b , return $g=a4+b ")
-# print(produce_new_question_instance(x[0], x[1]))
+print(get_new_question_instance(5))

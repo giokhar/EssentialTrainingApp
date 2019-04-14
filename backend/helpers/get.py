@@ -8,17 +8,7 @@ import json, time
 # * ================ *
 
 
-def all_courses():
-	"""Return serialized all Course objects"""
-	return CourseSerializer(Course.objects.all(),many=True).data
-
-def students_by_course(course_id):
-	"""Return a list of students with a specific course_id"""
-	return Student.objects.values_list('hash', flat=True).filter(course_id=course_id)
-
-def logs_by_quiz(quiz_id):
-	return QuizLogSerializer(QuizLog.objects.all().filter(quiz_id=quiz_id), many=True).data
-
+#TO BE DONE
 def new_question(question_template_id):
 	question_template_obj = QuestionTemplateSerializer(QuestionTemplate.objects.get(pk=question_template_id)).data
 	question_template = json.loads(question_template_obj["template_json"])
@@ -57,3 +47,17 @@ def generate_hashes(amount, course_id):
 		hashes.append(my_hash)
 		time.sleep(0.001) # sleep for a bit to let it make the time.time() value unique
 	return {"hashes":hashes,"course_id":course_id}
+
+def quizzes_by_student(student_hash):
+    student_json = StudentSerializer(Student.objects.get(pk = student_hash)).data
+    course_id = student_json['course_id']
+    quizzes = quizzes_by_course(course_id)
+    return quizzes
+
+def quizzes_by_course(course_id):
+    quizzes_queryset = Quiz.objects.all().filter(course_id=course_id)
+    quizzes = []
+    for quiz in quizzes_queryset:
+        quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
+        quizzes.append(quiz_json)
+    return quizzes

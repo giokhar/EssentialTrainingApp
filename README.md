@@ -15,7 +15,7 @@ api/ courses/ \
 api/ logs/quiz/<int:quiz_id>/ \
 api/ create/quiz/ \
 api/ create/quiz_log/ \
-api/ create/question_template/ \
+api/ create/question_template/ 
 
 ___
 ### Following POST requests return `{"success":True/False}`<br>

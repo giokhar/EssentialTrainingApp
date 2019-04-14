@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 
 try:keys = json.loads(open('keys.json').read())
@@ -69,11 +70,19 @@ WSGI_APPLICATION = 'EssentialTrainingApp.wsgi.application'
 
 DATABASES = {
     'default': {
+<<<<<<< HEAD
         'ENGINE': 'django.db.backends.mysql', 
         'NAME':     keys['db_name'],
         'USER':     keys['db_user'],
         'PASSWORD': keys['db_pass'],
         'HOST':     keys['db_host'],   # Or an IP Address that your DB is hosted on
+=======
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'giokharc_essential_training_app',
+        'USER': 'giokharc_eta',
+        'PASSWORD': '12345679',
+        'HOST': 'giokhar.com',   # Or an IP Address that your DB is hosted on
+>>>>>>> 01eab8f5e3d5eeeb8b54d272e2920c13aec2b67d
         # 'PORT': '3306',
     }
 }

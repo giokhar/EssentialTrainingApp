@@ -2,7 +2,7 @@
   "name": "express",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/GiorgiKharshiladze/EssentialTrainingApp/tree/master/frontend/QuizAdmin/",
+  "homepage": "https://GiorgiKharshiladze.github.io/frontend/QuizAdmin/",
   "dependencies": {
     "axios": "^0.18.0",
     "react": "^16.8.5",

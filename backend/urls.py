@@ -7,6 +7,7 @@ urlpatterns = [
 	# GET METHODS
 	path('students/', api.student_list_view),
 	path('students/<str:hash>/', api.student_details_view),
+	path('students/course/<int:course_id>', api.students_by_course_view),
 
 	path('quizzes/<int:quiz_id>/', api.quiz_details_view),
 	path('quizzes/hash/<str:hash>/', api.quizzes_by_student_view),
@@ -15,6 +16,7 @@ urlpatterns = [
 	path('hashes/<int:amount>/<int:course_id>/', api.hash_generator_view),
 	path('question/new/<int:question_template_id>', api.new_question_view),
 	path('courses/', api.all_courses_view),
+	path('logs/quiz/<int:quiz_id>', api.logs_by_quiz_view),
 	# POST METHODS
 	path('create/quiz/', api.create_quiz_view),
 	path('create/quiz_log', api.create_quiz_log_view),

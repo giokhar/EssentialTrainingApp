@@ -6,6 +6,26 @@ import json, time
 # * ================ *
 # * GET REQUESTS API *
 # * ================ *
+
+
+def completed_quizzes(stud_hash):
+	return QuizLog.objects.all().filter(student_hash=stud_hash, complete=True)
+
+    # logs= QuizLog.objects.raw('SELECT quiz_id FROM quiz_logs WHERE student_hash = %s', [stud_hash])
+	#
+    # for log in logs:
+    #     id_list.append(log.quiz_id)
+	#
+    # quiz_list = []
+    # for id in id_list:
+    #     quizzes = QuizLogSerializer(Quiz.objects.all().filter(pk = id), many=True).data
+    #     for quiz in quizzes:
+    #         if quiz.completed:
+    #             quiz_list.append(quiz)
+    # return quiz_list
+
+
+
 def all_courses():
 	"""Return serialized all Course objects"""
 	return CourseSerializer(Course.objects.all(),many=True).data

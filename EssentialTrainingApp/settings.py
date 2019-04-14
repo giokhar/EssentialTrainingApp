@@ -21,6 +21,7 @@ ALLOWED_HOSTS = ['*']
 
 # To allow requests from anywhere 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 
 
 # Application definition

@@ -5,6 +5,19 @@ import AutosizeInput from 'react-input-autosize';
 import Modal from 'react-modal';
 import { DropdownMultiple, Dropdown } from 'reactjs-dropdown-component';
 
+
+{/*
+  question_template = {
+    "inputs":["a","b"], 
+    "outputs":["a+b", "a-b"],
+    "input_type":"regular",
+    "text":"I have $ apples, somebody gave me $ apples. How many apples do I have?",
+    "output_template":"A = <$, $>",
+    "variable_ranges":[[1,3],[5,7]], 
+    "variable_type": "bla"}
+*/}
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +37,8 @@ class App extends Component {
       quizTitle: '',
       quizTypes: [],
       finalQuiz: [],
-      courses:[{title:'CS 228'}, {title:'CS 310'}]
+      courses:[{title:'CS 228'}, {title:'CS 310'}],
+      backendInput:[]
 
     };
 
@@ -35,6 +49,8 @@ class App extends Component {
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
+
+
 
   openModal() {
     this.setState({ modalIsOpen: true });
@@ -49,6 +65,25 @@ class App extends Component {
     this.setState({ modalIsOpen: false });
   }
 
+
+getVariables(){   
+  let x = this.state.inputs.filter((element, index) => {
+    return index % 2 != 0;
+  })
+
+  return x;
+}
+
+getQuizText(){   
+  let x = this.state.inputs.filter((element, index) => {
+    return index % 2 === 0;
+  });
+
+  return x;
+}
+
+
+
   appendToArray(ex) {
     var newInput = 'input-${this.state.inputs.length}';
     this.setState({ newText: this.state.newText + this.state.text })
@@ -61,6 +96,10 @@ class App extends Component {
         break;
       case "sqrt":
         this.setState({ variableNumber: this.state.variableNumber + 1, inputs: this.state.inputs.concat(["a" + this.state.variableNumber.toString(), "Enter text here"]) });
+        var newbackendInput=[]
+        newbackendInput = this.state.backendInput.concat("a" + this.state.variableNumber.toString());
+        this.setState({backendInput:newbackendInput});
+        
         break;
       default:
         this.setState({ inputs: this.state.inputs.concat([]) });
@@ -221,7 +260,29 @@ class App extends Component {
                     <div onClick={() => this.setState({ outputs: this.state.outputs.concat([""]) })} id="addOutput" >Add output</div>
                   </div>
                 </div>
-                <div onClick={() => { this.setState({ quizTypes: this.state.quizTypes.concat([this.state.quizTitle]), quizTitle: '' }); alert("Your quiz template has been added to the list") }} style={{ backgroundColor: 'blue', padding: 10, color: 'white', borderRadius: 15 }}> Add quiz Template to quiz list </div>
+                <div onClick={() => { this.setState({ 
+                  quizTypes: this.state.quizTypes.concat([this.state.quizTitle]), quizTitle: '' });
+                 alert("Your quiz template has been added to the list");
+               
+
+                 console.log("Quiz Title");
+                 console.log(this.state.quizTitle)
+
+                 //Getting Text
+                 console.log("Quiz Text ===============")
+                 console.log(this.getQuizText());
+                
+                 //Getting Inputs
+                 console.log("Inputs ===============")
+                 console.log(this.getVariables());
+
+                 //Getting Outputs
+                 console.log("Outputs ===============")
+                 console.log(this.state.outputs);
+
+
+                 //Getting 
+                 }} style={{ backgroundColor: 'blue', padding: 10, color: 'white', borderRadius: 15 }}> Add quiz Template to quiz list </div>
 
 
               </div>

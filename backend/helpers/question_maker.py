@@ -94,14 +94,14 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 		if isSafe(output_command_array[i]):
 			next_command = 'output_array[i]=' + output_command_array[i]
 			try:
-				exec(next_command)
+				code = compile(next_command, '<user_string>', 'exec')
+				exec(code)
 
 			except Exception as error:
-				#This segment of the code forwards whatever error was caught.
-				return str(error) + " in output command N"+ str(i+1)
+				raise Exception(str(error) + " in output command N"+ str(i+1))
 
 		else:
-			return "Code injection detected!!!"
+			raise Exception("Code injection detected!!!")
 
 	return (input_array, output_array)
 

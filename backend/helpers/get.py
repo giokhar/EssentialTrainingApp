@@ -48,8 +48,9 @@ def generate_hashes(amount, course_id):
 	"""Generate a json student hashes based on the amount of students(int) and the course_id"""
 	hashes = []
 	my_hash = 0
+	course = Course.objects.get(pk=course_id)
 	for i in range(amount):
-		my_hash = hash(time.time())
+		my_hash = (course.title +" "+ course.semester).lower().replace(' ', "-") + "-" + str(hash(time.time()))
 		serializer = StudentSerializer(data={"hash":my_hash,"course_id":course_id})
 		if serializer.is_valid(): # if data matches all the columns
 			serializer.save() # insert into db

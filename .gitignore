@@ -1,6 +1,6 @@
 node_modules
 .DS_Store
-EssentialTrainingApp/settings.py
+EssentialTrainingApp/keys.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

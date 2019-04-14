@@ -1,18 +1,22 @@
 //module imports
 import axios from "axios";
 
+//http://essential-training-app-api.herokuapp.com/api/hashes/<int:amount>/<int:course_id>
+
+
 //var that contains the URL to the backend.
-var backendUrl = "https://intense-stream-11530.herokuapp.com";
+var backendUrl = "http://essential-training-app-api.herokuapp.com/api/";
 
 //Calls the end-point to get the data from the backend.
-export const getList = () => {
+export const getList = (amount,course_Id) => {
   return axios
-    .get(backendUrl + "/posts/", {
+    .get(backendUrl + "/hashes/"+amount+course_Id, {
       headers: { 
         "Content-Type": "application/json" 
       } //Let backend know that the data is JSON object.
     })
     .then(response => { 
+      console.log(response.data)
       return (response.data) //Return data if the function call was successful.
     }).catch(error => {
       console.log(error.response) //Log the error on the console if there was an error.

@@ -1,14 +1,14 @@
 {
-  "main.css": "/frontend/QuizAdmin/static/css/main.63337435.chunk.css",
-  "main.js": "/frontend/QuizAdmin/static/js/main.82c9b788.chunk.js",
-  "main.js.map": "/frontend/QuizAdmin/static/js/main.82c9b788.chunk.js.map",
-  "runtime~main.js": "/frontend/QuizAdmin/static/js/runtime~main.37bf554f.js",
-  "runtime~main.js.map": "/frontend/QuizAdmin/static/js/runtime~main.37bf554f.js.map",
-  "static/js/2.d3575b30.chunk.js": "/frontend/QuizAdmin/static/js/2.d3575b30.chunk.js",
-  "static/js/2.d3575b30.chunk.js.map": "/frontend/QuizAdmin/static/js/2.d3575b30.chunk.js.map",
-  "index.html": "/frontend/QuizAdmin/index.html",
-  "precache-manifest.b76f32acafbf49e505ddd99258b935f7.js": "/frontend/QuizAdmin/precache-manifest.b76f32acafbf49e505ddd99258b935f7.js",
-  "service-worker.js": "/frontend/QuizAdmin/service-worker.js",
-  "static/css/main.63337435.chunk.css.map": "/frontend/QuizAdmin/static/css/main.63337435.chunk.css.map",
-  "static/media/quizMaker.css": "/frontend/QuizAdmin/static/media/CircularBook.4f84355b.otf"
+  "main.css": "/EssentialTrainingApp/frontend/QuizAdmin/static/css/main.52c59e92.chunk.css",
+  "main.js": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/main.1954d369.chunk.js",
+  "main.js.map": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/main.1954d369.chunk.js.map",
+  "runtime~main.js": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/runtime~main.9cd6e48c.js",
+  "runtime~main.js.map": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/runtime~main.9cd6e48c.js.map",
+  "static/js/2.d3575b30.chunk.js": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/2.d3575b30.chunk.js",
+  "static/js/2.d3575b30.chunk.js.map": "/EssentialTrainingApp/frontend/QuizAdmin/static/js/2.d3575b30.chunk.js.map",
+  "index.html": "/EssentialTrainingApp/frontend/QuizAdmin/index.html",
+  "precache-manifest.531eb83f8047cede55eb8e93cedc7d23.js": "/EssentialTrainingApp/frontend/QuizAdmin/precache-manifest.531eb83f8047cede55eb8e93cedc7d23.js",
+  "service-worker.js": "/EssentialTrainingApp/frontend/QuizAdmin/service-worker.js",
+  "static/css/main.52c59e92.chunk.css.map": "/EssentialTrainingApp/frontend/QuizAdmin/static/css/main.52c59e92.chunk.css.map",
+  "static/media/quizMaker.css": "/EssentialTrainingApp/frontend/QuizAdmin/static/media/CircularBook.4f84355b.otf"
 }

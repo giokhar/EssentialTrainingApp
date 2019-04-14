@@ -1,0 +1,28 @@
+{
+  "name": "express",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.8.5",
+    "react-dom": "^16.8.5",
+    "react-input-autosize": "^2.2.1",
+    "react-modal": "^3.8.1",
+    "react-scripts": "2.1.8",
+    "reactjs-dropdown-component": "^1.0.6"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

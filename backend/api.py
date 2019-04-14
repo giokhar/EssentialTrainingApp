@@ -4,6 +4,11 @@ from backend.helpers import get, post
 
 
 @api_view(["GET"])
+def students_by_course_view(request, course_id):
+	"""Return JSON response: hashes of students enrolled in a specific course"""
+	return Response(get.students_by_course(course_id))
+
+@api_view(["GET"])
 def all_courses_view(request):
 	"""Return JSON response of all courses"""
 	return Response(get.all_courses())

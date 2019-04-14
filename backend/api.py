@@ -2,6 +2,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from backend.helpers import get, post
 
+@api_view(["GET"])
+def logs_by_quiz_view(request, quiz_id):
+	"""Return JSON response of all logs with specified quiz_id"""
+	return Response(get.logs_by_quiz(quiz_id))
 
 @api_view(["GET"])
 def students_by_course_view(request, course_id):

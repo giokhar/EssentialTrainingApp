@@ -13,10 +13,7 @@ class HashGenerator extends Component {
 
 
 getHashes(){
-    getList(this.state.number_of_students, this.state.course_id).then(data => {
-        //push the posts into the state.
-       console.log(data.hases)
-      });
+    console.log(getList());
     }
 
   render() {
@@ -37,7 +34,9 @@ getHashes(){
            onChange={(e) => { this.setState({ course_id: e.target.value }) }} /> 
       </div>
 
-<div onClick={()=>{this.getHashes()}}></div>
+<div onClick={()=>{this.getHashes()}}>
+Generate Hashes
+</div>
 
       HASHGENERATOR IS HERE
       </div>

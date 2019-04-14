@@ -5,17 +5,18 @@ import axios from "axios";
 
 
 //var that contains the URL to the backend.
-var backendUrl = "http://essential-training-app-api.herokuapp.com/api/";
+var backendUrl = "http://essential-training-app-api.herokuapp.com/api";
 
 //Calls the end-point to get the data from the backend.
-export const getList = (amount,course_Id) => {
+export const getList = () => {
   return axios
-    .get(backendUrl + "/hashes/"+amount+course_Id, {
+    .get("http://essential-training-app-api.herokuapp.com/api/hashes/23/21/", {
       headers: { 
         "Content-Type": "application/json" 
       } //Let backend know that the data is JSON object.
     })
     .then(response => { 
+     console.log("=========")
       console.log(response.data)
       return (response.data) //Return data if the function call was successful.
     }).catch(error => {

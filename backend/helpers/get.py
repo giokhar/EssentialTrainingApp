@@ -8,7 +8,10 @@ import json, time
 # * ================ *
 
 
-#TO BE DONE
+def all_courses():
+	"""Return serialized all Course objects"""
+	return CourseSerializer(Course.objects.all(),many=True).data
+
 def new_question(question_template_id):
 	question_template_obj = QuestionTemplateSerializer(QuestionTemplate.objects.get(pk=question_template_id)).data
 	question_template = json.loads(question_template_obj["template_json"])

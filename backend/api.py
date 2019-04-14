@@ -60,3 +60,7 @@ def create_quiz_view(request):
 @api_view(['POST'])
 def create_question_template_view(request):
 	return Response(post.create_question_template(request.data))
+
+@api_view(["POST"])
+def create_quiz_log_view(request):
+	return Response(post.create_quiz_log(request.data))

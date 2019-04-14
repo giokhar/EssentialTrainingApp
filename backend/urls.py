@@ -17,5 +17,6 @@ urlpatterns = [
 	path('courses/', api.all_courses_view),
 	# POST METHODS
 	path('create/quiz/', api.create_quiz_view),
+	path('create/quiz_log', api.create_quiz_log_view),
 	path('create/question_template/', api.create_question_template_view)
 ]

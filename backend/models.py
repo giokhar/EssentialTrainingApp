@@ -44,6 +44,8 @@ class QuizLog(models.Model):
 	results_json = models.TextField(null=True)
 	num_questions = models.IntegerField(null=True)
 	num_incorrect = models.IntegerField(null=True)
+	completed = models.BooleanField(default=False)
+	passed = models.BooleanField(default=False)
 	start_time =  models.DateTimeField(null=True)
 	end_time = models.DateTimeField(null=True)
 

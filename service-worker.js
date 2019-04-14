@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/GiorgiKharshiladze/EssentialTrainingApp/tree/master/frontend/QuizAdmin/precache-manifest.6b9d0139c7aaf182904ef9e4f1c716c6.js"
+  "/frontend/QuizAdmin/precache-manifest.b76f32acafbf49e505ddd99258b935f7.js"
 );
 
 workbox.clientsClaim();
@@ -28,7 +28,7 @@ self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/GiorgiKharshiladze/EssentialTrainingApp/tree/master/frontend/QuizAdmin/index.html", {
+workbox.routing.registerNavigationRoute("/frontend/QuizAdmin/index.html", {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });

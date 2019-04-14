@@ -25,7 +25,9 @@ def student_details(hash):
 def quiz_details(quiz_id):
 	"""Return the JSON of quiz details"""
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
-	# TODO: Check if this hash is registered for this course and if this quiz allowed
+	#useful if there are unpublished quizzes.
+	# if quiz_obj._meta.get_field(is_published) == False:
+	# 	raise ExceptionError ("Quiz not pulished yet")
 	details = {"title":quiz_obj.title, "questions":[],"is_published":quiz_obj.is_published}
 	questions = json.loads(quiz_obj.question_json)
 	for template_id, amount in questions.items():

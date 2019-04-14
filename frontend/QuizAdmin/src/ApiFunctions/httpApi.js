@@ -27,7 +27,7 @@ export const getList = () => {
 //Calls the end-point to send the data to the backend.
 export const addToList = (name, text, image, date) => {
   //Take in name,text,image and date as parameter and send it to the backend.
-  return axios.post(backendUrl + "/posts/",
+  return axios.post(backendUrl + "/create/quiz/",
     {
       name: name,
       text: text,

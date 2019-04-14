@@ -3,10 +3,6 @@ from rest_framework.response import Response
 from backend.helpers import get, post
 
 @api_view(["GET"])
-def completed_quizzes_view(request, student_hash):
-	return Response(get.completed_quizzes(student_hash))
-
-@api_view(["GET"])
 def quizzes_by_course_view(request, course_id):
 	"""Return JSON response of all quizzes by course_id"""
 	return Response(get.quizzes_by_course(course_id))

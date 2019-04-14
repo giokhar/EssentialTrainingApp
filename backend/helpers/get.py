@@ -7,25 +7,6 @@ import json, time
 # * GET REQUESTS API *
 # * ================ *
 
-
-def completed_quizzes(stud_hash):
-	return QuizLog.objects.all().filter(student_hash=stud_hash, complete=True)
-
-    # logs= QuizLog.objects.raw('SELECT quiz_id FROM quiz_logs WHERE student_hash = %s', [stud_hash])
-	#
-    # for log in logs:
-    #     id_list.append(log.quiz_id)
-	#
-    # quiz_list = []
-    # for id in id_list:
-    #     quizzes = QuizLogSerializer(Quiz.objects.all().filter(pk = id), many=True).data
-    #     for quiz in quizzes:
-    #         if quiz.completed:
-    #             quiz_list.append(quiz)
-    # return quiz_list
-
-
-
 def all_courses():
 	"""Return serialized all Course objects"""
 	return CourseSerializer(Course.objects.all(),many=True).data
@@ -77,10 +58,20 @@ def generate_hashes(amount, course_id):
 	return {"hashes":hashes,"course_id":course_id}
 
 def quizzes_by_student(student_hash):
-    student_json = StudentSerializer(Student.objects.get(pk = student_hash)).data
-    course_id = student_json['course_id']
-    quizzes = quizzes_by_course(course_id)
-    return quizzes
+	student_json = StudentSerializer(Student.objects.get(pk = student_hash)).data
+	course_id = student_json['course_id']
+	all_quizzes = quizzes_by_course(course_id)
+
+
+	old_quiz_list = completed_quizzes(student_hash)
+	new_quiz_list = []
+
+	for quiz in all_quizzes:
+		if quiz not in old_quiz_list:
+			new_quiz_list.append(quiz)
+
+	return {"old":old_quiz_list,"new":new_quiz_list}
+
 
 def quizzes_by_course(course_id):
     quizzes_queryset = Quiz.objects.all().filter(course_id=course_id)
@@ -89,3 +80,20 @@ def quizzes_by_course(course_id):
         quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
         quizzes.append(quiz_json)
     return quizzes
+
+# * =============== *
+# * HELPER QUERIES  *
+# * =============== *
+
+def completed_quizzes(student_hash):
+	"""Return quiz_ids for quizzes that are completed by a specific student"""
+	quiz_ids = QuizLog.objects.values_list('quiz_id', flat=True).filter(student_hash=student_hash, completed=True)
+
+	quizzes_queryset = Quiz.objects.all().filter(pk__in=quiz_ids)
+
+	quizzes = []
+	for quiz in quizzes_queryset:
+		quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
+		quizzes.append(quiz_json)
+	return quizzes
+

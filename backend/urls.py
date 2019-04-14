@@ -10,9 +10,8 @@ urlpatterns = [
 	path('students/course/<int:course_id>/', api.students_by_course_view),
 
 	path('quizzes/<int:quiz_id>/', api.quiz_details_view),
-	path('quizzes/hash/<str:hash>/', api.quizzes_by_student_view),
+	path('quizzes/student/<str:hash>/', api.quizzes_by_student_view),
 	path('quizzes/course/<int:course_id>/', api.quizzes_by_course_view),
-	path('quizzes/completed/<str:hash>', api.completed_quizzes_view),
 
 	path('hashes/<int:amount>/<int:course_id>/', api.hash_generator_view),
 	path('question/new/<int:question_template_id>/', api.new_question_view),

@@ -7,6 +7,8 @@ import { DropdownMultiple, Dropdown } from 'reactjs-dropdown-component';
 //import { createStackNavigator, createAppContainer } from 'react-navigation';
 import {BrowserRouter, Route} from 'react-router-dom';
 import { get_courses } from "./ApiFunctions/httpApi";
+import Sidebar from "./Sidebar";
+
 {/*
   question_template = {
     "inputs":["a","b"], 
@@ -166,8 +168,7 @@ getQuizText(){
     return (
       <BrowserRouter>
       <div style={{ backgroundColor: "#EFF0F2", width: "100%", height: 1000 }}>
-      <a href="HashGenerator">HashGenerator</a>
-      <a href="Courses">Courses</a>
+      <Sidebar/>
         <div id="quizMakerContainer">
           <div id="templateMaker">
             <div id="templateMakerHeader">

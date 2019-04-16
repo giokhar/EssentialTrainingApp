@@ -10,7 +10,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <Route exact={true} path='/' render={() => (
+          <Route exact={true} path='/QuizMaker' render={() => (
             <div className="App">
               <QuizMaker />
             </div>

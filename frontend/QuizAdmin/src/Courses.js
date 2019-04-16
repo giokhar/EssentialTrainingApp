@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { getList, addToList, updateItem, get_courses,get_students_by_id } from "./ApiFunctions/httpApi";
 import "./Styles/courses.css";
+import Sidebar from "./Sidebar";
 
 
 class Courses extends Component {
@@ -28,6 +29,7 @@ class Courses extends Component {
     render() {
         return (
             <BrowserRouter>
+               <Sidebar/>
                 <div className="Courses">
                     {this.state.courses.map((item, index) => {
                          if (this.state.dataShown == "course_list"){

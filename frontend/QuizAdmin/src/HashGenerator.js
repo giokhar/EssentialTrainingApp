@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter, Route} from 'react-router-dom';
 import { getList, addToList, updateItem } from "./ApiFunctions/httpApi";
+import Sidebar from "./Sidebar";
 
 class HashGenerator extends Component {
     constructor(props){
@@ -20,6 +21,7 @@ getHashes(){
   render() {
     return (
         <BrowserRouter>
+        <Sidebar/>
       <div className="HashGenerator">
 
 

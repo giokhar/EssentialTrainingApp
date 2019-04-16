@@ -48,7 +48,7 @@ export const get_students_by_id = (course_id) => {
       } //Let backend know that the data is JSON object.
     })
     .then(response => { 
-      return (response.data) //Return data if the function call was successful.
+      return (response) //Return data if the function call was successful.
     }).catch(error => {
     });
 };

@@ -11,11 +11,12 @@ class Courses extends Component {
             number_of_students: '',
             course_id: '',
             courses: ['fwf', 'eff'],
+            dataShown:'course_list'
         }
     }
 
     get_students(course_id){
-        console.log(get_students_by_id(course_id))
+        get_students_by_id(course_id).then(response=>{this.setState({courses:response.data, dataShown:'student_list'})});
     }
 
     componentDidMount() {
@@ -29,9 +30,20 @@ class Courses extends Component {
             <BrowserRouter>
                 <div className="Courses">
                     {this.state.courses.map((item, index) => {
-                        return (
-                            <div onClick={()=>{this.get_students(item.id)}} id="mathButtons"> {item.title} </div>
-                        )
+                         if (this.state.dataShown == "course_list"){
+                             return(
+                            <div onClick={()=>{this.get_students(item.id)}} id="mathButtons">
+                              {item.title}
+                                </div>
+                             )}
+
+                             else{
+                                 return (
+                                    <div onClick={()=>{this.get_students(item.id)}} id="mathButtons">
+                              {item}
+                                    </div>
+                                 )
+                             }
                     })}
                 </div>
             </BrowserRouter>

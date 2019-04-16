@@ -40,6 +40,20 @@ export const get_courses = () => {
 };
 
 
+export const get_students_by_id = (course_id) => {
+  return axios
+    .get(backendUrl+ "students/course/"+ course_id +"/?format=json", {
+      headers: { 
+        "Content-Type": "application/json" 
+      } //Let backend know that the data is JSON object.
+    })
+    .then(response => { 
+      return (response.data) //Return data if the function call was successful.
+    }).catch(error => {
+    });
+};
+
+
 //Calls the end-point to send the data to the backend.
 export const addToList = () => {
   //Take in name,text,image and date as parameter and send it to the backend.

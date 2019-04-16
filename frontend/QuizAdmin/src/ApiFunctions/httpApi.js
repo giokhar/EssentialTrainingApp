@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 //var that contains the URL to the backend.
-var backendUrl = "http://essential-training-app-api.herokuapp.com/api";
+var backendUrl = "http://essential-training-app-api.herokuapp.com/api/";
 
 //Calls the end-point to get the data from the backend.
 export const getList = () => {
@@ -24,16 +24,28 @@ export const getList = () => {
     });
 };
 
+
+
+export const get_courses = () => {
+  return axios
+    .get(backendUrl+ "courses/?format=json", {
+      headers: { 
+        "Content-Type": "application/json" 
+      } //Let backend know that the data is JSON object.
+    })
+    .then(response => { 
+      return (response.data) //Return data if the function call was successful.
+    }).catch(error => {
+    });
+};
+
+
 //Calls the end-point to send the data to the backend.
-export const addToList = (name, text, image, date) => {
+export const addToList = () => {
   //Take in name,text,image and date as parameter and send it to the backend.
   return axios.post(backendUrl + "/create/quiz/",
-    {
-      name: name,
-      text: text,
-      image: image,
-      date: date,
-    }, {
+
+  { "title":"New Quiz", "question_json":"{'1':5,'2':9}", "is_published":1, "course_id":2 }, {
       headers: {
         'Content-Type': "application/json"
       } //Let backend know that the data is JSON object.

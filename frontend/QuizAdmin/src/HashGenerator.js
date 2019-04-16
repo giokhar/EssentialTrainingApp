@@ -13,7 +13,8 @@ class HashGenerator extends Component {
 
 
 getHashes(){
-    console.log(getList());
+    //console.log(getList());
+    console.log(addToList());
     }
 
   render() {

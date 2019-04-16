@@ -7,6 +7,7 @@
     "axios": "^0.18.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
+    "react-dropdown": "^1.6.4",
     "react-input-autosize": "^2.2.1",
     "react-modal": "^3.8.1",
     "react-navigation": "^3.8.1",

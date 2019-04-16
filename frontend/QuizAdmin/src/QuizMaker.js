@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 import { DropdownMultiple, Dropdown } from 'reactjs-dropdown-component';
 //import { createStackNavigator, createAppContainer } from 'react-navigation';
 import {BrowserRouter, Route} from 'react-router-dom';
-
+import { get_courses } from "./ApiFunctions/httpApi";
 {/*
   question_template = {
     "inputs":["a","b"], 
@@ -17,7 +17,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
     "variable_ranges":[[1,3],[5,7]], 
     "variable_type": "bla"}
 */}
-
+//http://essential-training-app-api.herokuapp.com/api/courses/?format=json
 
 class QuizMaker extends Component {
   constructor(props) {
@@ -41,6 +41,8 @@ class QuizMaker extends Component {
       courses:[{title:'CS 228'}, {title:'CS 310'}],
       backendInput:[],
       variableType:"",
+      y:[],
+      selectedCourse:"",
       variableTypeList: [
         {
           id: 0,
@@ -86,6 +88,17 @@ class QuizMaker extends Component {
   }
 
 
+
+  resetThenSetCourses = (id, key) => {
+    this.setState({selectedCourse:this.state.courses[id-1].title})    
+  }
+
+
+  componentDidMount(){
+    var courseList = get_courses();
+  console.log(courseList.then(data=>{this.setState({courses:data})}))
+  }
+  
   openModal() {
     this.setState({ modalIsOpen: true });
   }
@@ -149,11 +162,12 @@ getQuizText(){
 
 
   render() {
+  
     return (
       <BrowserRouter>
       <div style={{ backgroundColor: "#EFF0F2", width: "100%", height: 1000 }}>
-      <a href="HashGenerator">Sign In</a>
-
+      <a href="HashGenerator">HashGenerator</a>
+      <a href="Courses">Courses</a>
         <div id="quizMakerContainer">
           <div id="templateMaker">
             <div id="templateMakerHeader">
@@ -170,9 +184,9 @@ getQuizText(){
           </div>
           <div id="courseSelector">
             <div id="templateMakerTitle">Courses</div>
-            <Dropdown title="Select Courses"  list={this.state.courses}/>
+            <Dropdown title="Select Courses" list={this.state.courses} resetThenSet={this.resetThenSetCourses}/>
+            {this.state.selectedCourse}
           </div>
-
         </div>
 
         {/* TEMPLATE MAKER MODAL */}

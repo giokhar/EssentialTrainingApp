@@ -6,8 +6,11 @@ import Modal from 'react-modal';
 import { DropdownMultiple, Dropdown } from 'reactjs-dropdown-component';
 //import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { get_courses } from "./ApiFunctions/httpApi";
+import { get_courses, get_question_templates } from "./ApiFunctions/httpApi";
 import Sidebar from './Sidebar';
+import { Select, AsyncSelect, MultiSelect } from 'dropdown-select';
+import 'dropdown-select/dist/css/dropdown-select.css';
+
 
 {/*
   question_template = {
@@ -26,6 +29,7 @@ class QuizMaker extends Component {
     super(props);
     // Don't call this.setState() here!
     this.state = {
+      selectedTemplateList:[""],
       counter: "sfs", test: "",
       object: <input></input>,
       inputs: ['Enter text here'],
@@ -44,6 +48,8 @@ class QuizMaker extends Component {
       backendInput: [],
       variableType: "",
       y: [],
+      templates:'',
+
       selectedCourse: "",
       variableTypeList: [
         {
@@ -75,6 +81,7 @@ class QuizMaker extends Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+     this.handleTemplateDropdown = this.handleTemplateDropdown.bind(this);
   }
 
 
@@ -96,9 +103,26 @@ class QuizMaker extends Component {
   }
 
 
+  resetThenSetTemplates = (id, key) => {
+    //this.setState({ templates: this.state.courses[id - 1].title })
+  }
+
+
   componentDidMount() {
     var courseList = get_courses();
     console.log(courseList.then(data => { this.setState({ courses: data }) }))
+
+    var templateList = get_question_templates();
+    console.log("=============================");
+    console.log("=============================");
+    templateList.then(data => { console.log((data.data[0].type)) })
+    templateList.then(data => { this.setState({templates:data.data[0].type}) })
+
+    console.log("?????????")
+    console.log(this.state.selectedTemplateList)
+    console.log("?????????")
+   
+
   }
 
   openModal() {
@@ -131,6 +155,10 @@ class QuizMaker extends Component {
     return x;
   }
 
+ 
+handleTemplateDropdown(event){
+  this.setState({selectedTemplateList:this.state.selectedTemplateList.concat(event)})
+}
 
 
   appendToArray(ex) {
@@ -172,8 +200,15 @@ class QuizMaker extends Component {
           <div id="quizMakerContainer">
             <div id="templateMaker">
               <div id="templateMakerHeader">
+              <div id="templateMakerInnerContainer">
                 <div id="templateMakerTitle">Quiz</div>
-                <div style={{ backgroundColor: 'blue', padding: 20, width: 100, }} onClick={() => { this.openModal() }}>Create new quiz</div>
+                 <Select style={{backgroundColor:'blue'}} onChange={this.handleTemplateDropdown} options={this.state.templates}  />
+                  {this.state.selectedTemplateList.map((item,index)=>{return(
+                    <div id="templateList">
+                    {item}
+                      </div>
+                      )})}
+                      </div>
               </div>
 
               <div>
@@ -185,11 +220,13 @@ class QuizMaker extends Component {
             </div>
             <div id="rightContainer">
               <div id="courseSelector">
+              <div id="courseSelectorInternalContainer">
                 <div id="templateMakerTitle">Courses</div>
                 <Dropdown title="Select Courses" list={this.state.courses} resetThenSet={this.resetThenSetCourses} />
-                {this.state.selectedCourse}
+              <div id="selectedCourse">  {this.state.selectedCourse} </div>
               </div>
-              <div id="createTemplateButton">Create Template</div>
+              </div>
+              <div onClick={this.openModal.bind(this)} id="createTemplateButton">Create Template</div>
               <div id="publishButton">Publish Quiz</div>
             </div>
           </div>

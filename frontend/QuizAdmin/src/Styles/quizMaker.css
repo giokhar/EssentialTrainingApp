@@ -218,8 +218,16 @@
 
 }
 
+#courseSelectorInternalContainer{
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    text-align: left;
+    margin-left: 20px;
+    margin-top:20px;
+}
+
 #quizMakerContainer{
-    
     margin-left: 150px;
     display: flex;
     flex-direction: row;
@@ -275,4 +283,33 @@ font-size: 15px;
     margin-top: 10px;
     background-color: rebeccapurple;
     height: 60px;
+}
+
+#templateList{
+display: flex;
+flex-direction: column;
+background-color: aquamarine;
+height:50px;
+width: 440px; 
+margin:10px;
+
+}
+
+
+#templateMakerInnerContainer{
+display: flex;
+flex-direction: column;
+align-items: flex-start
+}
+
+#selectedCourse{
+    background-color: blanchedalmond;
+    font-family: 'circular';
+    font-size: 15px;
+    height:50px;
+width:300px;
+margin-top:30px;
+display: flex;
+align-items: center;
+justify-content: center;
 }

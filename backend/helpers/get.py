@@ -31,6 +31,16 @@ def student_details(hash):
 	"""Return serialized student object by hash"""
 	return StudentSerializer(Student.objects.get(pk=hash)).data
 
+def all_question_templates():
+	"""Return serialized all question templates"""
+	question_template_objects = QuestionTemplate.objects.all()
+	all_templates = []
+	for qto in question_template_objects:
+		json_object = {"id":qto.id,"type":qto.type,"template_json":json.loads(qto.template_json)}
+		all_templates.append(json_object)
+	return all_templates
+
+
 def quiz_details(quiz_id):
 	"""Return the JSON of quiz details"""
 	quiz_obj = Quiz.objects.get(pk=quiz_id)

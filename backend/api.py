@@ -38,6 +38,11 @@ def student_list_view(request):
 	return Response(get.all_students())
 
 @api_view(["GET"])
+def question_template_list_view(request):
+	"""Return JSON response of all question templates"""
+	return Response(get.all_question_templates())
+
+@api_view(["GET"])
 def student_details_view(request, hash):
 	"""Return JSON response of student details by hash"""
 	return Response(get.student_details(hash))

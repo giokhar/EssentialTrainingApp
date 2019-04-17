@@ -15,6 +15,7 @@ urlpatterns = [
 
 	path('hashes/<int:amount>/<int:course_id>/', api.hash_generator_view),
 	path('question/new/<int:question_template_id>/', api.new_question_view),
+	path('question/templates/', api.question_template_list_view),
 	path('courses/', api.all_courses_view),
 	path('logs/quiz/<int:quiz_id>/', api.logs_by_quiz_view),
 	# POST METHODS

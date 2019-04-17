@@ -9,6 +9,7 @@
   }
 
 #container {
+    
     backgroundColor: red;
     width: 100px;
 }
@@ -201,7 +202,7 @@
 #templateMaker{
     background-color: white;
     width:500px;
-    height:400px;
+    height:350px;
     margin-left:200px;
     margin:20px;
     box-shadow: 0px 14px 24px -11px rgba(0,0,0,0.13);
@@ -209,8 +210,8 @@
 }
 
 #courseSelector{
-    width:500px;
-    height:400px;
+    width:350px;
+    height:200px;
     margin:20px;
     background-color: red;
     box-shadow: 0px 14px 24px -11px rgba(0,0,0,0.13);
@@ -218,12 +219,14 @@
 }
 
 #quizMakerContainer{
-    margin-left: 300px;
-   
+    
+    margin-left: 150px;
     display: flex;
     flex-direction: row;
-    
-    
+    align-items: center;
+    justify-content: center;
+    padding-top:20vh;
+   
 }
 
 #templateMakerHeader{
@@ -250,4 +253,26 @@ font-family: 'circular';
 font-size: 15px;
     border-radius: 10px;
     
+}
+
+
+
+#rightContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+#createTemplateButton{
+    width:350px;
+    margin-left: 20px;
+    height: 60px;
+    background-color: #8A64AB;
+}
+
+#publishButton{
+    width:350px;
+    margin-left: 20px;
+    margin-top: 10px;
+    background-color: rebeccapurple;
+    height: 60px;
 }

@@ -1,12 +1,15 @@
 import React, { Component } from "react";
+import "./Styles/Sidebar.css";
  
 class Sidebar extends Component {
     render() {
         return (
-            <div>
-                    <a href="HashGenerator">HashGenerator</a>
-                     <a href="Courses">Courses</a>
-                     <a href="QuizMaker">QuizMaker</a>
+            <div id="mainContainerSidebar">
+                <div id="container">
+                    <a id="menuButtons" href="HashGenerator">HashGenerator</a>
+                     <a id="menuButtons" href="Courses">Courses</a>
+                     <a id="menuButtons" href="QuizMaker">QuizMaker</a>
+                     </div>
             </div>
         );
     }

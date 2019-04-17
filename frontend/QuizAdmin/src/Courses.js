@@ -30,24 +30,26 @@ class Courses extends Component {
         return (
             <BrowserRouter>
                <Sidebar/>
-                <div className="Courses">
+                <div id="CoursesContainer">
+                COURSES
+                <div id="CoursesContainerInternal">
                     {this.state.courses.map((item, index) => {
                          if (this.state.dataShown == "course_list"){
                              return(
-                            <div onClick={()=>{this.get_students(item.id)}} id="mathButtons">
+                            <div onClick={()=>{this.get_students(item.id)}} id="CourseButtons">
                               {item.title}
                                 </div>
                              )}
 
                              else{
                                  return (
-                                    <div onClick={()=>{this.get_students(item.id)}} id="mathButtons">
+                                    <div onClick={()=>{this.get_students(item.id)}} id="CourseButtons">
                               {item}
                                     </div>
                                  )
                              }
                     })}
-                </div>
+                </div> </div>
             </BrowserRouter>
         );
     }

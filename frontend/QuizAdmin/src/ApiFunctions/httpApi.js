@@ -54,6 +54,21 @@ export const get_students_by_id = (course_id) => {
 };
 
 
+export const get_question_templates = () => {
+  return axios
+    .get(backendUrl+ "question/templates/?format=json", {
+      headers: { 
+        "Content-Type": "application/json" 
+      } //Let backend know that the data is JSON object.
+    })
+    .then(response => { 
+      return (response) //Return data if the function call was successful.
+    }).catch(error => {
+    });
+};
+
+
+
 //Calls the end-point to send the data to the backend.
 export const addToList = () => {
   //Take in name,text,image and date as parameter and send it to the backend.
@@ -71,27 +86,4 @@ export const addToList = () => {
       console.log(error.response) //Log the error on the console if there was an error.
     });
 }
-
-//Calls the end-point to update the number of likes and dislikes.
-export const updateItem = (id, numberLikes, numberDislikes) => {
-  //Use the post id to update likes or dislikes on a certain post.
-  return axios
-    .put(
-      backendUrl + "/posts/" + `${id}/update`,
-      {
-        likes: numberLikes,
-        dislikes: numberDislikes,
-      },
-      {
-        headers: { 
-          "Content-Type": "application/json"
-        } //Let backend know that the data is JSON object.
-      })
-    .then(function (response) {
-      return (response) //Return data if the function call was successful.
-    })
-    .catch(error => {
-      console.log(error.response) //Log the error on the console if there was an error.
-    });
-};
 

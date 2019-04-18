@@ -100,8 +100,7 @@ def students_by_quiz(quiz_id):
 	quiz_logs = (Quiz.objects.all().filter(pk = quiz_id))
 	for quiz in quiz logs:
 		student_hashes.append(quiz["student_hash "])
-    return student_hashes
-
+	return StudentSerializer(Student.objects.all().filter(pk__in student_hashes), many=True).data
 
 # * =============== *
 # * HELPER QUERIES  *

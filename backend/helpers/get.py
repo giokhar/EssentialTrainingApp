@@ -84,6 +84,7 @@ def quizzes_by_student(student_hash):
 	return {"old":old_quiz_list,"new":new_quiz_list}
 
 
+
 def quizzes_by_course(course_id):
     quizzes_queryset = Quiz.objects.all().filter(course_id=course_id)
     quizzes = []
@@ -91,6 +92,16 @@ def quizzes_by_course(course_id):
         quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
         quizzes.append(quiz_json)
     return quizzes
+
+
+def students_by_quiz(quiz_id):
+	"""returns students who took a certian quiz"""
+	student_hashes = []
+	quiz_logs = (Quiz.objects.all().filter(pk = quiz_id))
+	for quiz in quiz logs:
+		student_hashes.append(quiz["student_hash "])
+    return student_hashes
+
 
 # * =============== *
 # * HELPER QUERIES  *
@@ -107,4 +118,3 @@ def completed_quizzes(student_hash):
 		quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
 		quizzes.append(quiz_json)
 	return quizzes
-

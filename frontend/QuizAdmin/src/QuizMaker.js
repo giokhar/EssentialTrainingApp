@@ -49,7 +49,8 @@ class QuizMaker extends Component {
       variableType: "",
       y: [],
       templates:'',
-
+      minVarRange:'',
+      maxVarRange:'',
       selectedCourse: "",
       variableTypeList: [
         {
@@ -111,8 +112,11 @@ class QuizMaker extends Component {
   componentDidMount() {
     var courseList = get_courses();
     console.log(courseList.then(data => { this.setState({ courses: data }) }))
-
+var temp;
     var templateList = get_question_templates();
+    templateList.then(data=>{console.log(data.data.map((item,index)=>{return (item.type)})
+      
+      )})
     console.log("=============================");
     console.log("=============================");
     templateList.then(data => { console.log((data.data[0].type)) })
@@ -144,6 +148,10 @@ class QuizMaker extends Component {
       return index % 2 != 0;
     })
 
+    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
+    console.log(x)
+    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
+
     return x;
   }
 
@@ -152,7 +160,10 @@ class QuizMaker extends Component {
       return index % 2 === 0;
     });
 
-    return x;
+    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
+    console.log(x.join(" $ "))
+    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
+    return x.join(" $ ");
   }
 
  
@@ -249,6 +260,10 @@ handleTemplateDropdown(event){
                   {/*TITLE*/}
                   <div> Enter Quiz Title <input value={this.state.quizTitle} onChange={(e) => { this.setState({ quizTitle: e.target.value }) }} />  </div>
                   <Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} />
+                  Minimum
+<input value={this.state.minVarRange} onChange={(e)=>{this.setState({minVarRange:e.target.value})}}/>
+Maximum
+<input value={this.state.maxVarRange} onChange={(e)=>{this.setState({maxVarRange:e.target.value})}}/>
 
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div>
@@ -357,6 +372,10 @@ handleTemplateDropdown(event){
                     });
                     alert("Your quiz template has been added to the list");
 
+
+                   // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"input_values\":[[1,100],[100,200]]}" }
+
+                    console.log("inputs:"+this.getVariables()+"outputs"+this.state.outputs+"input type:"+this.state.variableType+"text:"+this.getQuizText()+this.state.minVarRange+this.state.maxVarRange)
 
                     console.log("Get Variable Type");
                     console.log(this.state.variableType)

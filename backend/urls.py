@@ -12,7 +12,6 @@ urlpatterns = [
 	path('quizzes/<int:quiz_id>/', api.quiz_details_view),
 	path('quizzes/student/<str:hash>/', api.quizzes_by_student_view),
 	path('quizzes/course/<int:course_id>/', api.quizzes_by_course_view),
-	# path('quizzes/students/<int:quiz_id>', api.get_students_by_quiz),
 
 	path('hashes/<int:amount>/<int:course_id>/', api.hash_generator_view),
 	path('question/new/<int:question_template_id>/', api.new_question_view),

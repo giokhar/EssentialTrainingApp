@@ -69,7 +69,3 @@ def create_question_template_view(request):
 @api_view(["POST"])
 def create_quiz_log_view(request):
 	return Response(post.create_quiz_log(request.data))
-
-@api_view(["GET"])
-def get_students_by_quiz(quiz_id):
-	return Response(post.students_by_quiz(request.data))

@@ -46,6 +46,7 @@ class QuizMaker extends Component {
       finalQuiz: [],
       courses: [{ title: 'CS 228' }, { title: 'CS 310' }],
       backendInput: [],
+      valueRanges:[],
       variableType: "",
       y: [],
       templates:'',
@@ -197,10 +198,32 @@ handleTemplateDropdown(event){
   }
 
 
+  getRange() {
+    var x = this.state.valueRanges;//["", "12", "empty", "34", "", "52", "empty", "74", "", "94", "empty", "112"]
+    //console.log(x);
+    var newArr = []
+    var i = 0
+    for (i = 0; i < x.length - 1; i = i + 1) {
+      if (x[i] != "") {
+        newArr.push('[' + x[i] + "," + x[i + 1] + "]")
+        i = i + 1
+      }
+    }
+    return (newArr)
+  }
+
   onChangeAge() {
     this.setState({ refresh: !this.state.refresh })
   }
 
+  getOutputTemplate(){
+    var outputTemplate = "";
+    var no_of_vars = this.getVariables().length
+    for (var i = 0; i < no_of_vars; i = i + 1) {
+      outputTemplate = outputTemplate+"$,"
+    }
+    return "<"+outputTemplate.substring(0, outputTemplate.length - 1)+">"
+  }
 
   render() {
 
@@ -299,7 +322,7 @@ Maximum
 
                     <div style={{ marginLeft: 30 }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <button id="addVariable" onClick={() => this.appendToArray("sqrt")}> Add Variable </button>
+                        <button id="addVariable" onClick={() => {this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({valueRanges:temp  })}}> Add Variable </button>
 
                         <div id="mathTitle"> Math Functions </div>
                         <div style={{ width: 400, flexWrap: 'wrap' }}>
@@ -321,11 +344,29 @@ Maximum
                     {this.state.inputs.map((item, index) => {
                       //console.log("The current iteration is: " + index);
                       if (item[0] == "a") {
-                        return (<button id="outputVariables"
+                        return (
+                        <div>
+                        <button id="outputVariables"
                           onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + item + " "; this.setState({ refresh: !this.state.refresh }) }}
                           onChange={this.onChangeAge.bind(this)}>
                           {item}
+                         
                         </button>
+                         <div><input value={this.state.valueRanges[index]} onChange={(e)=>{
+                           var temp = this.state.valueRanges;
+                           temp[index] = e.target.value;
+                           this.setState({valueRanges:temp, refresh:!this.state.refresh})   
+
+                           console.log(this.state.valueRanges);                        
+                           }}/></div>
+                          <div><input value={this.state.valueRanges[index+1]} onChange={(e)=>{
+                           var temp = this.state.valueRanges;
+                           temp[index+1] = e.target.value;
+                           this.setState({valueRanges:temp, refresh:!this.state.refresh})   
+
+                           console.log(this.state.valueRanges);                        
+                           }}/></div>
+                         </div>
                         )
                       }
                     }
@@ -351,6 +392,7 @@ Maximum
                                     <div id="outputItems">
                                       <div id="outputItemText">
                                         {item}
+                                   
                                       </div>
                                     </div>
                                   )
@@ -375,7 +417,7 @@ Maximum
 
                    // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"input_values\":[[1,100],[100,200]]}" }
 
-                    console.log("inputs:"+this.getVariables()+"outputs"+this.state.outputs+"input type:"+this.state.variableType+"text:"+this.getQuizText()+this.state.minVarRange+this.state.maxVarRange)
+                    console.log("inputs:"+this.getVariables()+" ,outputs:"+this.state.outputs+" ,input type:"+this.state.variableType+" ,text:"+this.getQuizText() + " ,output_template:A="+ this.getOutputTemplate() +  "input_values:"+"["+this.getRange()+"]")
 
                     console.log("Get Variable Type");
                     console.log(this.state.variableType)
@@ -419,31 +461,4 @@ Maximum
 
 export default QuizMaker;
 
-
-{
-  /*
-  id = models.AutoField(primary_key=True)
-	title = models.CharField(max_length=255)
-  question_json = {
-    id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=255)
-    template_json = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_range":[1,100]}
-	  created_on =  models.DateTimeField(auto_now_add=True)
-  }
-  {
-    id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=255)
-    template_json = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_range":[1,100]}
-	  created_on =  models.DateTimeField(auto_now_add=True)
-  }
-  {
-    id = models.AutoField(primary_key=True)
-    type = models.CharField(max_length=255)
-    template_json = {"input_num": 2, "outputs":["a0+a1", "a0-a1"], "input_type":"regular","text":"Find the sum and difference of $ and $","output_template":"A = <$, $>","input_range":[1,100]}
-	  created_on =  models.DateTimeField(auto_now_add=True)
-  }
-	is_published = models.BooleanField(default=False)
-	course_ids = models.TextField(null=True)
-	created_on =  models.DateTimeField(auto_now_add=True)
-*/
-}
+ 

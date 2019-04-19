@@ -1,21 +1,46 @@
-
 #CourseButtons {
     background-color: white;
-    width: 800px;
-    height: 50px;
-   margin:10px;
+    padding:20px;
+    padding-right:800px;
+   margin:5px;
+   text-align: left;
+
     border-width: 0; 
     font-family: 'circular';
+    align-self: center;
      color: #8A64AB;
-    font-size: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 14px 24px -11px rgba(0,0,0,0.13);
+    font-size: 20px; 
+    box-shadow: 0px 46px 223px -11px rgba(0,0,0,0.18);
+}
 
+#CourseButtons:hover{
+    padding:30px;
+    padding-right:900px;
+    transition: 0.3s;
 }
 
 #CoursesContainer{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-self: center;
     margin-left:200px;
+
+}
+
+ #title_font{
+    font-family: 'circular';
+    color: #8A64AB;
+   font-size: 45px;
+   margin-top:80px;
+  
+   margin-bottom:20px;
    
+ }
+
+
+ #CoursesContainerInternal{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
  }

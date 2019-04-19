@@ -11,7 +11,24 @@ import Sidebar from './Sidebar';
 import { Select, AsyncSelect, MultiSelect } from 'dropdown-select';
 import 'dropdown-select/dist/css/dropdown-select.css';
 
+const customStyles = {
+  option: (provided, state) => ({
+    ...provided,
+    borderBottom: '1px dotted pink',
+    color: state.isSelected ? 'red' : 'blue',
+    padding: 20,
+  }),
+  control: () => ({
+    // none of react-select's styles are passed to <Control />
+    width: 200,
+  }),
+  singleValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = 'opacity 300ms';
 
+    return { ...provided, opacity, transition };
+  }
+}
 {/*
   question_template = {
     "inputs":["a","b"], 
@@ -29,7 +46,7 @@ class QuizMaker extends Component {
     super(props);
     // Don't call this.setState() here!
     this.state = {
-      selectedTemplateList:[""],
+      selectedTemplateList: [],
       counter: "sfs", test: "",
       object: <input></input>,
       inputs: ['Enter text here'],
@@ -40,19 +57,20 @@ class QuizMaker extends Component {
       outputArray: '',
       outputs: [""],
       selectedOutput: 0,
-      modalIsOpen: true,
+      modalIsOpen: false,
       quizTitle: '',
       quizTypes: [],
       finalQuiz: [],
       courses: [{ title: 'CS 228' }, { title: 'CS 310' }],
       backendInput: [],
-      valueRanges:[],
+      valueRanges: [],
       variableType: "",
       y: [],
-      templates:'',
-      minVarRange:'',
-      maxVarRange:'',
+      templates: '',
+      minVarRange: '',
+      maxVarRange: '',
       selectedCourse: "",
+      render_template_popup:false,
       variableTypeList: [
         {
           id: 0,
@@ -83,7 +101,7 @@ class QuizMaker extends Component {
     this.openModal = this.openModal.bind(this);
     this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-     this.handleTemplateDropdown = this.handleTemplateDropdown.bind(this);
+    this.handleTemplateDropdown = this.handleTemplateDropdown.bind(this);
   }
 
 
@@ -109,24 +127,26 @@ class QuizMaker extends Component {
     //this.setState({ templates: this.state.courses[id - 1].title })
   }
 
+  getTemplates(){
+    var templateList = get_question_templates();
+    return templateList.then(data => { return (data.data.map((item, index) => { return (item.type) })
+      )
+    })
 
-  componentDidMount() {
+  }
+
+  componentWillMount() {
     var courseList = get_courses();
     console.log(courseList.then(data => { this.setState({ courses: data }) }))
-var temp;
-    var templateList = get_question_templates();
-    templateList.then(data=>{console.log(data.data.map((item,index)=>{return (item.type)})
-      
-      )})
+    var temp;
+   (this.getTemplates().then(data =>{this.setState({templates:data})}))
     console.log("=============================");
     console.log("=============================");
-    templateList.then(data => { console.log((data.data[0].type)) })
-    templateList.then(data => { this.setState({templates:data.data[0].type}) })
-
+    
     console.log("?????????")
     console.log(this.state.selectedTemplateList)
     console.log("?????????")
-   
+
 
   }
 
@@ -167,10 +187,10 @@ var temp;
     return x.join(" $ ");
   }
 
- 
-handleTemplateDropdown(event){
-  this.setState({selectedTemplateList:this.state.selectedTemplateList.concat(event)})
-}
+
+  handleTemplateDropdown(event) {
+    this.setState({ selectedTemplateList: this.state.selectedTemplateList.concat(event) })
+  }
 
 
   appendToArray(ex) {
@@ -216,17 +236,40 @@ handleTemplateDropdown(event){
     this.setState({ refresh: !this.state.refresh })
   }
 
-  getOutputTemplate(){
+  getOutputTemplate() {
     var outputTemplate = "";
     var no_of_vars = this.getVariables().length
     for (var i = 0; i < no_of_vars; i = i + 1) {
-      outputTemplate = outputTemplate+"$,"
+      outputTemplate = outputTemplate + "$,"
     }
-    return "<"+outputTemplate.substring(0, outputTemplate.length - 1)+">"
+    return "<" + outputTemplate.substring(0, outputTemplate.length - 1) + ">"
   }
 
-  render() {
+renderPopup(){
+ var tempArray=[]
+  for(var i =0; i <this.state.templates.length; i++){
+   tempArray.push(this.state.templates[i])
+}
+return tempArray
+}
 
+
+renderPopupContainer(){
+  if (this.state.render_template_popup == true)
+   {return(
+<div id="template_popup_container">
+{this.renderPopup().map((item,index)=>{return( <div id="template_popup" onClick={()=>{this.setState({selectedTemplateList:this.state.selectedTemplateList.concat(item)})}}> {item}   </div>)})}
+</div>)
+  }
+  else{
+    return 
+  }
+}
+
+  render() {
+    console.log("---")
+    console.log(this.state.templates)
+    console.log(this.state.selectedTemplateList)
     return (
       <BrowserRouter>
         <Sidebar />
@@ -234,15 +277,23 @@ handleTemplateDropdown(event){
           <div id="quizMakerContainer">
             <div id="templateMaker">
               <div id="templateMakerHeader">
-              <div id="templateMakerInnerContainer">
-                <div id="templateMakerTitle">Quiz</div>
-                 <Select style={{backgroundColor:'blue'}} onChange={this.handleTemplateDropdown} options={this.state.templates}  />
-                  {this.state.selectedTemplateList.map((item,index)=>{return(
-                    <div id="templateList">
-                    {item}
+                <div id="templateMakerInnerContainer">
+                  <div id="templateMakerTitle">Quiz</div>
+                  <div  >Select templates</div>
+                  {/*  <div>{this.state.templates.map((item,index)=>{return(<div style={{width:200, backgroundColor:'purple', height:500}}>{item}</div>)})}</div> */}
+                  <Select styles={customStyles} onChange={this.handleTemplateDropdown} options={this.state.templates} />
+                 {/*
+                  <div id="select_template_toggle" onClick={()=>this.setState({render_template_popup:!this.state.render_template_popup})}> Select Templates</div>
+                  {this.renderPopupContainer()}
+                 */}
+                   {this.state.selectedTemplateList.map((item, index) => {
+                    return (
+                      <div id="templateList">
+                        {item}
                       </div>
-                      )})}
-                      </div>
+                    )
+                  })}
+                </div>
               </div>
 
               <div>
@@ -254,11 +305,11 @@ handleTemplateDropdown(event){
             </div>
             <div id="rightContainer">
               <div id="courseSelector">
-              <div id="courseSelectorInternalContainer">
-                <div id="templateMakerTitle">Courses</div>
-                <Dropdown title="Select Courses" list={this.state.courses} resetThenSet={this.resetThenSetCourses} />
-              <div id="selectedCourse">  {this.state.selectedCourse} </div>
-              </div>
+                <div id="courseSelectorInternalContainer">
+                  <div id="templateMakerTitle">Courses</div>
+                  <Dropdown title="Select Courses" list={this.state.courses} resetThenSet={this.resetThenSetCourses} />
+                  <div id="selectedCourse">  {this.state.selectedCourse} </div>
+                </div>
               </div>
               <div onClick={this.openModal.bind(this)} id="createTemplateButton">Create Template</div>
               <div id="publishButton">Publish Quiz</div>
@@ -281,12 +332,13 @@ handleTemplateDropdown(event){
 
 
                   {/*TITLE*/}
-                  <div> Enter Quiz Title <input value={this.state.quizTitle} onChange={(e) => { this.setState({ quizTitle: e.target.value }) }} />  </div>
-                  <Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} />
-                  Minimum
-<input value={this.state.minVarRange} onChange={(e)=>{this.setState({minVarRange:e.target.value})}}/>
-Maximum
-<input value={this.state.maxVarRange} onChange={(e)=>{this.setState({maxVarRange:e.target.value})}}/>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <div id="enter_quiz_title_text">Enter Quiz Title</div>
+                      <div><input id="quiz_title_text" value={this.state.quizTitle} onChange={(e) => { this.setState({ quizTitle: e.target.value }) }} /> </div>
+                    </div>
+                 {/*   <div><Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} /></div> */}
+                  </div>
 
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div>
@@ -322,7 +374,7 @@ Maximum
 
                     <div style={{ marginLeft: 30 }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <button id="addVariable" onClick={() => {this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({valueRanges:temp  })}}> Add Variable </button>
+                        <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
 
                         <div id="mathTitle"> Math Functions </div>
                         <div style={{ width: 400, flexWrap: 'wrap' }}>
@@ -340,37 +392,37 @@ Maximum
                   </div>
 
 
-                  <div>
+                  <div style={{display:'flex', flexDirection:'row'}}>
                     {this.state.inputs.map((item, index) => {
                       //console.log("The current iteration is: " + index);
                       if (item[0] == "a") {
                         return (
-                        <div>
-                        <button id="outputVariables"
-                          onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + item + " "; this.setState({ refresh: !this.state.refresh }) }}
-                          onChange={this.onChangeAge.bind(this)}>
-                          {item}
-                         
-                        </button>
-                         <div><input value={this.state.valueRanges[index]} onChange={(e)=>{
-                           var temp = this.state.valueRanges;
-                           temp[index] = e.target.value;
-                           this.setState({valueRanges:temp, refresh:!this.state.refresh})   
+                          <div id="outputContainer">
+                            <button id="outputVariables"
+                              onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + item + " "; this.setState({ refresh: !this.state.refresh }) }}
+                              onChange={this.onChangeAge.bind(this)}>
+                              {item}
 
-                           console.log(this.state.valueRanges);                        
-                           }}/></div>
-                          <div><input value={this.state.valueRanges[index+1]} onChange={(e)=>{
-                           var temp = this.state.valueRanges;
-                           temp[index+1] = e.target.value;
-                           this.setState({valueRanges:temp, refresh:!this.state.refresh})   
+                            </button>
+                            <div><input placeholder={"Min"}  id="outputRanges" value={this.state.valueRanges[index]} onChange={(e) => {
+                              var temp = this.state.valueRanges;
+                              temp[index] = e.target.value;
+                              this.setState({ valueRanges: temp, refresh: !this.state.refresh })
 
-                           console.log(this.state.valueRanges);                        
-                           }}/></div>
-                         </div>
+                              console.log(this.state.valueRanges);
+                            }} /></div>
+                            <div><input placeholder={"Max"} id="outputRanges" value={this.state.valueRanges[index + 1]} onChange={(e) => {
+                              var temp = this.state.valueRanges;
+                              temp[index + 1] = e.target.value;
+                              this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+
+                              console.log(this.state.valueRanges);
+                            }} /></div>
+                          </div>
                         )
                       }
                     }
-                  )}
+                    )}
 
                   </div>
 
@@ -392,7 +444,7 @@ Maximum
                                     <div id="outputItems">
                                       <div id="outputItemText">
                                         {item}
-                                   
+
                                       </div>
                                     </div>
                                   )
@@ -415,9 +467,20 @@ Maximum
                     alert("Your quiz template has been added to the list");
 
 
-                   // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"input_values\":[[1,100],[100,200]]}" }
+                    // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"input_values\":[[1,100],[100,200]]}" }
 
-                    console.log("inputs:"+this.getVariables()+" ,outputs:"+this.state.outputs+" ,input type:"+this.state.variableType+" ,text:"+this.getQuizText() + " ,output_template:A="+ this.getOutputTemplate() +  "input_values:"+"["+this.getRange()+"]")
+                    console.log({
+                      "type": this.state.quizTitle,
+                      "template_json": "{\\" +
+                        "inputs\\\":" + this.getVariables() + "," +
+                        "outputs:" + this.state.outputs + "," +
+                        "input_type:" + this.state.variableType + "," +
+                        "text:" + this.getQuizText() + "," +
+                        "output_template:A=" + this.getOutputTemplate() + "," +
+                        "input_values:" + "[" + this.getRange() + "]" +
+                        "}"
+                    }
+                    )
 
                     console.log("Get Variable Type");
                     console.log(this.state.variableType)
@@ -440,7 +503,7 @@ Maximum
 
 
                     //Getting 
-                  }} style={{ backgroundColor: 'blue', padding: 10, color: 'white', borderRadius: 15 }}> Add quiz Template to quiz list </div>
+                  }}  id="save_template" > Save Template </div>
 
 
                 </div>
@@ -461,4 +524,3 @@ Maximum
 
 export default QuizMaker;
 
- 

@@ -1,25 +1,33 @@
 #container{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    
 }
 
  
  #mainContainerSidebar{
      position:absolute;
      height:100vh;
-     width:200px;
-     background-color: maroon;
+     width:250px;
+     background-color: #F7F8F8;
      font-size: 15px;
      display: flex;
      justify-content: center;
+     align-items: center;
      flex-direction: column;
+ 
     }
 
   
 
 #menuButtons{
-    margin:10px;
+    margin:20px;
+    margin-left:-20px;
     font-family: "circular";
-    color: black;
+    color:#A7A9AC;
     text-decoration: none;
+    font-size:20px;
 }
+

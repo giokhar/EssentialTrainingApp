@@ -5,7 +5,7 @@ import "./Styles/courses.css";
 import Sidebar from "./Sidebar";
 
 
-class Courses extends Component {
+class Quizzes extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,4 +59,4 @@ class Courses extends Component {
     }
 }
 
-export default Courses;
+export default Quizzes;

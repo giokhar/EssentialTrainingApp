@@ -57,6 +57,11 @@ def hash_generator_view(request, amount, course_id):
 	"""Return and create hashes in the database"""
 	return Response(get.generate_hashes(amount, course_id))
 
+@api_view(['GET'])
+def quiz_stats_view(request, quiz_id):
+	"""Return JSON response of stats of the quiz by quiz_id"""
+	return Response(get.quiz_stats(quiz_id))
+
 
 @api_view(["POST"])
 def create_quiz_view(request):

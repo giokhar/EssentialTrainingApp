@@ -8,7 +8,7 @@ import json, time
 # * ================ *
 
 def test():
-	return True
+	return quiz_overview(2)
 
 def all_courses():
 	"""Return serialized all Course objects"""
@@ -96,7 +96,7 @@ def quizzes_by_course(course_id):
 
 def quiz_stats(quiz_id):
 	"""TODO: THIS WILL RETURN THE STATS JSON WHEN IT'S DONE"""
-	return quiz_overview(quiz_id)
+	return quiz_id
 
 
 # * =============== *
@@ -117,5 +117,10 @@ def completed_quizzes(student_hash):
 
 def quiz_overview(quiz_id):
 	"""This method is used for displaying stats"""
+	overview = {}
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
-	return QuizSerializer(quiz_obj).data
+	data = json.loads(QuizSerializer(quiz_obj).data['question_json'])
+	for key in data.keys():
+		question_type = QuestionTemplate.objects.get(pk=int(key)).type
+		overview[question_type] = data[key]
+	return overview

@@ -7,6 +7,9 @@ import json, time
 # * GET REQUESTS API *
 # * ================ *
 
+def test():
+	return num_students_take_quiz(7)
+
 def all_courses():
 	"""Return serialized all Course objects"""
 	return CourseSerializer(Course.objects.all(),many=True).data
@@ -101,6 +104,29 @@ def quizzes_by_course(course_id):
 # 	for quiz in quiz_logs:
 # 		student_hashes.append(quiz["student_hash "])
 # 	return StudentSerializer(Student.objects.all().filter(pk__in student_hashes), many=True).data
+
+#how many students are supposed to take a quiz with a certain quiz_id
+
+
+def num_students_take_quiz(quiz_id):
+	quiz_logs = QuizLog.objects.all()
+	logs_json = QuizLogSerializer(quiz_logs).data
+	return logs_json
+
+
+
+#from backend.helpers.get import *
+#print(students_took_quiz(7))
+
+def students_took_quiz(quiz_id):
+	quiz_logs = (QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True))
+	num_completed = len(quiz_logs)
+	return num_completed
+
+#returns {"complete:" % as a float number}
+#also do pass/self.fail, potenitally in the same dictionary
+
+
 
 # * =============== *
 # * HELPER QUERIES  *

@@ -7,6 +7,9 @@ import json, time
 # * GET REQUESTS API *
 # * ================ *
 
+def test():
+	return True
+
 def all_courses():
 	"""Return serialized all Course objects"""
 	return CourseSerializer(Course.objects.all(),many=True).data
@@ -93,7 +96,7 @@ def quizzes_by_course(course_id):
 
 def quiz_stats(quiz_id):
 	"""TODO: THIS WILL RETURN THE STATS JSON WHEN IT'S DONE"""
-	return quiz_id
+	return quiz_overview(quiz_id)
 
 
 # * =============== *
@@ -111,3 +114,8 @@ def completed_quizzes(student_hash):
 		quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
 		quizzes.append(quiz_json)
 	return quizzes
+
+def quiz_overview(quiz_id):
+	"""This method is used for displaying stats"""
+	quiz_obj = Quiz.objects.get(pk=quiz_id)
+	return QuizSerializer(quiz_obj).data

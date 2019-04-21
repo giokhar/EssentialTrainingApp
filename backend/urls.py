@@ -4,6 +4,8 @@ from backend import api
 
 
 urlpatterns = [
+	# TEST METHOD
+	path('test/', api.test_view),
 	# GET METHODS
 	path('students/', api.student_list_view),
 	path('students/<str:hash>/', api.student_details_view),

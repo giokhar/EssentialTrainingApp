@@ -3,6 +3,11 @@ from rest_framework.response import Response
 from backend.helpers import get, post
 
 @api_view(["GET"])
+def test_view(request):
+	"""THIS FUNCTION IS USED ONLY FOR DEVELOPMENT"""
+	return Response(get.test())
+
+@api_view(["GET"])
 def quizzes_by_course_view(request, course_id):
 	"""Return JSON response of all quizzes by course_id"""
 	return Response(get.quizzes_by_course(course_id))
@@ -61,7 +66,6 @@ def hash_generator_view(request, amount, course_id):
 def quiz_stats_view(request, quiz_id):
 	"""Return JSON response of stats of the quiz by quiz_id"""
 	return Response(get.quiz_stats(quiz_id))
-
 
 @api_view(["POST"])
 def create_quiz_view(request):

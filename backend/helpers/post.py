@@ -19,9 +19,9 @@ def create_question_template(data):
 	isValidQuestionTemplate = True
 	error_message = ""
 
-
 	if serializer.is_valid():
-		question_template = json.loads(serializer["template_json"])
+		serializer_data = serializer.validated_data
+		question_template = json.loads(serializer_data["template_json"])
 
 		try:
 			qm.get_new_question_instance(question_template)

@@ -1,6 +1,7 @@
 from backend.models import *
 from backend.serializers import *
 from backend.helpers import question_maker as qm
+from django.db.models import Avg, F
 import json, time
 
 # * ================ *
@@ -8,7 +9,7 @@ import json, time
 # * ================ *
 
 def test():
-	return quiz_overview(2)
+	return avg_time_to_finish(7)
 
 def all_courses():
 	"""Return serialized all Course objects"""
@@ -116,7 +117,7 @@ def completed_quizzes(student_hash):
 	return quizzes
 
 def quiz_overview(quiz_id):
-	"""This method is used for displaying stats"""
+	"""This method is used for displaying stats in quiz_stats function"""
 	overview = {}
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
 	data = json.loads(QuizSerializer(quiz_obj).data['question_json'])
@@ -124,3 +125,12 @@ def quiz_overview(quiz_id):
 		question_type = QuestionTemplate.objects.get(pk=int(key)).type
 		overview[question_type] = data[key]
 	return overview
+
+def avg_time_to_finish(quiz_id):
+	"""This method is used for displaying stats in quiz_stats function"""
+	diffs = []
+	logs = QuizLog.objects.filter(quiz_id=quiz_id, completed=True, passed=True)
+	for log in logs:
+		diffs.append((log.end_time - log.start_time).total_seconds())
+	return {"average_time":sum(diffs)/float(len(diffs))} # average time in seconds
+

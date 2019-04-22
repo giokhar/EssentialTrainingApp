@@ -77,11 +77,11 @@ def quizzes_by_student(student_hash):
 	# old_quiz_list = completed_quizzes(student_hash)
 	# new_quiz_list = []
 
-	# for quiz in all_quizzes:
-	# 	if quiz not in old_quiz_list:
-	# 		new_quiz_list.append(quiz)
+	for quiz in all_quizzes:
+		if quiz not in old_quiz_list:
+			new_quiz_list.append(quiz)
 
-	return {"all":all_quizzes}#{"old":old_quiz_list,"new":new_quiz_list}
+	return {"all":new_quiz_list}#{"old":old_quiz_list,"new":new_quiz_list}
 
 def quizzes_by_course(course_id):
     quizzes_queryset = Quiz.objects.filter(course_id=course_id)

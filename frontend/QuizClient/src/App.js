@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import Login from './login';
 import Quizzes from './quizzes';
+import Quiz_taker from './quiz_taker';
+
 
 import { BrowserRouter, Route } from 'react-router-dom';
 
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    
+    }
+}
+
   render() {
     return (
       <BrowserRouter>
@@ -16,14 +25,10 @@ class App extends Component {
             </div>
           )} />
 
-          <Route exact={true} path='/quizzes' render={() => (
-            <div className="App">
-              <Quizzes />
-            </div>
-          )} />
+          <Route component={(props) => <Quizzes {...props} />} exact={true} path='/quizzes' />
+          <Route component={(props) => <Quiz_taker {...props} />} exact={true} path='/quiz_taker' />
 
-
-        </div>
+         </div>
       </BrowserRouter>
     );
   }

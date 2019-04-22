@@ -119,7 +119,7 @@ def students_took_quiz(quiz_id):
 	#checks how many completed, failed, and passed quizzes there are
 	completed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True)
 	num_completed = len(completed_quiz_logs)
-	num_students = number_students(quiz_id)
+	num_students = number_students(quiz_id) #how many studens are supposed to take that quiz
 	passed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, passed = True)
 	num_passed = len(passed_quiz_logs)
 	num_failed = (QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True, passed = False))

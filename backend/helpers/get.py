@@ -1,6 +1,7 @@
 from backend.models import *
 from backend.serializers import *
 from backend.helpers import question_maker as qm
+from statistics import mean, median, stdev
 import json, time
 
 # * ================ *
@@ -72,8 +73,6 @@ def quizzes_by_student(student_hash):
 	student_json = StudentSerializer(Student.objects.get(pk = student_hash)).data
 	course_id = student_json['course_id']
 	all_quizzes = quizzes_by_course(course_id)
-
-
 	old_quiz_list = completed_quizzes(student_hash)
 	new_quiz_list = []
 
@@ -117,3 +116,52 @@ def completed_quizzes(student_hash):
 		quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
 		quizzes.append(quiz_json)
 	return quizzes
+
+
+def get_results_json_from_quiz_id(quiz_id):
+	"Returns all of the results_json objects from quiz_logs corresponding to the given quiz_id (only if completed)"
+	quiz_log_queryset = QuizLog.objects.all().filter(quiz_id = quiz_id).filter(completed=True)
+	results = [quiz_log.results_json for quiz_log in quiz_log_queryset]
+	return results
+
+def get_template_ids_from_quiz_id(quiz_id):
+	"Returns the template_ids corresponding to a given quiz"
+	quiz_obj = Quiz.objects.get(pk=quiz_id)
+	questions = json.loads(quiz_obj.question_json)
+	template_ids = questions.keys()
+	return template_ids
+
+def results_by_template(quiz_id):
+	results = get_results_json_from_quiz_id(quiz_id)
+	template_ids = get_template_ids_from_quiz_id(quiz_id)
+	results_by_template = {}
+	for template_id in template_ids:
+		no_of_questions_asked = []
+		no_incorrect = []
+		done = []
+		for result in results:
+			result = json.loads(result)
+			fields_dict = result[template_id]
+			no_of_questions_asked.append(fields_dict["no_of_questions_asked"] )
+			no_incorrect.append(fields_dict["no_incorrect"])
+			done.append(fields_dict["done"])
+		aggregate_fields_dict = {"no_of_questions_asked":no_of_questions_asked, "no_incorrect":no_incorrect,"done":done }
+		results_by_template[template_id] = aggregate_fields_dict
+
+	return results_by_template
+
+def get_template_wise_stats_from_quiz_id(quiz_id):
+	results_by_template_dict =  results_by_template(quiz_id)
+	template_ids = results_by_template_dict.keys()
+	stats_dict = {}
+	for template,fields in results_by_template_dict.items():
+		mean_no_of_questions = mean(fields["no_of_questions_asked"])
+		median_no_of_questions = median(fields["no_of_questions_asked"])
+		stdev_no_of_questions = stdev(fields["no_of_questions_asked"])
+		stats_dict[template] = {"mean_no_of_questions":mean_no_of_questions,"median_no_of_questions":median_no_of_questions,
+		                        "stdev_no_of_questions":stdev_no_of_questions }
+
+	return stats_dict
+
+# def test():
+# 	return get_template_wise_stats_for_quiz_id('7')

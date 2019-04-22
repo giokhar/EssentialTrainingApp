@@ -49,7 +49,10 @@ def quiz_details(quiz_id):
 	"""Return the JSON of quiz details"""
 	quiz_obj = Quiz.objects.get(pk=quiz_id)
 	details = {"title":quiz_obj.title, "questions":[],"is_published":quiz_obj.is_published}
-	details['questions'] = json.loads(quiz_obj.question_json)
+	questions = json.loads(quiz_obj.question_json)
+	for template_id, amount in questions.items():
+		template_obj = QuestionTemplate.objects.get(pk=template_id)
+		details['questions'].append({"template_id":int(template_id),"type":template_obj.type,"amount":amount})
 	return details
 
 def generate_hashes(amount, course_id):

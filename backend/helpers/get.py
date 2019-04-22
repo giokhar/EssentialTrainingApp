@@ -74,8 +74,8 @@ def quizzes_by_student(student_hash):
 	all_quizzes = quizzes_by_course(student_obj['course_id'])
 
 	# TODO: THIS NEEDS TO BE FIXED
-	# old_quiz_list = completed_quizzes(student_hash)
-	# new_quiz_list = []
+	old_quiz_list = completed_quizzes(student_hash)
+	new_quiz_list = []
 
 	for quiz in all_quizzes:
 		if quiz not in old_quiz_list:

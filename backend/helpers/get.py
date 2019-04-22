@@ -2,7 +2,7 @@ from backend.models import *
 from backend.serializers import *
 from backend.helpers import question_maker as qm
 import json, time
-
+import random
 # * ================ *
 # * GET REQUESTS API *
 # * ================ *
@@ -119,7 +119,7 @@ def students_took_quiz(quiz_id):
 	#checks how many completed, failed, and passed quizzes there are
 	completed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True)
 	num_completed = len(completed_quiz_logs)
-	num_students = number_students(quiz_id)
+	num_students = number_students(quiz_id) #how many studens are supposed to take that quiz
 	passed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, passed = True)
 	num_passed = len(passed_quiz_logs)
 	num_failed = (QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True, passed = False))
@@ -149,3 +149,16 @@ def completed_quizzes(student_hash):
 		quiz_json = {'id':quiz.id,'title':quiz.title,'created_on' :quiz.created_on}
 		quizzes.append(quiz_json)
 	return quizzes
+
+# * =============== *
+# * Multiple Choice Questions  *
+# * =============== *
+
+
+def multipleChoices(answer):
+	"""the right answer
+	returns four multiple choice answers"""
+	possible_answers = ( "N", "NW", "W", "SW", "S", "SE", "E", "NE", "into the page", "out of page)"
+	multiple_choice = random.sample(possible_answers-{answer},3)
+	multiple_choice.append(answer)
+	return multiple_choice

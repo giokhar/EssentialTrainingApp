@@ -162,6 +162,3 @@ def get_template_wise_stats_from_quiz_id(quiz_id):
 		                        "stdev_no_of_questions":stdev_no_of_questions }
 
 	return stats_dict
-
-# def test():
-# 	return get_template_wise_stats_for_quiz_id('7')

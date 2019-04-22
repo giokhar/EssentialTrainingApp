@@ -8,7 +8,7 @@ import json, time
 # * ================ *
 
 def test():
-	return num_students_take_quiz(7)
+	return students_took_quiz(7)
 
 def all_courses():
 	"""Return serialized all Course objects"""
@@ -105,26 +105,32 @@ def quizzes_by_course(course_id):
 # 		student_hashes.append(quiz["student_hash "])
 # 	return StudentSerializer(Student.objects.all().filter(pk__in student_hashes), many=True).data
 
+
 #how many students are supposed to take a quiz with a certain quiz_id
-
-
-def num_students_take_quiz(quiz_id):
-	quiz_logs = QuizLog.objects.all()
-	logs_json = QuizLogSerializer(quiz_logs).data
-	return logs_json
-
-
-
-#from backend.helpers.get import *
-#print(students_took_quiz(7))
+def number_students(quiz_id):
+	quiz_logs = Quiz.objects.all().filter(pk= quiz_id)
+	logs_json = QuizSerializer(quiz_logs, many=True).data
+	course_id = logs_json[0]["course_id"] #all quiz_ids are for only one course
+	students= Student.objects.all().filter(course_id = course_id)
+	num_students = students.count()
+	return num_students
 
 def students_took_quiz(quiz_id):
-	quiz_logs = (QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True))
-	num_completed = len(quiz_logs)
-	return num_completed
+	#checks how many completed, failed, and passed quizzes there are
+	completed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True)
+	num_completed = len(completed_quiz_logs)
+	num_students = number_students(quiz_id)
+	passed_quiz_logs = QuizLog.objects.all().filter(quiz_id= quiz_id, passed = True)
+	num_passed = len(passed_quiz_logs)
+	num_failed = (QuizLog.objects.all().filter(quiz_id= quiz_id, completed = True, passed = False))
+	if num_students == 0: #to prevent division by zero error
+		return "No students are supposed to take that quiz."
+	percent_complete = (num_completed / num_students) * 100
+	percent_passed = (num_passed / num_students) * 100
+	percent_failed = (num_failed / num_students) * 100
+	return {"completed": percent_complete, "passed": percent_passed, "failed": percent_failed}
 
-#returns {"complete:" % as a float number}
-#also do pass/self.fail, potenitally in the same dictionary
+
 
 
 

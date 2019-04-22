@@ -81,7 +81,7 @@ def quizzes_by_student(student_hash):
 		if quiz not in old_quiz_list:
 			new_quiz_list.append(quiz)
 
-	return {"all":new_quiz_list}#{"old":old_quiz_list,"new":new_quiz_list}
+	return {"old":old_quiz_list,"new":new_quiz_list}
 
 def quizzes_by_course(course_id):
     quizzes_queryset = Quiz.objects.filter(course_id=course_id)

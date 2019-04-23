@@ -3,6 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { get_quizzes } from './api_functions/http_api'
 import axios from "axios";
 import "./styles/quizzes.css";
+import { withRouter } from 'react-router-dom';
 
 //http://essential-training-app-api.herokuapp.com/api/quizzes/student/cs-128-spring-2019-110253530030518616/?format=json
 
@@ -36,6 +37,14 @@ class Quizzes extends Component {
             })
     }
 
+    take_quiz(quiz_id_param){
+        let { history } = this.props;
+        history.push({
+         pathname: '/quiz_taker',
+         quiz_id: quiz_id_param,
+        });
+    }
+
 
     render_new_quizzes() {
         console.log(this.state.quizzes)
@@ -43,7 +52,7 @@ class Quizzes extends Component {
             return (
                 this.state.quizzes.new.map((item) => { 
                     return (
-                        <div id="quiz_title">item.title </div>
+                        <div onClick={()=>{this.take_quiz(item.id)}} id="quiz_title">item.title </div>
                         ) 
                 })
             )
@@ -61,4 +70,4 @@ class Quizzes extends Component {
     }
 }
 
-export default Quizzes;
+export default withRouter(Quizzes);

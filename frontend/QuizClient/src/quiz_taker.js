@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import Quizzes from "./quizzes";
 //import { get_quizzes } from "./api_functions/http_api";
-import "./styles/login.css";
+import "./styles/quiz_taker.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Modal from 'react-modal';
@@ -31,7 +31,10 @@ class Quiz_taker extends Component {
     }
 
     async componentWillMount() {
-        await axios.get("http://essential-training-app-api.herokuapp.com/api/quizzes/2/?format=json")
+        console.log("============")
+        console.log(this.props.location.quiz_id)
+        console.log("================")
+        await axios.get("http://essential-training-app-api.herokuapp.com/api/quizzes/"+this.props.location.quiz_id+"/?format=json")
             .then(response => {
                 this.setState({ quiz_details: (response.data) }, () => { this.setState({ refresh: !this.state.refresh }); });
             })

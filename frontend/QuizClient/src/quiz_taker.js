@@ -6,10 +6,11 @@ import "./styles/quiz_taker.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Modal from 'react-modal';
-
+import CircularProgressbar from 'react-circular-progressbar';
 
 // {"student_hash":"cs-128-spring-2019-200621840961614167", "quiz_id":1, "results_json":"{\"1\":{\"no_of_questions_asked\":15,\"no_incorrect\":5,\"done\":1}, \"2\":{\"no_of_questions_asked\":7,\"no_incorrect\":3,\"done\":1}}", "num_questions":5, "num_incorrect":2, "completed":1, "passed":1, "start_time":"2019-04-14T22:16:55.906695Z", "end_time":"2019-04-14T22:16:55.906695Z"}
 
+//cs-128-spring-2019-200621840961614167
 class Quiz_taker extends Component {
     constructor(props) {
         super(props);
@@ -27,14 +28,12 @@ class Quiz_taker extends Component {
             no_of_questions_asked: '',
             no_incorrect: '',
             modalIsOpen: false,
+            quesionts_correct_circles:'',
         }
     }
 
     async componentWillMount() {
-        console.log("============")
-        console.log(this.props.location.quiz_id)
-        console.log("================")
-        await axios.get("http://essential-training-app-api.herokuapp.com/api/quizzes/"+this.props.location.quiz_id+"/?format=json")
+        await axios.get("http://essential-training-app-api.herokuapp.com/api/quizzes/" + this.props.location.quiz_id + "/?format=json")
             .then(response => {
                 this.setState({ quiz_details: (response.data) }, () => { this.setState({ refresh: !this.state.refresh }); });
             })
@@ -44,8 +43,10 @@ class Quiz_taker extends Component {
 
         if (this.state.quiz_details.questions != null || this.state.quiz_details != undefined) {
             await this.setState({
-                question_id: (this.state.quiz_details.questions.map((item)=>{return (item.template_id)})),
-                questions_correct: (this.state.quiz_details.questions.map((item)=>{return (item.amount)})),
+                question_id: (this.state.quiz_details.questions.map((item) => { return (item.template_id) })),
+                questions_correct: (this.state.quiz_details.questions.map((item) => { return (item.amount) })),
+                quesionts_correct_circles: (this.state.quiz_details.questions.map((item) => { return (item.amount) })),
+                student_hash: this.props.location.student_hash,
             })
         }
     }
@@ -86,7 +87,6 @@ class Quiz_taker extends Component {
         if (JSON.stringify(this.state.questions_correct) === JSON.stringify(arr_zero)) {
             this.setState({ modalIsOpen: true })
         }
-
     }
 
 
@@ -126,22 +126,47 @@ class Quiz_taker extends Component {
         return (
             this.state.questions_correct.map((item, index) => {
                 return (
-                    <div id="scores">{item}</div>
+                    <div style={{width:100, height:100,   alignSelf:'center'}}>
+                        <CircularProgressbar
+                            percentage={100-((item / this.state.quesionts_correct_circles[index])*100)}
+                            text={`${item.toString() + "/" + this.state.quesionts_correct_circles[index]}`}
+                            styles={{
+                            
+                                background: {
+                                  fill: "white"
+                                },
+                                text: {
+                                  fill:  "#455CAA" , 
+                                },
+                                path: {
+                                  stroke:  "#455CAA"
+                                },
+                                trail: { stroke: "silver" }
+                              }}
+                        />
+                       
+                    </div>
                 )
             })
         )
     }
 
     render() {
+        console.log(this.state.solution[this.state.solution_index]);
+        console.log("========================")
+        console.log(this.state.student_hash);
+        console.log("========================")
         return (
             <div id="main_container">
                 <div>
-                  
+
                 </div>
-                <div id="left_bar"> {this.render_correct_answers()} </div>
+                <div id="left_bar">
+                    {this.render_correct_answers()} </div>
+
                 {this.render_modal()}
                 <div id="right_bar">
-                <div id="next_button" onClick={() => { this.render_question() }}>Next</div>
+                    <div id="next_button" onClick={() => { this.render_question() }}>Next</div>
                 </div>
                 <div id="question_container">
                     <div id="question_answer">
@@ -150,10 +175,10 @@ class Quiz_taker extends Component {
                         <div id="submit_buttom" onClick={() => { this.initialize_quiz() }}>Submit</div>
                     </div>
                 </div>
-               
-               
+
+
                 The solution is
-                {this.state.solution[this.state.solution_index]}
+             <div style={{ position: 'absolute', zIndex: 9999, }}>   {this.state.solution[this.state.solution_index]} </div>
             </div>
         );
     }

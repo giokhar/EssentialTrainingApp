@@ -42,6 +42,7 @@ class Quizzes extends Component {
         history.push({
          pathname: '/quiz_taker',
          quiz_id: quiz_id_param,
+         student_hash: this.props.location.hash.slice(1),
         });
     }
 

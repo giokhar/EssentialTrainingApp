@@ -1,3 +1,4 @@
+
 #quiz_list{
  background-color:red;
 }
@@ -33,6 +34,7 @@
 
 
 #left_bar{
+    text-align:'center';
      width: 250px;
      background-color: white;
      height: 100vh;
@@ -107,3 +109,4 @@
     background-color: #EFF0F2;
     height: 100vh;
 }
+

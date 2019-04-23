@@ -11,7 +11,7 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            student_hash:""
+            student_hash: ""
         }
     }
 
@@ -19,32 +19,49 @@ class Login extends Component {
     authenticate() {
         let { history } = this.props;
         history.push({
-         pathname: '/quizzes',
-         hash: this.state.input_value,
+            pathname: '/quizzes',
+            hash: this.state.input_value,
         });
     }
- 
 
- 
+
+
 
     render() {
         return (
-            <div>
-                <Route
-                    path="/quizzes"
-                    render={(props) => <Quizzes {...props} isAuthenticated={"ffe"} />}
-                />
-                Enter Student Hash
-                <input value={this.state.input_value} onChange={(e) => this.setState({input_value:e.target.value})} />
+            <div id="main_login_container">
+                <div id="login_form_container">
+                    <div id="login_form_inner_container">
+                        <div id="left_box_container">
+                            <div id="login_text">
+                                <div id="login_title">ESSENTIAL <br/> TRAINING <br/> APP</div>
 
-                <button onClick={()=>{this.authenticate()}} >
-                Click Me
-            </button>
-                <div>
-                    
-                        Login
-              
+                                <div id="login_description">Lorem ipsum dolor sit amet,
+                                    consectetuer adipiscing elit,
+                                    sed diam nonummy nibh euismod
+                                    tincidunt ut laoreet dolore magna
+                                    aliquam erat volutpat. Ut wisi enim
+                                    ad minim veniam, quis nostrud exerci
+                                    tation ullamcorper suscipit lobortis
+                                    nisl ut aliquip ex ea </div>
+                            </div>
+                        </div>
+
+                        <div id="right_box_container">
+                            <div id="sign_in_text"> Sign in </div>
+                            <div> <input placeholder="Enter Student Hash" id="login_input" value={this.state.input_value} onChange={(e) => this.setState({ input_value: e.target.value })} />
+                            </div>
+
+                            <div onClick={() => { this.authenticate() }} id="login_button">Login</div>
+                        </div>
+                        <div>
+
+
+
+                        </div>
+                    </div>
                 </div>
+
 
             </div>
         );

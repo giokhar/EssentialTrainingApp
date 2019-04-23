@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import Quizzes from "./quizzes";
 //import { get_quizzes } from "./api_functions/http_api";
 import "./styles/login.css";
-import { Link } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
 
 
@@ -16,12 +16,16 @@ class Login extends Component {
     }
 
 
-    authenticate(e) {
-        this.setState({student_hash:e.target.value})
-        console.log(this.state.student_hash)
+    authenticate() {
+        let { history } = this.props;
+        history.push({
+         pathname: '/quizzes',
+         hash: this.state.input_value,
+        });
     }
+ 
 
-
+ 
 
     render() {
         return (
@@ -31,16 +35,15 @@ class Login extends Component {
                     render={(props) => <Quizzes {...props} isAuthenticated={"ffe"} />}
                 />
                 Enter Student Hash
-                <input onChange={(e) => this.authenticate(e)} />
+                <input value={this.state.input_value} onChange={(e) => this.setState({input_value:e.target.value})} />
 
-    <div>
-        Incorrect Hash
-    </div>
-
+                <button onClick={()=>{this.authenticate()}} >
+                Click Me
+            </button>
                 <div>
-                    <Link to={{ pathname: "/quizzes", state: { hash: (this.state.student_hash) } }}>
+                    
                         Login
-                    </Link>
+              
                 </div>
 
             </div>
@@ -48,4 +51,5 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);
+

@@ -30,6 +30,11 @@ vector_dot_3d_template = json.dumps({"inputs":"custom", "outputs":"single value"
                      "text":"Let A = $ and B = $. Find the dot product A.B ",
                      "output_template":"A.B = $","variable_ranges":"custom", "variable_type": "custom"})
 
+vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_cross_magnitude_3d",
+                     "text":"Let A = $ and B = $. Find the magnitude of their cross product |AxB| ",
+                     "output_template":"|AxB| = $","variable_ranges":"custom", "variable_type": "custom"})
+
+
 def get_new_question_instance_custom(question_template_json):
     question_template_dict = load_json(question_template_json)
     func_name = question_template_dict["input_type"]
@@ -52,6 +57,7 @@ def decorator_custom_varlist_soln(custom_func):
 ############TemplateFunctions######################
 ###################################################
 
+# NOTE:  Ideally these will be in a seperate file
 #Custom function corresponding to the template
 def dot_product_direction():
 	angles = [0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180]
@@ -129,6 +135,16 @@ def vector_cross_3d():
     solution = cross_vec.__repr__()
     return (constants,solution)
 
+def vector_cross_magnitude_3d():
+    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v1 = Vector(v1_comps)
+    v2 = Vector(v2_comps)
+    cross_vec = v1.cross(v2)
+    constants = [v1.__repr__(),v2.__repr__()]
+    solution = round(abs(cross_vec),2)
+    return (constants,solution)
+
 #########################WRAPPINGFUNCTIONS##########################
 ####################################################################
 dot_product_direction = decorator_custom_varlist_soln(dot_product_direction)
@@ -137,6 +153,7 @@ vector_addition_3d = decorator_custom_varlist_soln(vector_addition_3d)
 vector_subtraction_3d = decorator_custom_varlist_soln(vector_subtraction_3d)
 vector_dot_3d = decorator_custom_varlist_soln(vector_dot_3d)
 vector_cross_3d = decorator_custom_varlist_soln(vector_cross_3d)
+vector_cross_magnitude_3d = decorator_custom_varlist_soln(vector_cross_magnitude_3d)
 
 
 #########################HELPERS#####################################
@@ -159,7 +176,7 @@ def dumps_json(question_instance_dict):
     return question_json
 
 if __name__ == '__main__':
-    print(get_new_question_instance_custom(vector_dot_3d_template))
-    print(get_new_question_instance_custom(vector_cross_3d_template))
-    print(get_new_question_instance_custom(dot_prod_direction_template))
-    print(get_new_question_instance_custom(cross_product_cardinal_directions_template))
+    # print(get_new_question_instance_custom(vector_dot_3d_template))
+    print(get_new_question_instance_custom(vector_cross_magnitude_3d_template))
+    # print(get_new_question_instance_custom(dot_prod_direction_template))
+    # print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

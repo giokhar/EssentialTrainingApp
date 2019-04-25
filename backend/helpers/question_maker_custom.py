@@ -7,11 +7,11 @@ from vector_class import Vector
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required
 # In this scheme each template is associated with a single function
 dot_prod_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"dot_product_direction",
-                     "text":"Let v1 and v2 be vectors with angles $ and $ degrees respectively. Is v1.v2 positive,negative or zero?",
+                     "text":"Let A and B be vectors with angles $ and $ degrees respectively. Is A.B positive,negative or zero?",
                      "output_template":"$","variable_ranges":"custom", "variable_type": "custom"})
 
 cross_product_cardinal_directions_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"cross_product_cardinal_directions",
-                     "text":"Let v1 and v2 be vectors pointing in $ and $ directions respectively. In which direction v1 cross v2 pointing?",
+                     "text":"Let A and B be vectors pointing in $ and $ directions respectively. In which direction does their cross product AxB point?",
                      "output_template":"$","variable_ranges":"custom", "variable_type": "custom"})
 
 vector_addition_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_addition_3d",
@@ -37,7 +37,7 @@ vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"s
 
 def get_new_question_instance_custom(question_template_json):
     question_template_dict = load_json(question_template_json)
-    func_name = question_template_dict["input_type"]
+    func_name = question_template_dict["input_type"]             #identifying the function's name
     question_json = globals()[func_name](question_template_dict) #executing the function
     return question_json
 
@@ -105,7 +105,7 @@ def vector_cross_magnitude_3d():
     solution = round(abs(cross_vec),2)
     return (constants,solution)
 
-#Takes a function that returns a vector and and wraps it to create a function that returns (input_var_list,solution)
+#Takes a function that returns a vector object and and wraps it to create a function that returns (input_var_list,solution)
 def vector_function_problem_decorator(vector_function):
     def padded_function():
         v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')

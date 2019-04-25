@@ -24,7 +24,8 @@ class Vector():
 
     def __abs__(self):
         #returns the magnitude of the vector
-        return math.sqrt(sum(self.comps))
+        mag = np.linalg.norm(self.comps)
+        return mag
 
     def __add__(self,vector):
         new_comps = [x+y for (x,y) in zip(self.comps,vector.comps)]

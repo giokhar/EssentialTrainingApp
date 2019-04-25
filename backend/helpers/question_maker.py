@@ -1,6 +1,7 @@
 from random import randint, choice, uniform
 import math
 import json
+from numbers import get_numbers,get_ints,get_nats,get_reals
 
 DEFAULT_LOWER_BOUND = -100
 DEFAULT_UPPER_BOUND = 100
@@ -29,11 +30,10 @@ def num(s):
 def populate_text(input_constants, question_text):
 	result_string = ""
 	input_counter = 0
-
 	for next_word in question_text:
 		#it means that a variable is present
 		if next_word == '$':
-			result_string += str(input_constants[input_counter])+" " 
+			result_string += str(input_constants[input_counter])+" "
 			input_counter += 1
 		else:
 			result_string += next_word + " "
@@ -56,12 +56,12 @@ def get_new_question_instance(question_template):
 	variable_ranges = question_template["variable_ranges"] #unused yet
 	variable_type = question_template["variable_type"] #unused yet
 
-	#produce random variables for 
+	#produce random variables for
 	input_output_constants = produce_new_question_variables(input_variables, output_command_array, variable_ranges, variable_type)
 
 	input_constants = input_output_constants[0]
 	output_constants = input_output_constants[1]
-	
+
 	#populates the text with random variables extracted above
 	populated_question_text = populate_text(input_constants, question_text)
 
@@ -85,7 +85,7 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 		next_num = str(input_constants[i])
 		next_command = input_array[i] + "=" + next_num
 		input_array[i] = num(next_num)
-		
+
 		exec(next_command)#example: exec("a=rand.randint()")
 
 	#traverses through the output_commmand_array and executes those statements
@@ -105,41 +105,5 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 
 	return (input_array, output_array)
 
-def get_reals(how_many, variable_ranges, dec_places = 2):
-	return [round(uniform(*choice(variable_ranges)), dec_places) for i in range(how_many)]
-
-def get_ints(how_many, variable_ranges):
-	return [randint(*choice(variable_ranges)) for i in range(how_many)]
-
-def get_nats(how_many, variable_ranges):
-	for next_range in variable_ranges:
-		lower_bound = next_range[0]
-		if lower_bound < 0 :
-			raise ValueError("Natural numbers may not be negative. Please check the given range.")
-	
-	return [randint(*choice(variable_ranges)) for i in range(how_many)]
-
-
-def get_numbers(how_many, variable_ranges, variable_type = "integers"):
-
-	result_list = []
-
-	variable_type = variable_type.lower()
-	#in case if no ranges were specified, we are using default values
-	if not variable_ranges:
-		variable_ranges = [[DEFAULT_LOWER_BOUND, DEFAULT_UPPER_BOUND]] #NOTE: MUST BE LIST OF LISTS
-
-	#variable_ranges example: [0, 5], [10, 15]
-
-	if variable_type == "real":
-		list_of_numbers = get_reals(how_many, variable_ranges)
-
-	elif variable_type == "natural":
-		list_of_numbers = get_nats(how_many, variable_ranges)
-
-	else: #if the name of variable type is not listed here, we return integers by default
-		list_of_numbers = get_ints(how_many, variable_ranges)
-
-	return list_of_numbers
 
 # print(get_new_question_instance(5))

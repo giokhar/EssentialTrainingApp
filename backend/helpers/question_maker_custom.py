@@ -3,6 +3,7 @@ import json
 import custom_numbers
 from vector_class import Vector
 
+# NOTE:  All of these templates will be added to the DATABASE after being finalized.
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required
 # In this scheme each template is associated with a single function
 dot_prod_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"dot_product_direction",
@@ -14,11 +15,19 @@ cross_product_cardinal_directions_template = json.dumps({"inputs":"custom", "out
                      "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
 
 vector_addition_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_addition_3d",
-                     "text":"Find the sum of <$,$,$> and <$,$,$>",
+                     "text":"Find the sum of $ and $",
                      "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
 
 vector_subtraction_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_subtraction_3d",
-                     "text":"Find the difference of <$,$,$> and <$,$,$>",
+                     "text":"Find the difference of $ and $",
+                     "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
+
+vector_cross_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_cross_3d",
+                     "text":"Let A = $ and B = $. Find the cross product AxB ",
+                     "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
+
+vector_dot_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_dot_3d",
+                     "text":"Let A = $ and B = $. Find the dot product A.B ",
                      "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
 
 def get_new_question_instance_custom(question_template_json):
@@ -86,8 +95,8 @@ def vector_addition_3d():
     v1 = Vector(v1_comps)
     v2 = Vector(v2_comps)
     sum_vec = v1 + v2
-    constants = [str(x) for x in v1_comps + v2_comps]
-    solution = [str(x) for x in list(sum_vec.get_list())]
+    constants = [v1.__repr__(),v2.__repr__()]
+    solution = sum_vec.__repr__()
     return (constants,solution)
 
 def vector_subtraction_3d():
@@ -95,9 +104,29 @@ def vector_subtraction_3d():
     v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
     v1 = Vector(v1_comps)
     v2 = Vector(v2_comps)
-    sum_vec = v1 - v2
-    constants = [str(x) for x in v1_comps + v2_comps]
-    solution = [str(x) for x in list(sum_vec.get_list())]
+    sub_vec = v1 - v2
+    constants = [v1.__repr__(),v2.__repr__()]
+    solution = sub_vec.__repr__()
+    return (constants,solution)
+
+def vector_dot_3d():
+    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v1 = Vector(v1_comps)
+    v2 = Vector(v2_comps)
+    dot_vec = v1.dot(v2)
+    constants = [v1.__repr__(),v2.__repr__()]
+    solution = dot_vec.__repr__()
+    return (constants,solution)
+
+def vector_cross_3d():
+    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v1 = Vector(v1_comps)
+    v2 = Vector(v2_comps)
+    cross_vec = v1.cross(v2)
+    constants = [v1.__repr__(),v2.__repr__()]
+    solution = cross_vec.__repr__()
     return (constants,solution)
 
 #########################WRAPPINGFUNCTIONS##########################
@@ -106,6 +135,9 @@ dot_product_direction = decorator_custom_vec_vec_soln(dot_product_direction)
 cross_product_cardinal_directions = decorator_custom_vec_vec_soln(cross_product_cardinal_directions)
 vector_addition_3d = decorator_custom_vec_vec_soln(vector_addition_3d)
 vector_subtraction_3d = decorator_custom_vec_vec_soln(vector_subtraction_3d)
+vector_dot_3d = decorator_custom_vec_vec_soln(vector_dot_3d)
+vector_cross_3d = decorator_custom_vec_vec_soln(vector_cross_3d)
+
 
 #########################HELPERS#####################################
 #####################################################################
@@ -126,9 +158,8 @@ def dumps_json(question_instance_dict):
     question_json = json.dumps(question_instance_dict)
     return question_json
 
-
-
 if __name__ == '__main__':
-    print(get_new_question_instance_custom(vector_subtraction_3d_template))
-    print(get_new_question_instance_custom(dot_prod_direction_template))
-    print(get_new_question_instance_custom(cross_product_cardinal_directions_template))
+    print(get_new_question_instance_custom(vector_dot_3d_template))
+    print(get_new_question_instance_custom(vector_cross_3d_template))
+    # print(get_new_question_instance_custom(dot_prod_direction_template))
+    # print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

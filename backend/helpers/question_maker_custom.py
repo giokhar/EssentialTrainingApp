@@ -18,14 +18,13 @@ def get_new_question_instance_custom(question_template_json):
     return question_json
 
 #Wrapper function that takes the question template, and used the custom output functions to create a question_json
-#Takes a function of return type (vector,vector,solution) and returns a function that takes a question_template and returns a question instance
+#Takes a function of return type (inpu_var_list,solution) and returns a function that takes a question_template and returns a question instance
 def decorator_custom_vec_vec_soln(custom_func):
     def create_question_instance(question_template):
         question_text = question_template["text"]
         output_template = question_template["output_template"]
-        (v1,v2,solution) = custom_func()
-        input_vars = [v1,v2]
-        updated_text = custom_populate_text(input_vars,question_text)
+        (input_const_list,solution) = custom_func()
+        updated_text = custom_populate_text(input_const_list,question_text)
         question_instance_dict = {'text':updated_text,'solution':solution,'output_template':output_template}
         question_json = dumps_json(question_instance_dict)
         return question_json
@@ -46,7 +45,7 @@ def dot_product_direction():
 		answer = "negative"
 	elif vect2 - vect1 < 90:
 		answer = "positive"
-	return vect1, vect2, answer
+	return ([vect1, vect2], answer)
 
 def cross_product_cardinal_directions():
 	"""Randomly picks two vector directions and gives their cross product direction"""
@@ -69,9 +68,14 @@ def cross_product_cardinal_directions():
 	answer = answers[vector_directions]
 	vect1 = vector_directions[0]
 	vect2 = vector_directions[1]
-	return vect1, vect2, answer
+	return ([vect1 ,vect2], answer)
 
-################################HELPERS##############################
+#########################WRAPPINGFUNCTIONS##########################
+####################################################################
+dot_product_direction = decorator_custom_vec_vec_soln(dot_product_direction)
+cross_product_cardinal_directions = decorator_custom_vec_vec_soln(cross_product_cardinal_directions)
+
+#########################HELPERS#####################################
 #####################################################################
 
 #Assert that there are an equal number of constants and spaces for constants in the question text
@@ -91,7 +95,5 @@ def dumps_json(question_instance_dict):
     return question_json
 
 if __name__ == '__main__':
-    dot_product_direction = decorator_custom_vec_vec_soln(dot_product_direction)
-    cross_product_cardinal_directions = decorator_custom_vec_vec_soln(cross_product_cardinal_directions)
     print(get_new_question_instance_custom(dot_prod_direction_template))
     print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

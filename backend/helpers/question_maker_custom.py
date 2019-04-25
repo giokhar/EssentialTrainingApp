@@ -41,6 +41,25 @@ def get_new_question_instance_custom(question_template_json):
     question_json = globals()[func_name](question_template_dict) #executing the function
     return question_json
 
+#############################HELPERS#####################################
+#########################################################################
+
+#Assert that there are an equal number of constants and spaces for constants in the question text
+def custom_populate_text(constants,question_text):
+    const_gen = (str(x) for x in constants)
+    text_list = list(question_text)
+    updated_text_list = [next(const_gen) if x =='$' else x for x in text_list ]
+    updated_question_text = ''.join(updated_text_list)
+    return updated_question_text
+
+def load_json(question_template_json):
+    question_template = json.loads(question_template_json)
+    return question_template
+
+def dumps_json(question_instance_dict):
+    question_json = json.dumps(question_instance_dict)
+    return question_json
+
 ############TemplateFunctions######################
 ###################################################
 # NOTE:  Ideally these will be in a seperate file
@@ -145,25 +164,6 @@ def vector_dot_3d(v1,v2):
 def vector_cross_3d(v1,v2):
     cross_vec = v1.cross(v2)
     return cross_vec
-
-#############################HELPERS#####################################
-#########################################################################
-
-#Assert that there are an equal number of constants and spaces for constants in the question text
-def custom_populate_text(constants,question_text):
-    const_gen = (str(x) for x in constants)
-    text_list = list(question_text)
-    updated_text_list = [next(const_gen) if x =='$' else x for x in text_list ]
-    updated_question_text = ''.join(updated_text_list)
-    return updated_question_text
-
-def load_json(question_template_json):
-    question_template = json.loads(question_template_json)
-    return question_template
-
-def dumps_json(question_instance_dict):
-    question_json = json.dumps(question_instance_dict)
-    return question_json
 
 if __name__ == '__main__':
     print(get_new_question_instance_custom(vector_addition_3d_template))

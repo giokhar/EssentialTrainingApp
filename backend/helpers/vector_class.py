@@ -31,7 +31,13 @@ class Vector():
         vec = Vector(new_comps)
         return vec
 
+    def __sub__(self,vector):
+        new_comps = [x-y for (x,y) in zip(self.comps,vector.comps)]
+        vec = Vector(new_comps)
+        return vec
+
     def get_list(self):
+
         return self.comps
 
     def r_theta(self):
@@ -61,9 +67,12 @@ class Vector():
             #numpy behaves a bit weirdly when crossing two vectors of length 2, returning something that looks like a scalar
             if (self.dimension == 2) and (vector.dimension == 2):
                 k_direction = int(np.cross(self.comps,vector.comps) )
-                return np.array([0,0,k_direction])
+                vec = Vector([0,0,k_direction])
+                return vec
             else:
-                return np.cross(self.comps,vector.comps)
+                comps = list(np.cross(self.comps,vector.comps))
+                vec = Vector(comps)
+                return vec
 
     def plot(self):
         if self.dimension == 2:

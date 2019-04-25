@@ -42,7 +42,7 @@ def get_new_question_instance_custom(question_template_json):
     return question_json
 
 #Wrapper function that takes the question template, and used the custom output functions to create a question_json
-#Takes a function of return type (inpu_var_list,solution) and returns a function that takes a question_template and returns a question instance
+#Takes a function of return type (input_var_list,solution) and returns a function that takes a question_template and returns a question instance
 def decorator_custom_varlist_soln(custom_func):
     def create_question_instance(question_template):
         question_text = question_template["text"]
@@ -95,46 +95,6 @@ def cross_product_cardinal_directions():
 	vect2 = vector_directions[1]
 	return ([vect1 ,vect2], answer)
 
-def vector_addition_3d():
-    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v1 = Vector(v1_comps)
-    v2 = Vector(v2_comps)
-    sum_vec = v1 + v2
-    constants = [v1.__repr__(),v2.__repr__()]
-    solution = sum_vec.__repr__()
-    return (constants,solution)
-
-def vector_subtraction_3d():
-    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v1 = Vector(v1_comps)
-    v2 = Vector(v2_comps)
-    sub_vec = v1 - v2
-    constants = [v1.__repr__(),v2.__repr__()]
-    solution = sub_vec.__repr__()
-    return (constants,solution)
-
-def vector_dot_3d():
-    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v1 = Vector(v1_comps)
-    v2 = Vector(v2_comps)
-    dot_vec = v1.dot(v2)
-    constants = [v1.__repr__(),v2.__repr__()]
-    solution = dot_vec.__repr__()
-    return (constants,solution)
-
-def vector_cross_3d():
-    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v1 = Vector(v1_comps)
-    v2 = Vector(v2_comps)
-    cross_vec = v1.cross(v2)
-    constants = [v1.__repr__(),v2.__repr__()]
-    solution = cross_vec.__repr__()
-    return (constants,solution)
-
 def vector_cross_magnitude_3d():
     v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
     v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
@@ -144,6 +104,42 @@ def vector_cross_magnitude_3d():
     constants = [v1.__repr__(),v2.__repr__()]
     solution = round(abs(cross_vec),2)
     return (constants,solution)
+
+#Takes a function that returns a vector and and wraps it to create a function that returns (input_var_list,solution)
+def vector_function_problem_decorator(vector_function):
+    def padded_function():
+        v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+        v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+        v1 = Vector(v1_comps)
+        v2 = Vector(v2_comps)
+        solution_vec = vector_function(v1,v2)
+        constants = [v1.__repr__(),v2.__repr__()]
+        solution = solution_vec.__repr__()
+        return (constants,solution)
+    return padded_function
+
+def vector_addition_3d(v1,v2):
+    sum_vec = v1 + v2
+    return sum_vec
+vector_addition_3d = vector_function_problem_decorator(vector_addition_3d)
+
+def vector_subtraction_3d(v1,v2):
+    sub_vec = v1 - v2
+    return sub_vec
+vector_subtraction_3d = vector_function_problem_decorator(vector_subtraction_3d)
+
+def vector_dot_3d(v1,v2):
+    dot_vec = v1.dot(v2)
+    return dot_vec
+vector_dot_3d = vector_function_problem_decorator(vector_dot_3d)
+
+def vector_cross_3d(v1,v2):
+    cross_vec = v1.cross(v2)
+    return cross_vec
+vector_cross_3d = vector_function_problem_decorator(vector_cross_3d)
+
+
+
 
 #########################WRAPPINGFUNCTIONS##########################
 ####################################################################
@@ -176,7 +172,9 @@ def dumps_json(question_instance_dict):
     return question_json
 
 if __name__ == '__main__':
-    # print(get_new_question_instance_custom(vector_dot_3d_template))
+    print(get_new_question_instance_custom(vector_addition_3d_template))
+    print(get_new_question_instance_custom(vector_subtraction_3d_template))
+    print(get_new_question_instance_custom(vector_dot_3d_template))
     print(get_new_question_instance_custom(vector_cross_magnitude_3d_template))
-    # print(get_new_question_instance_custom(dot_prod_direction_template))
-    # print(get_new_question_instance_custom(cross_product_cardinal_directions_template))
+    print(get_new_question_instance_custom(dot_prod_direction_template))
+    print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

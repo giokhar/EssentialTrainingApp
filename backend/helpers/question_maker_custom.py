@@ -3,7 +3,6 @@ import json
 import custom_numbers
 from vector_class import Vector
 
-# NOTE:  All of these templates will be added to the DATABASE after being finalized.
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required
 # In this scheme each template is associated with a single function
 dot_prod_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"dot_product_direction",
@@ -20,7 +19,7 @@ vector_addition_3d_template = json.dumps({"inputs":"custom", "outputs":"single v
 
 vector_subtraction_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_subtraction_3d",
                      "text":"Let A = $ and B = $. Find the difference A-B ",
-                     "output_template":"A-b = $","variable_ranges":"custom", "variable_type": "custom"})
+                     "output_template":"A-B = $","variable_ranges":"custom", "variable_type": "custom"})
 
 vector_cross_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_cross_3d",
                      "text":"Let A = $ and B = $. Find the cross product AxB ",
@@ -44,7 +43,6 @@ def get_new_question_instance_custom(question_template_json):
 #############################HELPERS#####################################
 #########################################################################
 
-#Assert that there are an equal number of constants and spaces for constants in the question text
 def custom_populate_text(constants,question_text):
     const_gen = (str(x) for x in constants)
     text_list = list(question_text)
@@ -62,7 +60,6 @@ def dumps_json(question_instance_dict):
 
 ############TemplateFunctions######################
 ###################################################
-# NOTE:  Ideally these will be in a seperate file
 #Custom functions for each template
 
 #Wrapper function that takes the question template, and used the custom output functions to create a question_json
@@ -128,7 +125,7 @@ def vector_cross_magnitude_3d():
     solution = round(abs(cross_vec),2)
     return (constants,solution)
 
-#Takes a function that returns a vector object and and wraps it to create a function that returns (input_var_list,solution)
+#Takes a function that takes two random vectors and returns a vector object and wraps it to create a function that returns (input_var_list,solution)
 def decorator_vector_function_problem(vector_function):
     def padded_function():
         v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')

@@ -68,7 +68,7 @@ def decorator_custom_varlist_soln(custom_func):
     def create_question_instance(question_template):
         question_text = question_template["text"]
         output_template = question_template["output_template"]
-        (input_const_list,solution) = custom_func()
+        (input_const_list,solution) = custom_func()        
         updated_text = custom_populate_text(input_const_list,question_text)
         question_instance_dict = {'text':updated_text,'solution':solution,'output_template':output_template}
         question_json = dumps_json(question_instance_dict)
@@ -163,9 +163,9 @@ def vector_cross_3d(v1,v2):
     return cross_vec
 
 if __name__ == '__main__':
-    print(get_new_question_instance_custom(vector_addition_3d_template))
-    print(get_new_question_instance_custom(vector_subtraction_3d_template))
-    print(get_new_question_instance_custom(vector_dot_3d_template))
+    # print(get_new_question_instance_custom(vector_addition_3d_template))
+    # print(get_new_question_instance_custom(vector_subtraction_3d_template))
+    # print(get_new_question_instance_custom(vector_dot_3d_template))
     print(get_new_question_instance_custom(vector_cross_magnitude_3d_template))
-    print(get_new_question_instance_custom(dot_prod_direction_template))
-    print(get_new_question_instance_custom(cross_product_cardinal_directions_template))
+    # print(get_new_question_instance_custom(dot_prod_direction_template))
+    # print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

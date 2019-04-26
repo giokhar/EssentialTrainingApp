@@ -38,7 +38,6 @@ class Vector():
         return vec
 
     def get_list(self):
-
         return self.comps
 
     def r_theta(self):

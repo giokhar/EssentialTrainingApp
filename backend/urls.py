@@ -4,7 +4,7 @@ from backend import api
 
 
 urlpatterns = [
-	# GET METHODS
+    # GET METHODS	
 	path('students/', api.student_list_view),
 	path('students/<str:hash>/', api.student_details_view),
 	path('students/course/<int:course_id>/', api.students_by_course_view),

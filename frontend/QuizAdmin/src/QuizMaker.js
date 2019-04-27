@@ -381,6 +381,74 @@ class QuizMaker extends Component {
   }
 
 
+  delete_canvas_elements(elem_to_delete){
+    var temp_arr = this.state.inputs; 
+    temp_arr.splice(elem_to_delete, 1);
+     this.setState({alloutput:temp_arr})
+  }
+
+
+
+  render_canvas(){
+    return(
+      
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div>
+        <div id="canvas">
+
+          <div style={{ position: "absolute", bottom: 80, right: 200 }}>
+            <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
+            <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
+          </div>
+
+          <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
+          {this.state.inputs.map((item, index) => {
+            if (this.validate_variables(item[0] + item[1])) {
+              return (
+                <div>
+                <div onClick={()=>{this.delete_canvas_elements(index)}}> x </div>
+              <input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />
+            </div>
+              )
+            }
+            else {
+              return (
+                <div>
+                <div onClick={()=>{this.delete_canvas_elements(index)}}> x </div>
+              <input
+                onChange={(e) => {
+                  this.x = this.state.inputs;
+                  this.x[index] = e.target.value;
+                  this.setState({ refresh: !this.state.refresh })
+                }}
+                id="bleh"
+                style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 9 }}
+                value={this.state.inputs[index]}/>
+                </div>
+              )
+            }
+          }
+
+          )}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginLeft: 30 }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+          <div id="mathTitle">Outputs </div>
+          <div>frefwerf werf wer fwerf werf werf werf werf wer fer ferfw </div>
+          <div style={{ width: 400, flexWrap: 'wrap' }}>
+            <div>{this.render_variables()}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    )
+  }
+
   render() {
     return (
       <BrowserRouter>
@@ -440,52 +508,7 @@ class QuizMaker extends Component {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div>
-                      <div id="canvas">
-
-                        <div style={{ position: "absolute", bottom: 80, right: 200 }}>
-                          <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
-                          <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
-                        </div>
-
-                        {this.state.inputs.map((item, index) => {
-                          if (this.validate_variables(item[0] + item[1])) {
-                            return (<input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />)
-                          }
-                          else {
-                            return (<input
-                              onChange={(e) => {
-                                this.x = this.state.inputs;
-                                this.x[index] = e.target.value;
-                                this.setState({ refresh: !this.state.refresh })
-                                // this.onChangeAge();
-                              }
-                              }
-                              id="bleh"
-                              style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 9 }}
-                              value={this.state.inputs[index]}
-
-                            />)
-                          }
-                        }
-
-                        )}
-                      </div>
-                    </div>
-
-                    <div style={{ marginLeft: 30 }}>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-                        <div id="mathTitle">Outputs </div>
-                        <div>frefwerf werf wer fwerf werf werf werf werf wer fer ferfw </div>
-                        <div style={{ width: 400, flexWrap: 'wrap' }}>
-                          <div>{this.render_variables()}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
+{this.render_canvas()}
                   <div id="outputTitle">Outputs</div>
 
 

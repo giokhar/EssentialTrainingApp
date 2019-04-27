@@ -37,24 +37,42 @@ class Quizzes extends Component {
             })
     }
 
-    take_quiz(quiz_id_param){
+    take_quiz(quiz_id_param) {
         let { history } = this.props;
         history.push({
-         pathname: '/quiz_taker',
-         quiz_id: quiz_id_param,
-         student_hash: this.props.location.hash.slice(1),
+            pathname: '/quiz_taker',
+            quiz_id: quiz_id_param,
+            student_hash: this.props.location.hash.slice(1),
         });
     }
 
 
     render_new_quizzes() {
-        console.log(this.state.quizzes)
         if (this.state.quizzes.new !== undefined || this.state.quizzes !== '') {
             return (
-                this.state.quizzes.new.map((item) => { 
+                this.state.quizzes.new.map((item) => {
                     return (
-                        <div onClick={()=>{this.take_quiz(item.id)}} id="quiz_title">item.title </div>
-                        ) 
+                        <div onClick={() => { this.take_quiz(item.id) }} id="quiz_list">
+                            <div id="quiz_title"> {item.title}  </div>
+                            <div id="quiz_date"> {item.created_on.slice(0,10)} </div>
+                        </div>
+                    )
+                })
+            )
+        }
+    }
+
+
+    render_old_quizzes() {
+        if (this.state.quizzes.old !== undefined || this.state.quizzes !== '') {
+            return (
+                this.state.quizzes.old.map((item) => {
+                    return (
+                        <div onClick={() => { this.take_quiz(item.id) }} id="quiz_list_old">
+                            <div id="quiz_title"> {item.title}  </div>
+                            <div id="quiz_date_old"> {item.created_on.slice(0,10)} </div>
+                        </div>
+                    )
                 })
             )
         }
@@ -65,8 +83,33 @@ class Quizzes extends Component {
         console.log(this.state.quizzes)
         return (
             <BrowserRouter>
-               {this.render_new_quizzes()}
+                <div id="quizzes_main_container">
+
+                    <div id="quizzes_left_panel">
+                        <div id="app_name">ESSENTIAL <br/> TRAINING <br/> APP</div>
+                        <div></div>
+                        <div id="quizzes_logout_button">Logout</div>
+                    </div>
+
+                    <div id="quiz_container">
+                        <div id="quizzess_title_text"> QUIZZES </div>
+
+                        <div id="quiz_list_container">
+                            <div id="new_quiz_container">
+                                <div id="new_quizzes_title_text">New Quizzes</div>
+                                <div id="new_quiz_list"> {this.render_new_quizzes()}  </div>
+                            </div>
+
+                            <div id="old_quiz_container">
+                                <div id="old_quizzes_title_text">Old Quizzes</div>
+                                <div id="old_quiz_list">{this.render_old_quizzes()}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </BrowserRouter>
+
         );
     }
 }

@@ -8,6 +8,52 @@
     src:  url(../Assets/CircularBook.otf)  ;
   }
 
+#modal {
+    
+      
+    
+}
+
+
+#output_container{
+    background-color: bisque;
+    height:40px;
+    display:flex;
+    padding:5px;
+    width:600px;
+    align-items: center;
+    
+}
+
+#output_functions_button{
+padding:20px;
+margin:10px;
+background: #00A79D;
+}
+
+#output_functions{
+display:flex;
+flex-direction: row;
+}
+
+.test{
+ 
+    width: 450px;
+    height:45px;
+    border-width:0;
+    border-radius:15px;
+    background: silver;
+}
+
+
+.dd-list{
+z-index: 10px;
+position: absolute;
+width: 100%;
+border: 1px solid rgb(223, 223, 223);
+border-top: none;
+ 
+}
 #container {
     
     backgroundColor: red;
@@ -63,7 +109,7 @@
 #variables {
     border-radius: 100px;
     border-width: 0;
-    margin: 10px;
+    margin-left: 20px;
     background-color: #8A64AB;
     text-align: center;
     width: 40px;
@@ -122,7 +168,7 @@
 #mainContainer{
     margin: auto;
     width: 55%;
-    padding-top:150px;
+  
 }
 
 #QuizMakerTitle{
@@ -196,6 +242,7 @@
 #bleh{
     font-family: 'circular';
     color:rgb(114, 114, 114);
+    margin-left:20px;
 }
 
 

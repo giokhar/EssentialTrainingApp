@@ -9,26 +9,17 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { get_courses, get_question_templates } from "./ApiFunctions/httpApi";
 import Sidebar from './Sidebar';
 import { Select, AsyncSelect, MultiSelect } from 'dropdown-select';
-import 'dropdown-select/dist/css/dropdown-select.css';
+import './dropdown-select.css';
+
 
 const customStyles = {
-  option: (provided, state) => ({
-    ...provided,
-    borderBottom: '1px dotted pink',
-    color: state.isSelected ? 'red' : 'blue',
-    padding: 20,
-  }),
-  control: () => ({
-    // none of react-select's styles are passed to <Control />
-    width: 200,
-  }),
-  singleValue: (provided, state) => {
-    const opacity = state.isDisabled ? 0.5 : 1;
-    const transition = 'opacity 300ms';
+  content: {
 
-    return { ...provided, opacity, transition };
+    borderWidth: 0,
+    backgroundColor: "#F3F6F8",
   }
-}
+};
+
 {/*
   question_template = {
     "inputs":["a","b"], 
@@ -56,6 +47,7 @@ class QuizMaker extends Component {
       variableNumber: 0,
       outputArray: '',
       outputs: [""],
+      alloutput: [],
       selectedOutput: 0,
       modalIsOpen: false,
       quizTitle: '',
@@ -70,7 +62,9 @@ class QuizMaker extends Component {
       minVarRange: '',
       maxVarRange: '',
       selectedCourse: "",
-      render_template_popup:false,
+      alpha_index: 0,
+      outputStrings: [<input></input>],
+      render_template_popup: false,
       variableTypeList: [
         {
           id: 0,
@@ -94,6 +88,9 @@ class QuizMaker extends Component {
 
 
     };
+
+
+    // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"variable_ranges\":[[1,100],[100,200]], \"variable_type\": \"real\"}"}
 
     this.x = [];
     // this.addTag = this.addTag.bind(this);
@@ -127,9 +124,13 @@ class QuizMaker extends Component {
     //this.setState({ templates: this.state.courses[id - 1].title })
   }
 
-  getTemplates(){
+  getTemplates() {
     var templateList = get_question_templates();
-    return templateList.then(data => { return (data.data.map((item, index) => { return (item.type) })
+    console.log("=-=-=-=-=-=-=-")
+    console.log(templateList.then(data => { return (data) }));
+    console.log("=-=-=-=-=-=-=-")
+    return templateList.then(data => {
+      return (data.data.map((item, index) => { return (item.type) })
       )
     })
 
@@ -139,15 +140,8 @@ class QuizMaker extends Component {
     var courseList = get_courses();
     console.log(courseList.then(data => { this.setState({ courses: data }) }))
     var temp;
-   (this.getTemplates().then(data =>{this.setState({templates:data})}))
-    console.log("=============================");
-    console.log("=============================");
-    
-    console.log("?????????")
-    console.log(this.state.selectedTemplateList)
-    console.log("?????????")
-
-
+    (this.getTemplates().then(data => { this.setState({ templates: data }) }))
+    this.setState({ alpha_array: this.create_alphabet_array() })
   }
 
   openModal() {
@@ -155,8 +149,7 @@ class QuizMaker extends Component {
   }
 
   afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // this.subtitle.style.color = '#f00';
+
   }
 
   closeModal() {
@@ -168,11 +161,6 @@ class QuizMaker extends Component {
     let x = this.state.inputs.filter((element, index) => {
       return index % 2 != 0;
     })
-
-    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
-    console.log(x)
-    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
-
     return x;
   }
 
@@ -180,10 +168,6 @@ class QuizMaker extends Component {
     let x = this.state.inputs.filter((element, index) => {
       return index % 2 === 0;
     });
-
-    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
-    console.log(x.join(" $ "))
-    console.log("=-=-=-=-=-=-=-=-=-=-=-=")
     return x.join(" $ ");
   }
 
@@ -193,23 +177,49 @@ class QuizMaker extends Component {
   }
 
 
+  create_alphabet_array() {
+    var alphabet = "abcdefghijklmnopqrstuvwxyz";
+    var alpha_array = alphabet.split("");
+    return alpha_array
+  }
+
+  push_alpha() {
+    this.setState({ alpha_index: this.state.alpha_index + 1 })
+    return (this.state.alpha_array[this.state.alpha_index])
+  }
+
+
+  validate_variables(variable) {
+    var var_array =
+      ['$a', '$b',
+        '$c', '$d', '$e', '$f',
+        '$g', '$h', '$i', '$j',
+        '$k', '$l', '$m', '$n',
+        '$o', '$p', '$q', '$r',
+        '$s', '$t', '$u', '$v',
+        '$w', '$x', '$y', '$z']
+    return var_array.includes(variable)
+  }
+
+
   appendToArray(ex) {
     var newInput = 'input-${this.state.inputs.length}';
     this.setState({ newText: this.state.newText + this.state.text })
     console.log(this.state.inputs)
 
-
     switch (ex) {
       case "string":
         this.setState({ inputs: this.state.inputs.concat(["string"]) });
         break;
+
       case "sqrt":
-        this.setState({ variableNumber: this.state.variableNumber + 1, inputs: this.state.inputs.concat(["a" + this.state.variableNumber.toString(), "Enter text here"]) });
+        this.setState({ variableNumber: this.state.variableNumber + 1, inputs: this.state.inputs.concat(["$" + this.push_alpha()]) });
         var newbackendInput = []
         newbackendInput = this.state.backendInput.concat("a" + this.state.variableNumber.toString());
         this.setState({ backendInput: newbackendInput });
 
         break;
+
       default:
         this.setState({ inputs: this.state.inputs.concat([]) });
         break;
@@ -219,8 +229,7 @@ class QuizMaker extends Component {
 
 
   getRange() {
-    var x = this.state.valueRanges;//["", "12", "empty", "34", "", "52", "empty", "74", "", "94", "empty", "112"]
-    //console.log(x);
+    var x = this.state.valueRanges;
     var newArr = []
     var i = 0
     for (i = 0; i < x.length - 1; i = i + 1) {
@@ -245,31 +254,85 @@ class QuizMaker extends Component {
     return "<" + outputTemplate.substring(0, outputTemplate.length - 1) + ">"
   }
 
-renderPopup(){
- var tempArray=[]
-  for(var i =0; i <this.state.templates.length; i++){
-   tempArray.push(this.state.templates[i])
-}
-return tempArray
-}
+  renderPopup() {
+    var tempArray = []
+    for (var i = 0; i < this.state.templates.length; i++) {
+      tempArray.push(this.state.templates[i])
+    }
+    return tempArray
+  }
 
 
-renderPopupContainer(){
-  if (this.state.render_template_popup == true)
-   {return(
-<div id="template_popup_container">
-{this.renderPopup().map((item,index)=>{return( <div id="template_popup" onClick={()=>{this.setState({selectedTemplateList:this.state.selectedTemplateList.concat(item)})}}> {item}   </div>)})}
-</div>)
+  renderPopupContainer() {
+    if (this.state.render_template_popup == true) {
+      return (
+        <div id="template_popup_container">
+          {this.renderPopup().map((item, index) => { return (<div id="template_popup" onClick={() => { this.setState({ selectedTemplateList: this.state.selectedTemplateList.concat(item) }) }}> {item}   </div>) })}
+        </div>)
+    }
+    else {
+      return
+    }
   }
-  else{
-    return 
+
+
+  render_output() {
+    return (
+      <div>{this.state.alloutput.map((item, index) => {
+        console.log(this.state.alloutput);
+        if (this.validate_variables(this.state.alloutput[index])) { ; console.log(this.state.alloutput[index]); return (this.state.alloutput[index]) }
+        else {
+          return (
+            <input onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+          )
+
+        }
+      })}
+      </div>
+    )
   }
-}
+
+
+  render_variables() {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {this.state.inputs.map((item, index) => {
+          //console.log("The current iteration is: " + index);
+          if (this.validate_variables(item[0] + item[1])) {
+            return (
+              <div id="outputContainer">
+                <button id="outputVariables"
+                  onClick={() => { this.setState({ alloutput: this.state.alloutput.concat(item), refresh: !this.state.refresh }) }}
+                  onChange={this.onChangeAge.bind(this)}>
+                  {item}
+
+                </button>
+                <div><input placeholder={"Min"} id="outputRanges" value={this.state.valueRanges[index]} onChange={(e) => {
+                  var temp = this.state.valueRanges;
+                  temp[index] = e.target.value;
+                  this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+
+                  console.log(this.state.valueRanges);
+                }} /></div>
+                <div><input placeholder={"Max"} id="outputRanges" value={this.state.valueRanges[index + 1]} onChange={(e) => {
+                  var temp = this.state.valueRanges;
+                  temp[index + 1] = e.target.value;
+                  this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+
+                  console.log(this.state.valueRanges);
+                }} /></div>
+              </div>
+            )
+          }
+        }
+        )}
+
+      </div>
+    )
+  }
+
 
   render() {
-    console.log("---")
-    console.log(this.state.templates)
-    console.log(this.state.selectedTemplateList)
     return (
       <BrowserRouter>
         <Sidebar />
@@ -280,13 +343,8 @@ renderPopupContainer(){
                 <div id="templateMakerInnerContainer">
                   <div id="templateMakerTitle">Quiz</div>
                   <div  >Select templates</div>
-                  {/*  <div>{this.state.templates.map((item,index)=>{return(<div style={{width:200, backgroundColor:'purple', height:500}}>{item}</div>)})}</div> */}
-                  <Select styles={customStyles} onChange={this.handleTemplateDropdown} options={this.state.templates} />
-                 {/*
-                  <div id="select_template_toggle" onClick={()=>this.setState({render_template_popup:!this.state.render_template_popup})}> Select Templates</div>
-                  {this.renderPopupContainer()}
-                 */}
-                   {this.state.selectedTemplateList.map((item, index) => {
+                  <Select inputClassName="test" onChange={this.handleTemplateDropdown} options={this.state.templates} />
+                  {this.state.selectedTemplateList.map((item, index) => {
                     return (
                       <div id="templateList">
                         {item}
@@ -318,17 +376,18 @@ renderPopupContainer(){
 
           {/* TEMPLATE MAKER MODAL */}
           <Modal
-
+            id="modal"
+            style={customStyles}
             isOpen={this.state.modalIsOpen}
             onAfterOpen={this.afterOpenModal}
             // onRequestClose={this.closeModal}
             contentLabel="Example Modal"
           >
             <div onClick={() => { this.closeModal() }}>close</div>
-            <div style={{ backgroundColor: "#F3F6F8", width: "100%", height: 1000, position: 'absolute' }}>
+            <div style={{ position: 'absolute' }}>
               <div id='mainContainer'>
                 <div>
-                  <div id="QuizMakerTitle" >QuizMaker</div>
+                  <div id="QuizMakerTitle" >QUESTION MAKER</div>
 
 
                   {/*TITLE*/}
@@ -337,15 +396,21 @@ renderPopupContainer(){
                       <div id="enter_quiz_title_text">Enter Quiz Title</div>
                       <div><input id="quiz_title_text" value={this.state.quizTitle} onChange={(e) => { this.setState({ quizTitle: e.target.value }) }} /> </div>
                     </div>
-                 {/*   <div><Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} /></div> */}
+                    {/*   <div><Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} /></div> */}
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <div>
                       <div id="canvas">
+
+                        <div style={{ position: "absolute", bottom: 80, right: 200 }}>
+                          <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
+                          <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
+                        </div>
+
                         {this.state.inputs.map((item, index) => {
                           //console.log("The current iteration is: " + index);
-                          if (item[0] == "a") {
+                          if (this.validate_variables(item[0] + item[1])) {
                             return (<input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />)
                           }
                           else {
@@ -353,15 +418,12 @@ renderPopupContainer(){
                               onChange={(e) => {
                                 this.x = this.state.inputs;
                                 this.x[index] = e.target.value;
-                                console.log("=====")
-                                console.log(this.x)
-                                console.log("=====")
                                 this.setState({ refresh: !this.state.refresh })
                                 // this.onChangeAge();
                               }
                               }
                               id="bleh"
-                              style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 6.5 }}
+                              style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 9 }}
                               value={this.state.inputs[index]}
 
                             />)
@@ -374,92 +436,29 @@ renderPopupContainer(){
 
                     <div style={{ marginLeft: 30 }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
 
-                        <div id="mathTitle"> Math Functions </div>
+                        <div id="mathTitle">Outputs </div>
+                        <div>frefwerf werf wer fwerf werf werf werf werf wer fer ferfw </div>
                         <div style={{ width: 400, flexWrap: 'wrap' }}>
-                          <button id="mathButtons" onClick={() => this.setState({ outputArray: this.state.outputArray + 'Math.sqrt' })}> sqrt </button>
-                          <button id="mathButtons" onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + '+ '; this.setState({ refresh: !this.state.refresh }) }}> add </button>
-                          <button id="mathButtons" onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + '- '; this.setState({ refresh: !this.state.refresh }) }}> sub </button>
-                          <button id="mathButtons" onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + '÷ '; this.setState({ refresh: !this.state.refresh }) }}> div </button>
-                          <button id="mathButtons" onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + '/ '; this.setState({ refresh: !this.state.refresh }) }}> mul </button>
-                          <button id="mathButtons" onClick={() => this.appendToArray("sqrt")}> mod </button>
-                          {/* <button id="mathButtons" onClick={() => console.log(this.x)}> array output </button> */}
-
+                          <div>{this.render_variables()}</div>
                         </div>
                       </div>
                     </div>
                   </div>
 
+                  <div id="outputTitle">Outputs</div>
 
-                  <div style={{display:'flex', flexDirection:'row'}}>
-                    {this.state.inputs.map((item, index) => {
-                      //console.log("The current iteration is: " + index);
-                      if (item[0] == "a") {
-                        return (
-                          <div id="outputContainer">
-                            <button id="outputVariables"
-                              onClick={() => { this.state.outputs[this.state.selectedOutput] = this.state.outputs[this.state.selectedOutput] + item + " "; this.setState({ refresh: !this.state.refresh }) }}
-                              onChange={this.onChangeAge.bind(this)}>
-                              {item}
 
-                            </button>
-                            <div><input placeholder={"Min"}  id="outputRanges" value={this.state.valueRanges[index]} onChange={(e) => {
-                              var temp = this.state.valueRanges;
-                              temp[index] = e.target.value;
-                              this.setState({ valueRanges: temp, refresh: !this.state.refresh })
 
-                              console.log(this.state.valueRanges);
-                            }} /></div>
-                            <div><input placeholder={"Max"} id="outputRanges" value={this.state.valueRanges[index + 1]} onChange={(e) => {
-                              var temp = this.state.valueRanges;
-                              temp[index + 1] = e.target.value;
-                              this.setState({ valueRanges: temp, refresh: !this.state.refresh })
-
-                              console.log(this.state.valueRanges);
-                            }} /></div>
-                          </div>
-                        )
-                      }
-                    }
-                    )}
-
+                  <div id="output_functions">
+                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat(""), refresh: !this.state.refresh }) }}>Add Text</div>
+                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat("") }) }}>Add Function</div>
                   </div>
 
-                  <div>
-                    <div id="outputTitle">Output</div>
-                    <div style={{ flexDirection: 'row', display: 'flex' }}>
-                      <div>
-                        {/* Ouputs */}
-                        {this.state.outputs.map((item, index) => {
-                          //console.log("The current iteration is: " + index);
-                          return (
-                            <div style={{ flexDirection: 'column', marginBottom: 15, }}>
-                              <div style={{ borderWidth: 20, borderBottomColor: 'green' }} id="outputCanvas" onClick={() => this.setState({ selectedOutput: index })} >
-
-                                {this.state.outputs[index].split(" ").map((item, index) => {
-
-                                  return (
-
-                                    <div id="outputItems">
-                                      <div id="outputItemText">
-                                        {item}
-
-                                      </div>
-                                    </div>
-                                  )
-                                }
-                                )
-                                }
-
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                      <div onClick={() => this.setState({ outputs: this.state.outputs.concat([""]) })} id="addOutput" >Add output</div>
-                    </div>
+                  <div id="output_container">
+                    <div>{this.render_output()}</div>
                   </div>
+
                   <div onClick={() => {
                     this.setState({
                       quizTypes: this.state.quizTypes.concat([this.state.quizTitle]), quizTitle: ''
@@ -503,7 +502,7 @@ renderPopupContainer(){
 
 
                     //Getting 
-                  }}  id="save_template" > Save Template </div>
+                  }}>   </div>
 
 
                 </div>
@@ -511,11 +510,6 @@ renderPopupContainer(){
               </div>
             </div>
           </Modal>
-
-          {/* ============================================================ */}
-
-
-
         </div>
       </BrowserRouter>
     );

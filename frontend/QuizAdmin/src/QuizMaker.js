@@ -246,12 +246,27 @@ class QuizMaker extends Component {
   }
 
   getOutputTemplate() {
-    var outputTemplate = "";
-    var no_of_vars = this.getVariables().length
-    for (var i = 0; i < no_of_vars; i = i + 1) {
-      outputTemplate = outputTemplate + "$,"
+    var temp_arrx = this.state.alloutput;
+    var outputs = [];
+    var output_collector = "";
+
+    for (var i = 0; i < temp_arrx.length; i = i + 1) {
+      if (temp_arrx[i - 1] == "ƒ:") {
+        outputs.push(temp_arrx[i])
+      }
+
+      if (temp_arrx[i] == "ƒ:") {
+        output_collector = output_collector + ""
+      }
+      else if (temp_arrx[i - 1] == "ƒ:") {
+        output_collector = output_collector + " $ "
+      }
+      else {
+        output_collector = output_collector + temp_arrx[i]
+      }
     }
-    return "<" + outputTemplate.substring(0, outputTemplate.length - 1) + ">"
+
+    return([outputs,output_collector])
   }
 
   renderPopup() {
@@ -276,16 +291,47 @@ class QuizMaker extends Component {
   }
 
 
+  delete_output_element(elem_to_delete){
+    console.log("-3-3-3--3-3--33-");
+    console.log(elem_to_delete);
+    console.log("-3-3-3--3-3--33-");
+    var temp_arr = this.state.alloutput; 
+   temp_arr.splice(elem_to_delete, 1);
+    this.setState({alloutput:temp_arr})
+  }
+
   render_output() {
     return (
-      <div>{this.state.alloutput.map((item, index) => {
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {this.state.alloutput.map((item, index) => {
         console.log(this.state.alloutput);
-        if (this.validate_variables(this.state.alloutput[index])) { ; console.log(this.state.alloutput[index]); return (this.state.alloutput[index]) }
+        if (this.state.alloutput[index] == "ƒ:") { ; console.log(this.state.alloutput[index]); return (this.state.alloutput[index]) }
+        else if (this.state.alloutput[index - 1] == "ƒ:") {
+          if (index == this.state.selected_output_index) {
+            return (<div>
+              <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index-1); }}> x </div>
+              <input value={this.state.alloutput[index]} style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => {
+                this.setState({ selected_output_index: index });
+              }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+            </div>
+            )
+          }
+          else {
+            return (
+              <div>
+                <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index-1);}}> x </div>
+                <input value={this.state.alloutput[index]} style={{ backgroundColor: 'red' }} onClick={() => { this.setState({ selected_output_index: index }); }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+              </div>
+            )
+          }
+        }
         else {
           return (
-            <input onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+            <div>
+              <div onClick={() => { this.delete_output_element(index) }}> x </div>
+              <input value={this.state.alloutput[index]} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+            </div>
           )
-
         }
       })}
       </div>
@@ -302,7 +348,10 @@ class QuizMaker extends Component {
             return (
               <div id="outputContainer">
                 <button id="outputVariables"
-                  onClick={() => { this.setState({ alloutput: this.state.alloutput.concat(item), refresh: !this.state.refresh }) }}
+                  onClick={() => {
+                    var temp_array = this.state.alloutput;
+                    temp_array[this.state.selected_output_index] =  temp_array[this.state.selected_output_index] + item 
+                    this.setState({ alloutput: temp_array, refresh: !this.state.refresh }) }}
                   onChange={this.onChangeAge.bind(this)}>
                   {item}
 
@@ -375,14 +424,7 @@ class QuizMaker extends Component {
           </div>
 
           {/* TEMPLATE MAKER MODAL */}
-          <Modal
-            id="modal"
-            style={customStyles}
-            isOpen={this.state.modalIsOpen}
-            onAfterOpen={this.afterOpenModal}
-            // onRequestClose={this.closeModal}
-            contentLabel="Example Modal"
-          >
+          <Modal id="modal" style={customStyles} isOpen={this.state.modalIsOpen} onAfterOpen={this.afterOpenModal} contentLabel="Example Modal" >
             <div onClick={() => { this.closeModal() }}>close</div>
             <div style={{ position: 'absolute' }}>
               <div id='mainContainer'>
@@ -396,7 +438,6 @@ class QuizMaker extends Component {
                       <div id="enter_quiz_title_text">Enter Quiz Title</div>
                       <div><input id="quiz_title_text" value={this.state.quizTitle} onChange={(e) => { this.setState({ quizTitle: e.target.value }) }} /> </div>
                     </div>
-                    {/*   <div><Dropdown title="Select Variable Type" list={this.state.variableTypeList} resetThenSet={this.resetThenSet} /></div> */}
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -409,7 +450,6 @@ class QuizMaker extends Component {
                         </div>
 
                         {this.state.inputs.map((item, index) => {
-                          //console.log("The current iteration is: " + index);
                           if (this.validate_variables(item[0] + item[1])) {
                             return (<input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />)
                           }
@@ -452,7 +492,7 @@ class QuizMaker extends Component {
 
                   <div id="output_functions">
                     <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat(""), refresh: !this.state.refresh }) }}>Add Text</div>
-                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat("") }) }}>Add Function</div>
+                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat("ƒ:","") }) }}>Add Function</div>
                   </div>
 
                   <div id="output_container">
@@ -470,12 +510,12 @@ class QuizMaker extends Component {
 
                     console.log({
                       "type": this.state.quizTitle,
-                      "template_json": "{\\" +
-                        "inputs\\\":" + this.getVariables() + "," +
-                        "outputs:" + this.state.outputs + "," +
+                      "template_json": "{" +
+                        "inputs\":" + "[" + this.getVariables() + "]" + "," +
+                        "outputs:" + "[" + this.getOutputTemplate()[0] + "]" + "," +
                         "input_type:" + this.state.variableType + "," +
                         "text:" + this.getQuizText() + "," +
-                        "output_template:A=" + this.getOutputTemplate() + "," +
+                        "output_template:A=" + this.getOutputTemplate()[1] + "," +
                         "input_values:" + "[" + this.getRange() + "]" +
                         "}"
                     }
@@ -500,9 +540,11 @@ class QuizMaker extends Component {
                     console.log("Outputs ===============")
                     console.log(this.state.outputs);
 
+                    console.log(this.getOutputTemplate()[0])
+                    console.log(this.getOutputTemplate()[1])
 
                     //Getting 
-                  }}>   </div>
+                  }}> print output  </div>
 
 
                 </div>

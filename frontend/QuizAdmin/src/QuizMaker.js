@@ -266,7 +266,7 @@ class QuizMaker extends Component {
       }
     }
 
-    return([outputs,output_collector])
+    return ([outputs, output_collector])
   }
 
   renderPopup() {
@@ -291,49 +291,49 @@ class QuizMaker extends Component {
   }
 
 
-  delete_output_element(elem_to_delete){
+  delete_output_element(elem_to_delete) {
     console.log("-3-3-3--3-3--33-");
     console.log(elem_to_delete);
     console.log("-3-3-3--3-3--33-");
-    var temp_arr = this.state.alloutput; 
-   temp_arr.splice(elem_to_delete, 1);
-    this.setState({alloutput:temp_arr})
+    var temp_arr = this.state.alloutput;
+    temp_arr.splice(elem_to_delete, 1);
+    this.setState({ alloutput: temp_arr })
   }
 
   render_output() {
     return (
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {this.state.alloutput.map((item, index) => {
-        console.log(this.state.alloutput);
-        if (this.state.alloutput[index] == "ƒ:") { ; console.log(this.state.alloutput[index]); return (this.state.alloutput[index]) }
-        else if (this.state.alloutput[index - 1] == "ƒ:") {
-          if (index == this.state.selected_output_index) {
-            return (<div>
-              <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index-1); }}> x </div>
-              <input value={this.state.alloutput[index]} style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => {
-                this.setState({ selected_output_index: index });
-              }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
-            </div>
-            )
+        {this.state.alloutput.map((item, index) => {
+          console.log(this.state.alloutput);
+          if (this.state.alloutput[index] == "ƒ:") { ; console.log(this.state.alloutput[index]); return (this.state.alloutput[index]) }
+          else if (this.state.alloutput[index - 1] == "ƒ:") {
+            if (index == this.state.selected_output_index) {
+              return (<div>
+                <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index - 1); }}> x </div>
+                <input value={this.state.alloutput[index]} style={{ backgroundColor: 'green', borderColor: 'green' }} onClick={() => {
+                  this.setState({ selected_output_index: index });
+                }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+              </div>
+              )
+            }
+            else {
+              return (
+                <div>
+                  <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index - 1); }}> x </div>
+                  <input value={this.state.alloutput[index]} style={{ backgroundColor: 'red' }} onClick={() => { this.setState({ selected_output_index: index }); }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+                </div>
+              )
+            }
           }
           else {
             return (
               <div>
-                <div onClick={() => { this.delete_output_element(index); this.delete_output_element(index-1);}}> x </div>
-                <input value={this.state.alloutput[index]} style={{ backgroundColor: 'red' }} onClick={() => { this.setState({ selected_output_index: index }); }} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
+                <div onClick={() => { this.delete_output_element(index) }}> x </div>
+                <input value={this.state.alloutput[index]} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
               </div>
             )
           }
-        }
-        else {
-          return (
-            <div>
-              <div onClick={() => { this.delete_output_element(index) }}> x </div>
-              <input value={this.state.alloutput[index]} onChange={(e) => { var copy_array = this.state.alloutput; copy_array[index] = e.target.value; this.setState({ alloutput: copy_array }) }} />
-            </div>
-          )
-        }
-      })}
+        })}
       </div>
     )
   }
@@ -350,8 +350,9 @@ class QuizMaker extends Component {
                 <button id="outputVariables"
                   onClick={() => {
                     var temp_array = this.state.alloutput;
-                    temp_array[this.state.selected_output_index] =  temp_array[this.state.selected_output_index] + item 
-                    this.setState({ alloutput: temp_array, refresh: !this.state.refresh }) }}
+                    temp_array[this.state.selected_output_index] = temp_array[this.state.selected_output_index] + item
+                    this.setState({ alloutput: temp_array, refresh: !this.state.refresh })
+                  }}
                   onChange={this.onChangeAge.bind(this)}>
                   {item}
 
@@ -381,73 +382,84 @@ class QuizMaker extends Component {
   }
 
 
-  delete_canvas_elements(elem_to_delete){
-    var temp_arr = this.state.inputs; 
+  delete_canvas_elements(elem_to_delete) {
+    var temp_arr = this.state.inputs;
     temp_arr.splice(elem_to_delete, 1);
-     this.setState({alloutput:temp_arr})
+    this.setState({ alloutput: temp_arr })
   }
 
 
 
-  render_canvas(){
-    return(
-      
+  render_canvas() {
+    return (
+
       <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div>
-        <div id="canvas">
+        <div>
+          <div id="canvas">
 
-          <div style={{ position: "absolute", bottom: 80, right: 200 }}>
-            <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
-            <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
-          </div>
-
-          <div style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
-          {this.state.inputs.map((item, index) => {
-            if (this.validate_variables(item[0] + item[1])) {
-              return (
-                <div>
-                <div onClick={()=>{this.delete_canvas_elements(index)}}> x </div>
-              <input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />
+            <div style={{ position: "absolute", bottom: 80, right: 200 }}>
+              <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
+              <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
             </div>
-              )
-            }
-            else {
-              return (
-                <div>
-                <div onClick={()=>{this.delete_canvas_elements(index)}}> x </div>
-              <input
-                onChange={(e) => {
-                  this.x = this.state.inputs;
-                  this.x[index] = e.target.value;
-                  this.setState({ refresh: !this.state.refresh })
-                }}
-                id="bleh"
-                style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 9 }}
-                value={this.state.inputs[index]}/>
-                </div>
-              )
-            }
-          }
 
-          )}
+            <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+              {this.state.inputs.map((item, index) => {
+                if (this.validate_variables(item[0] + item[1])) {
+                  return (
+                    <div>
+                      <div onClick={() => { this.delete_canvas_elements(index) }}> x </div>
+                      <input id="variables" value={item} onChange={this.onChangeAge.bind(this)} />
+                    </div>
+                  )
+                }
+                else {
+                  return (
+                    <div>
+                      <div onClick={() => { this.delete_canvas_elements(index) }}> x </div>
+                      <input
+                        onChange={(e) => {
+                          this.x = this.state.inputs;
+                          this.x[index] = e.target.value;
+                          this.setState({ refresh: !this.state.refresh })
+                        }}
+                        id="bleh"
+                        style={{ backgroundColor: '#E8E9EA', padding: 9, borderWidth: 0, borderRadius: 10, width: this.state.inputs[index].length * 9 }}
+                        value={this.state.inputs[index]} />
+                    </div>
+                  )
+                }
+              }
+
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginLeft: 30 }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+
+            <div id="mathTitle">Outputs </div>
+            <div>frefwerf werf wer fwerf werf werf werf werf wer fer ferfw </div>
+            <div style={{ width: 400, flexWrap: 'wrap' }}>
+              <div>{this.render_variables()}</div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div style={{ marginLeft: 30 }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-
-          <div id="mathTitle">Outputs </div>
-          <div>frefwerf werf wer fwerf werf werf werf werf wer fer ferfw </div>
-          <div style={{ width: 400, flexWrap: 'wrap' }}>
-            <div>{this.render_variables()}</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     )
   }
+
+
+
+
+  delete_temlate_elements(elem_to_delete) {
+    var temp_arr = this.state.selectedTemplateList;
+    temp_arr.splice(elem_to_delete, 1);
+    this.setState({ alloutput: temp_arr })
+  }
+
+
 
   render() {
     return (
@@ -461,22 +473,14 @@ class QuizMaker extends Component {
                   <div id="templateMakerTitle">Quiz</div>
                   <div  >Select templates</div>
                   <Select inputClassName="test" onChange={this.handleTemplateDropdown} options={this.state.templates} />
-                  {this.state.selectedTemplateList.map((item, index) => {
-                    return (
-                      <div id="templateList">
-                        {item}
-                      </div>
-                    )
-                  })}
+                  {this.state.selectedTemplateList.map((item, index) => { return (
+                    <div>
+                      <div onClick={()=>{this.delete_temlate_elements(index)}}> x </div>
+                    <div id="templateList"> {item} </div>
+                    </div> ) })}
                 </div>
               </div>
-
-              <div>
-                {this.state.quizTypes.map((item, index) => {
-                  return (
-                    <div id="quizTypes"> {this.state.quizTypes[index]}</div>)
-                })}
-              </div>
+              <div> {this.state.quizTypes.map((item, index) => { return ( <div id="quizTypes"> {this.state.quizTypes[index]}</div>) })} </div>
             </div>
             <div id="rightContainer">
               <div id="courseSelector">
@@ -508,14 +512,13 @@ class QuizMaker extends Component {
                     </div>
                   </div>
 
-{this.render_canvas()}
+                  {this.render_canvas()}
                   <div id="outputTitle">Outputs</div>
-
 
 
                   <div id="output_functions">
                     <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat(""), refresh: !this.state.refresh }) }}>Add Text</div>
-                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat("ƒ:","") }) }}>Add Function</div>
+                    <div id="output_functions_button" onClick={() => { this.setState({ alloutput: this.state.alloutput.concat("ƒ:", "") }) }}>Add Function</div>
                   </div>
 
                   <div id="output_container">
@@ -541,8 +544,7 @@ class QuizMaker extends Component {
                         "output_template:A=" + this.getOutputTemplate()[1] + "," +
                         "input_values:" + "[" + this.getRange() + "]" +
                         "}"
-                    }
-                    )
+                    })
 
                     console.log("Get Variable Type");
                     console.log(this.state.variableType)
@@ -568,7 +570,6 @@ class QuizMaker extends Component {
 
                     //Getting 
                   }}> print output  </div>
-
 
                 </div>
 

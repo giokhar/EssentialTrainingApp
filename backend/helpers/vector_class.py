@@ -40,6 +40,11 @@ class Vector():
     def get_list(self):
         return self.comps
 
+    def bracket(self):
+        comps =  [str(x) for x in list(self.comps)]
+        bracket_notation = '<' + ','.join(comps) + '>'
+        return bracket_notation
+
     def r_theta(self):
         comps = self.comps
         if self.dimension == 2:

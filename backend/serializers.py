@@ -20,10 +20,11 @@ class CourseSerializer(serializers.ModelSerializer):
 class QuestionTemplateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = QuestionTemplate
-		# fields = "__all__"
+		#fields = "__all__"
 		exclude = ('id', 'created_on',)
 
 class QuizLogSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = QuizLog
-		fields = "__all__"
+		#fields = "__all__"
+		exclude = ('id')

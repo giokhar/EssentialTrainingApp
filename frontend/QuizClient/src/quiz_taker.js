@@ -28,7 +28,9 @@ class Quiz_taker extends Component {
             no_of_questions_asked: '',
             no_incorrect: '',
             modalIsOpen: false,
-            quesionts_correct_circles:'',
+            quesionts_correct_circles: '',
+            quiz_log: {},
+            start_time: 0,
         }
     }
 
@@ -49,6 +51,19 @@ class Quiz_taker extends Component {
                 student_hash: this.props.location.student_hash,
             })
         }
+
+        if (this.state.question_id != undefined) {
+            var temp_quiz_log = []
+            for (var i = 0; i < this.state.question_id.length; i++) {
+                temp_quiz_log.push([this.state.question_id[i], 0, 0, 0])
+                // temp_quiz_log[this.state.question_id[i]] = { "no_of_questions_asked": this.state.no_of_questions_asked, "no_incorrect": this.state.no_incorrect, "done": this.state.done };
+            }
+            //[question_template_id, no_of_questions_asked, no_incorrect, done]
+            this.setState({ quiz_log: temp_quiz_log });
+        }
+
+        var start_time_obj = new Date();
+        this.setState({start_time:start_time_obj.getTime()});
     }
 
     get_new_question(template_id) {
@@ -63,14 +78,35 @@ class Quiz_taker extends Component {
         }
     }
 
+    update_log_asked(template_id_index) {
+        var temp_arr = this.state.quiz_log;
+        temp_arr[template_id_index][1] = temp_arr[template_id_index][1] + 1
+        this.setState({ quiz_log: temp_arr })
+    }
+
+    update_log_incorrect(template_id_index) {
+        var temp_arr = this.state.quiz_log;
+        temp_arr[template_id_index][2] = temp_arr[template_id_index][2] + 1
+        this.setState({ quiz_log: temp_arr })
+    }
+
+    update_log_done(template_id_index) {
+        var temp_arr = this.state.quiz_log;
+        temp_arr[template_id_index][3] = temp_arr[template_id_index][3] + 1
+        this.setState({ quiz_log: temp_arr })
+    }
+
+
     render_question() {
         console.log(this.state.questions_correct[this.state.solution_index]);
         if (this.state.questions_correct[this.state.solution_index] !== 0 && this.state.question_id !== undefined) {
             return (this.get_new_question(this.state.question_id[this.state.solution_index]))
         }
         else {
+            this.update_log_done(this.state.solution_index)
             this.setState({ solution_index: this.state.solution_index + 1, refresh: !this.state.refresh }, () => {
                 this.get_new_question(this.state.question_id[this.state.solution_index])
+
             })
         }
     }
@@ -81,6 +117,75 @@ class Quiz_taker extends Component {
         this.setState({ questions_correct: temp })
     }
 
+    create_inner_json(original_json) {
+        var acc = ""
+        var temp_json = JSON.stringify(original_json.template_json);
+        for (var i = 0; i < temp_json.length; i++) {
+            if (temp_json[i] == "\"") {
+                acc = acc + "\\\""
+            }
+            else {
+                acc = acc + temp_json[i]
+            }
+        }
+        return (JSON.stringify(acc))
+    }
+
+    create_results_json(){
+        var results_json = {}
+        for (var i =0;i<this.state.quiz_log.length;i++){
+            results_json[this.state.quiz_log[i][0]] = {"no_of_questions_asked":this.state.quiz_log[i][1], "no_incorrect":this.state.quiz_log[i][2], "done":this.state.quiz_log[i][3]}
+        }
+        return (this.create_inner_json(results_json))
+    }
+
+    total_questions(){
+        var total_questions = 0;
+        for ( var i = 0 ; i < this.state.quiz_log.length ; i++ ){
+            total_questions = total_questions + this.state.quiz_log[i][1];
+        }
+        return (total_questions)
+    }
+
+    total_incorrect_questions(){
+        var total_incorrect_questions = 0;
+        for ( var i = 0 ; i < this.state.quiz_log.length ; i++ ){
+            total_incorrect_questions = total_incorrect_questions + this.state.quiz_log[i][2];
+        }
+        return (total_incorrect_questions)
+    }
+    
+    create_quiz_log = () => {
+
+        var quiz_log_json = {    
+        "student_hash": this.state.student_hash,
+        "quiz_id": this.props.location.quiz_id,
+        "results_json": this.create_results_json(),
+        "num_questions": this.create_results_json(),
+        "num_incorrect": this.total_incorrect_questions(),
+        "completed": true,
+        "passed": true,
+        "start_time": "2019-04-14T22:16:55.906695Z",
+        "end_time": "2019-04-14T22:16:55.906695Z"
+    }
+      
+        return axios.post("http://essential-training-app-api.herokuapp.com/api/" + "create/quiz_log/",
+          
+        JSON.stringify(quiz_log_json)
+          , {
+            headers: {
+              'Content-Type': "application/json"
+            } //Let backend know that the data is JSON object.
+          })
+          .then(response => {
+            console.log(response)
+            return (response) //Return data if the function call was successful.
+          })
+          .catch(error => {
+            console.log(error.response) //Log the error on the console if there was an error.
+          });
+      }
+      
 
     quiz_finish_listner() {
         var arr_zero = Array(this.state.questions_correct.length).fill(0);
@@ -115,10 +220,15 @@ class Quiz_taker extends Component {
         }
         else {
             alert("Incorrect-the real solution is " + this.state.solution[this.state.solution_index])
+            console.log()
             this.setState({ solution_input: '' });
             this.render_question();
+            this.update_log_incorrect(this.state.solution_index);
         }
         this.quiz_finish_listner();
+        this.update_log_asked(this.state.solution_index);
+        console.log("the solution index is:")
+        console.log(this.state.solution_index)
     }
 
 
@@ -126,25 +236,25 @@ class Quiz_taker extends Component {
         return (
             this.state.questions_correct.map((item, index) => {
                 return (
-                    <div style={{width:100, height:100,   alignSelf:'center'}}>
+                    <div style={{ width: 100, height: 100, alignSelf: 'center' }}>
                         <CircularProgressbar
-                            percentage={100-((item / this.state.quesionts_correct_circles[index])*100)}
+                            percentage={100 - ((item / this.state.quesionts_correct_circles[index]) * 100)}
                             text={`${item.toString() + "/" + this.state.quesionts_correct_circles[index]}`}
                             styles={{
-                            
+
                                 background: {
-                                  fill: "white"
+                                    fill: "white"
                                 },
                                 text: {
-                                  fill:  "#455CAA" , 
+                                    fill: "#455CAA",
                                 },
                                 path: {
-                                  stroke:  "#455CAA"
+                                    stroke: "#455CAA"
                                 },
                                 trail: { stroke: "silver" }
-                              }}
+                            }}
                         />
-                       
+
                     </div>
                 )
             })
@@ -152,10 +262,10 @@ class Quiz_taker extends Component {
     }
 
     render() {
-        console.log(this.state.solution[this.state.solution_index]);
-        console.log("========================")
+        console.log(this.create_results_json())
+        console.log(this.state.quiz_log);
         console.log(this.state.student_hash);
-        console.log("========================")
+        console.log(this.props.location.quiz_id);
         return (
             <div id="main_container">
                 <div>

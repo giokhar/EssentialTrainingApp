@@ -5,8 +5,8 @@ import AutosizeInput from 'react-input-autosize';
 import Modal from 'react-modal';
 import { DropdownMultiple, Dropdown } from 'reactjs-dropdown-component';
 //import { createStackNavigator, createAppContainer } from 'react-navigation';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { get_courses, get_question_templates } from "./ApiFunctions/httpApi";
+import { BrowserRouter, Route, } from 'react-router-dom';
+import { get_courses, get_question_templates, create_question_template } from "./ApiFunctions/httpApi";
 import Sidebar from './Sidebar';
 import { Select, AsyncSelect, MultiSelect } from 'dropdown-select';
 import './dropdown-select.css';
@@ -55,7 +55,7 @@ class QuizMaker extends Component {
       finalQuiz: [],
       courses: [{ title: 'CS 228' }, { title: 'CS 310' }],
       backendInput: [],
-      valueRanges: [],
+      valueRanges: [['', ''], ['', '']],
       variableType: "",
       y: [],
       templates: '',
@@ -65,6 +65,7 @@ class QuizMaker extends Component {
       alpha_index: 0,
       outputStrings: [<input></input>],
       render_template_popup: false,
+      template_no_correct: [],
       variableTypeList: [
         {
           id: 0,
@@ -96,7 +97,6 @@ class QuizMaker extends Component {
     // this.addTag = this.addTag.bind(this);
     this.appendToArray = this.appendToArray.bind(this);
     this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.handleTemplateDropdown = this.handleTemplateDropdown.bind(this);
   }
@@ -126,30 +126,26 @@ class QuizMaker extends Component {
 
   getTemplates() {
     var templateList = get_question_templates();
-    console.log("=-=-=-=-=-=-=-")
-    console.log(templateList.then(data => { return (data) }));
-    console.log("=-=-=-=-=-=-=-")
+    var template_types = [];
+    var template_ids = []
     return templateList.then(data => {
-      return (data.data.map((item, index) => { return (item.type) })
+      return (data.data.map((item, index) => { return ([item.type, item.id]) })
       )
     })
-
   }
 
   componentWillMount() {
     var courseList = get_courses();
-    console.log(courseList.then(data => { this.setState({ courses: data }) }))
+    courseList.then(data => { this.setState({ courses: data }) })
     var temp;
-    (this.getTemplates().then(data => { this.setState({ templates: data }) }))
+    (this.getTemplates().then(data => { this.setState({ templates: data.map(item => { return item[0] }), template_ids: data.map(item => { return item[1] }) }) }))
+      ;
+
     this.setState({ alpha_array: this.create_alphabet_array() })
   }
 
   openModal() {
     this.setState({ modalIsOpen: true });
-  }
-
-  afterOpenModal() {
-
   }
 
   closeModal() {
@@ -158,10 +154,15 @@ class QuizMaker extends Component {
 
 
   getVariables() {
-    let x = this.state.inputs.filter((element, index) => {
-      return index % 2 != 0;
-    })
-    return x;
+    var temp_arr = this.state.inputs;
+    var new_output_variables = [];
+    for (var i = 0; i < temp_arr.length; i++) {
+      if (this.validate_variables(temp_arr[i])) {
+        new_output_variables.push(temp_arr[i][1])
+      }
+    }
+
+    return (new_output_variables)
   }
 
   getQuizText() {
@@ -231,13 +232,15 @@ class QuizMaker extends Component {
   getRange() {
     var x = this.state.valueRanges;
     var newArr = []
-    var i = 0
-    for (i = 0; i < x.length - 1; i = i + 1) {
-      if (x[i] != "") {
-        newArr.push('[' + x[i] + "," + x[i + 1] + "]")
-        i = i + 1
+
+    for (var i = 0; i < x.length - 1; i = i + 1) {
+      if (x[i][0] != "" && x[i][1] != "") {
+        x[i][0] = parseInt(x[i][0]);
+        x[i][1] = parseInt(x[i][1]);
+        newArr.push(x[i])
       }
     }
+    console.log(newArr)
     return (newArr)
   }
 
@@ -355,22 +358,26 @@ class QuizMaker extends Component {
                   }}
                   onChange={this.onChangeAge.bind(this)}>
                   {item}
-
                 </button>
-                <div><input placeholder={"Min"} id="outputRanges" value={this.state.valueRanges[index]} onChange={(e) => {
-                  var temp = this.state.valueRanges;
-                  temp[index] = e.target.value;
-                  this.setState({ valueRanges: temp, refresh: !this.state.refresh })
 
-                  console.log(this.state.valueRanges);
-                }} /></div>
-                <div><input placeholder={"Max"} id="outputRanges" value={this.state.valueRanges[index + 1]} onChange={(e) => {
-                  var temp = this.state.valueRanges;
-                  temp[index + 1] = e.target.value;
-                  this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+                <div>
+                  <input placeholder={"Min"} id="outputRanges" value={this.state.valueRanges[index][0]} onChange={(e) => {
+                    var temp = this.state.valueRanges;
+                    temp[index][0] = e.target.value;
+                    this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+                    console.log(this.state.valueRanges);
+                  }} />
+                </div>
 
-                  console.log(this.state.valueRanges);
-                }} /></div>
+                <div>
+                  <input placeholder={"Max"} id="outputRanges" value={this.state.valueRanges[index][1]} onChange={(e) => {
+                    var temp = this.state.valueRanges;
+                    temp[index][1] = e.target.value;
+                    this.setState({ valueRanges: temp, refresh: !this.state.refresh })
+                    console.log(this.state.valueRanges);
+                  }} />
+                </div>
+
               </div>
             )
           }
@@ -398,7 +405,7 @@ class QuizMaker extends Component {
           <div id="canvas">
 
             <div style={{ position: "absolute", bottom: 80, right: 200 }}>
-              <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Variable </button>
+              <button id="addVariable" onClick={() => { this.appendToArray("sqrt"); var temp = this.state.valueRanges; temp.push(["", ""]); this.setState({ valueRanges: temp }) }}> Add Variable </button>
               <button id="addVariable" onClick={() => { this.appendToArray("string"); var temp = this.state.valueRanges; temp = temp.concat(''); this.setState({ valueRanges: temp }) }}> Add Textbox </button>
             </div>
 
@@ -451,17 +458,27 @@ class QuizMaker extends Component {
   }
 
 
-
-
   delete_temlate_elements(elem_to_delete) {
     var temp_arr = this.state.selectedTemplateList;
     temp_arr.splice(elem_to_delete, 1);
     this.setState({ alloutput: temp_arr })
   }
-
-
+  
+  handleChange = idx => selected => {
+    console.log(idx, selected);
+    const { label, value } = selected;
+    // rest of your code
+};
 
   render() {
+    console.log(this.state.templates);
+
+    var template_list = this.state.templates;
+    var temp=[];
+    for (var i=0;i<template_list.length;i++){
+      temp.push(template_list[i])
+    }
+
     return (
       <BrowserRouter>
         <Sidebar />
@@ -473,14 +490,30 @@ class QuizMaker extends Component {
                   <div id="templateMakerTitle">Quiz</div>
                   <div  >Select templates</div>
                   <Select inputClassName="test" onChange={this.handleTemplateDropdown} options={this.state.templates} />
-                  {this.state.selectedTemplateList.map((item, index) => { return (
-                    <div>
-                      <div onClick={()=>{this.delete_temlate_elements(index)}}> x </div>
-                    <div id="templateList"> {item} </div>
-                    </div> ) })}
+                  <div>
+                  <div style={{width:450}}> </div>
+                  <div style={{display:"visible", height:50}}> {temp.map((item,index)=>{ console.log(index);return (<option value={index}>{item}</option>)})} </div>
+                  </div>
+                  {this.state.selectedTemplateList.map((item, index) => {
+                    return (
+                      <div>
+                        <div onClick={() => { this.delete_temlate_elements(index) }}> x </div>
+                        <div id="templateList"> {item} </div>
+                        <div>
+                          <input id="outputRanges" placeholder={"Enter Range"} value={this.state.template_no_correct[index]} onChange={(e) => {
+                            var temp = this.state.template_no_correct;
+                            temp[index] = e.target.value;
+                            this.setState({ template_no_correct: temp, refresh: !this.state.refresh })
+                            console.log(this.state.template_no_correct);
+                          }} />
+                        </div>
+
+
+                      </div>)
+                  })}
                 </div>
               </div>
-              <div> {this.state.quizTypes.map((item, index) => { return ( <div id="quizTypes"> {this.state.quizTypes[index]}</div>) })} </div>
+              <div> {this.state.quizTypes.map((item, index) => { return (<div id="quizTypes"> {this.state.quizTypes[index]}</div>) })} </div>
             </div>
             <div id="rightContainer">
               <div id="courseSelector">
@@ -491,7 +524,12 @@ class QuizMaker extends Component {
                 </div>
               </div>
               <div onClick={this.openModal.bind(this)} id="createTemplateButton">Create Template</div>
-              <div id="publishButton">Publish Quiz</div>
+              <div onClick={() => {
+                console.log(
+
+
+                )
+              }} id="publishButton">Publish Quiz</div>
             </div>
           </div>
 
@@ -526,49 +564,10 @@ class QuizMaker extends Component {
                   </div>
 
                   <div onClick={() => {
-                    this.setState({
-                      quizTypes: this.state.quizTypes.concat([this.state.quizTitle]), quizTitle: ''
-                    });
-                    alert("Your quiz template has been added to the list");
+
+                    create_question_template(this.state.quizTitle, this.getVariables(), this.getOutputTemplate()[0], "regular", this.getQuizText(), this.getOutputTemplate()[1], this.getRange(), "real");
 
 
-                    // { "type":"Vector Addition", "template_json":"{\"inputs\":[\"a\",\"b\"], \"outputs\":[\"a+b\", \"a-b\"], \"input_type\":\"regular\",\"text\":\"I have $ apples, somebody gave me $ apples. How many apples do I have?\",\"output_template\":\"A = <$, $>\",\"input_values\":[[1,100],[100,200]]}" }
-
-                    console.log({
-                      "type": this.state.quizTitle,
-                      "template_json": "{" +
-                        "inputs\":" + "[" + this.getVariables() + "]" + "," +
-                        "outputs:" + "[" + this.getOutputTemplate()[0] + "]" + "," +
-                        "input_type:" + this.state.variableType + "," +
-                        "text:" + this.getQuizText() + "," +
-                        "output_template:A=" + this.getOutputTemplate()[1] + "," +
-                        "input_values:" + "[" + this.getRange() + "]" +
-                        "}"
-                    })
-
-                    console.log("Get Variable Type");
-                    console.log(this.state.variableType)
-
-
-                    console.log("Quiz Title============");
-                    console.log(this.state.quizTitle)
-
-                    //Getting Text
-                    console.log("Quiz Text ===============")
-                    console.log(this.getQuizText());
-
-                    //Getting Inputs
-                    console.log("Inputs ===============")
-                    console.log(this.getVariables());
-
-                    //Getting Outputs
-                    console.log("Outputs ===============")
-                    console.log(this.state.outputs);
-
-                    console.log(this.getOutputTemplate()[0])
-                    console.log(this.getOutputTemplate()[1])
-
-                    //Getting 
                   }}> print output  </div>
 
                 </div>

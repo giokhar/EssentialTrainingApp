@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import { getList, addToList, updateItem } from "./ApiFunctions/httpApi";
+import { getList, updateItem } from "./ApiFunctions/httpApi";
 import Sidebar from "./Sidebar";
 import "./Styles/HashGenerator.css";
 
@@ -15,7 +15,7 @@ class HashGenerator extends Component {
 
   getHashes() {
     //console.log(getList());
-    console.log(addToList());
+    console.log();
   }
 
   render() {

@@ -16,9 +16,7 @@ export const getList = () => {
       } //Let backend know that the data is JSON object.
     })
     .then(response => {
-      console.log("=========")
-      console.log(response.data)
-      return (response.data) //Return data if the function call was successful.
+         return (response.data) //Return data if the function call was successful.
     }).catch(error => {
       console.log(error.response) //Log the error on the console if there was an error.
     });
@@ -54,6 +52,20 @@ export const get_students_by_id = (course_id) => {
 };
 
 
+export const get_quizzes_by_course = (course_id) => {
+  return axios
+    .get(backendUrl + "quizzes/course/" + course_id + "/?format=json", {
+      headers: {
+        "Content-Type": "application/json"
+      } //Let backend know that the data is JSON object.
+    })
+    .then(response => {
+      return (response) //Return data if the function call was successful.
+    }).catch(error => {
+    });
+};
+
+
 export const get_question_templates = () => {
   return axios
     .get(backendUrl + "question/templates/?format=json", {
@@ -69,23 +81,6 @@ export const get_question_templates = () => {
 
 
 
-//Calls the end-point to send the data to the backend.
-export const addToList = () => {
-  //Take in name,text,image and date as parameter and send it to the backend.
-  return axios.post(backendUrl + "/create/quiz/",
-
-    { "title": "New Quiz", "question_json": "{'1':5,'2':9}", "is_published": 1, "course_id": 2 }, {
-      headers: {
-        'Content-Type': "application/json"
-      } //Let backend know that the data is JSON object.
-    })
-    .then(response => {
-      return (response) //Return data if the function call was successful.
-    })
-    .catch(error => {
-      console.log(error.response) //Log the error on the console if there was an error.
-    });
-};
 
 export const create_question_template = (type, inputs, outputs, input_type, text, output_template, variable_ranges, variable_type) => {
 
@@ -123,19 +118,29 @@ export const create_question_template = (type, inputs, outputs, input_type, text
 }
 
 
-export const create_quiz = () => {
+export const create_quiz = (title,question_json,course_id) => {
   //Take in name,text,image and date as parameter and send it to the backend.
-  return axios.post(backendUrl + "/create/quiz/",
+  var temp_obj =  { 
+    "title": title,
+   "question_json": question_json, 
+   "is_published": 1, 
+   "course_id": 1 
+  }
 
-    { "title": "New Quiz", "question_json": "{'1':5,'2':9}", "is_published": 1, "course_id": 2 }, {
+  console.log(JSON.stringify(temp_obj))
+  return axios.post(backendUrl + "create/quiz/",
+
+   JSON.stringify(temp_obj), {
       headers: {
         'Content-Type': "application/json"
       } //Let backend know that the data is JSON object.
     })
     .then(response => {
-      return (response) //Return data if the function call was successful.
+      return (response.data) //Return data if the function call was successful.
     })
     .catch(error => {
+      return (error.data)
+      alert(error.response);
       console.log(error.response) //Log the error on the console if there was an error.
     });
 };

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { getList, addToList, updateItem, get_courses, get_students_by_id } from "./ApiFunctions/httpApi";
+import { getList, addToList, updateItem, get_courses, get_students_by_id,get_quizzes_by_course } from "./ApiFunctions/httpApi";
 import "./Styles/courses.css";
 import Sidebar from "./Sidebar";
 
 
-class Quizzes extends Component {
+class Statistics extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,9 +16,15 @@ class Quizzes extends Component {
         }
     }
 
-    get_students(course_id) {
-        get_students_by_id(course_id).then(response => { this.setState({ courses: response.data, dataShown: 'student_list' }) });
+    
+    authenticate(course_id) {
+        let { history } = this.props;
+        history.push({
+            pathname: '/quiz_by_course',
+            course_id: course_id,
+        });
     }
+
 
     componentDidMount() {
         var courseList = get_courses();
@@ -31,25 +37,16 @@ class Quizzes extends Component {
             <BrowserRouter>
                 <Sidebar />
                 <div>
+                    fwrfwf
                     <div id="CoursesContainer">
-                        <div id="title_font">COURSES</div>
+                        <div id="title_font">Statistics</div>
                         <div id="CoursesContainerInternal">
                             {this.state.courses.map((item, index) => {
-                                if (this.state.dataShown == "course_list") {
                                     return (
-                                        <div onClick={() => { this.get_students(item.id) }} id="CourseButtons">
+                                        <div onClick={() => { this.authenticate(item.id) }} id="CourseButtons">
                                             {item.title}
                                         </div>
                                     )
-                                }
-
-                                else {
-                                    return (
-                                        <div onClick={() => { this.get_students(item.id) }} id="CourseButtons">
-                                            {item}
-                                        </div>
-                                    )
-                                }
                             })}
                         </div>
                     </div>
@@ -59,4 +56,4 @@ class Quizzes extends Component {
     }
 }
 
-export default Quizzes;
+export default Statistics;

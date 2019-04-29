@@ -1,25 +1,32 @@
 #CourseButtons {
     background-color: white;
-    padding:20px;
-    padding-right:800px;
    margin:5px;
    text-align: left;
-
+    width:800px;
+    height: 50px;
+    padding:10px;
+    display: flex;
+   align-items:center;
+    border-radius: 10px;
     border-width: 0; 
+    margin-left:-200px;
     font-family: 'circular';
     align-self: center;
-     color: #8A64AB;
+     color: rgb(56, 40, 204);
     font-size: 20px; 
-    box-shadow: 0px 46px 223px -11px rgba(0,0,0,0.18);
+    
 }
 
 #CourseButtons:hover{
     padding:30px;
-    padding-right:900px;
+    
     transition: 0.3s;
 }
 
 #CoursesContainer{
+    height:100vh;
+    width:100vw;
+    background-color: #EDEEF2;
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
@@ -28,13 +35,21 @@
 
 }
 
+
+#description{
+    width: 800px;
+    margin-left:300px;
+    font-size: 15px;
+    margin-bottom:20px;
+}
  #title_font{
+   
     font-family: 'circular';
-    color: #8A64AB;
+    color: rgb(56, 40, 204);
    font-size: 45px;
+   margin-left:300px;
    margin-top:80px;
   
-   margin-bottom:20px;
    
  }
 

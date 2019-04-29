@@ -35,6 +35,10 @@ class Quiz_taker extends Component {
     }
 
     async componentWillMount() {
+        console.log("the quiz id is=========")
+        console.log(this.props.location.quiz_id)
+        console.log("the quiz id is============")
+
         await axios.get("http://essential-training-app-api.herokuapp.com/api/quizzes/" + this.props.location.quiz_id + "/?format=json")
             .then(response => {
                 this.setState({ quiz_details: (response.data) }, () => { this.setState({ refresh: !this.state.refresh }); });
@@ -119,7 +123,7 @@ class Quiz_taker extends Component {
 
     create_inner_json(original_json) {
         var acc = ""
-        var temp_json = JSON.stringify(original_json.template_json);
+        var temp_json = JSON.stringify(original_json);
         for (var i = 0; i < temp_json.length; i++) {
             if (temp_json[i] == "\"") {
                 acc = acc + "\\\""
@@ -136,7 +140,8 @@ class Quiz_taker extends Component {
         for (var i =0;i<this.state.quiz_log.length;i++){
             results_json[this.state.quiz_log[i][0]] = {"no_of_questions_asked":this.state.quiz_log[i][1], "no_incorrect":this.state.quiz_log[i][2], "done":this.state.quiz_log[i][3]}
         }
-        return (this.create_inner_json(results_json))
+        console.log(results_json)
+        return (JSON.stringify(results_json))
     }
 
     total_questions(){
@@ -155,20 +160,21 @@ class Quiz_taker extends Component {
         return (total_incorrect_questions)
     }
     
+
     create_quiz_log = () => {
 
         var quiz_log_json = {    
         "student_hash": this.state.student_hash,
         "quiz_id": this.props.location.quiz_id,
         "results_json": this.create_results_json(),
-        "num_questions": this.create_results_json(),
+        "num_questions":this.total_questions(),
         "num_incorrect": this.total_incorrect_questions(),
         "completed": true,
         "passed": true,
         "start_time": "2019-04-14T22:16:55.906695Z",
         "end_time": "2019-04-14T22:16:55.906695Z"
     }
-      
+      console.log( JSON.stringify(quiz_log_json))
         return axios.post("http://essential-training-app-api.herokuapp.com/api/" + "create/quiz_log/",
           
         JSON.stringify(quiz_log_json)
@@ -191,6 +197,7 @@ class Quiz_taker extends Component {
         var arr_zero = Array(this.state.questions_correct.length).fill(0);
         if (JSON.stringify(this.state.questions_correct) === JSON.stringify(arr_zero)) {
             this.setState({ modalIsOpen: true })
+            this.create_quiz_log()
         }
     }
 
@@ -254,7 +261,6 @@ class Quiz_taker extends Component {
                                 trail: { stroke: "silver" }
                             }}
                         />
-
                     </div>
                 )
             })
@@ -262,7 +268,7 @@ class Quiz_taker extends Component {
     }
 
     render() {
-        console.log(this.create_results_json())
+      //  console.log(this.create_results_json())
         console.log(this.state.quiz_log);
         console.log(this.state.student_hash);
         console.log(this.props.location.quiz_id);

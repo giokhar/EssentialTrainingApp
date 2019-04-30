@@ -1,7 +1,8 @@
 import random
 import json
-import custom_numbers
-from vector_class import Vector
+from backend.helpers import question_maker as qm
+from backend.helpers import custom_numbers
+#from backend.helpers.vector_class import Vector
 from math import sin, cos
 
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required

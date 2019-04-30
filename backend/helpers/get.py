@@ -158,7 +158,7 @@ def completed_quizzes(student_hash):
 def multipleChoices(answer):
 	"""the right answer
 	returns four multiple choice answers"""
-	possible_answers = ( "N", "NW", "W", "SW", "S", "SE", "E", "NE", "into the page", "out of page)"
+	possible_answers = ( "N", "NW", "W", "SW", "S", "SE", "E", "NE", "into the page", "out of page")
 	multiple_choice = random.sample(possible_answers-{answer},3)
 	multiple_choice.append(answer)
 	return multiple_choice

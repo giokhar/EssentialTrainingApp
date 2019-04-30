@@ -1,3 +1,4 @@
+from backend.helpers import question_maker_custom as qmc
 from random import randint, choice, uniform
 import math
 import json
@@ -29,18 +30,26 @@ def num(s):
 def populate_text(input_constants, question_text):
 	result_string = ""
 	input_counter = 0
-
 	for next_word in question_text:
 		#it means that a variable is present
 		if next_word == '$':
-			result_string += str(input_constants[input_counter])+" " 
+			result_string += str(input_constants[input_counter])+" "
 			input_counter += 1
 		else:
 			result_string += next_word + " "
-
 	return result_string.strip()
 
+
 def get_new_question_instance(question_template):
+	question_template = json.loads(question_template)
+	input_type = question_template["input_type"]
+	if input_type == "regular":
+		return get_new_question_instance_uncustom(question_template)
+	else:
+		return qmc.get_new_question_instance_custom(question_template)
+
+
+def get_new_question_instance_uncustom(question_template):
 	#question_template = get_question_template(question_id)
 	# question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,3],[5,7]], "variable_type": "bla"}
 
@@ -56,12 +65,12 @@ def get_new_question_instance(question_template):
 	variable_ranges = question_template["variable_ranges"] #unused yet
 	variable_type = question_template["variable_type"] #unused yet
 
-	#produce random variables for 
+	#produce random variables for
 	input_output_constants = produce_new_question_variables(input_variables, output_command_array, variable_ranges, variable_type)
 
 	input_constants = input_output_constants[0]
 	output_constants = input_output_constants[1]
-	
+
 	#populates the text with random variables extracted above
 	populated_question_text = populate_text(input_constants, question_text)
 
@@ -85,7 +94,7 @@ def produce_new_question_variables(input_array, output_command_array, variable_r
 		next_num = str(input_constants[i])
 		next_command = input_array[i] + "=" + next_num
 		input_array[i] = num(next_num)
-		
+
 		exec(next_command)#example: exec("a=rand.randint()")
 
 	#traverses through the output_commmand_array and executes those statements
@@ -116,7 +125,6 @@ def get_nats(how_many, variable_ranges):
 		lower_bound = next_range[0]
 		if lower_bound < 0 :
 			raise ValueError("Natural numbers may not be negative. Please check the given range.")
-	
 	return [randint(*choice(variable_ranges)) for i in range(how_many)]
 
 
@@ -143,3 +151,35 @@ def get_numbers(how_many, variable_ranges, variable_type = "integers"):
 	return list_of_numbers
 
 # print(get_new_question_instance(5))
+
+# * =============== *
+# * Multiple Choice Questions  *
+# * =============== *
+
+
+def cross_product_mult_choice(answer):
+	"""for cross product questions, takes the right answer
+	returns four multiple choice answers"""
+	possible_answers = ( "N", "NW", "W", "SW", "S", "SE", "E", "NE",
+										"into the page", "out of page")
+	multiple_choice = random.sample(possible_answers-{answer},3)
+	multiple_choice.append(answer)
+	return multiple_choice
+
+def simple_components_mult_choice(answer):
+	"""for sample component questions, takes the right answer
+	returns four multiple choice answers"""
+	possible_answers = ("A-sin(θ)", "A+sin(θ)", "(-A)-sin(θ)", "(-A)+sin(θ)",
+	"A-sin(θ)", "A+sin(θ)", "(-A)-sin(θ)", "(-A)+sin(θ)","A-cos(θ)", "A+cos(θ)",
+	"cos(θ)", ("-cos(θ)"),"tan(θ)","(-A)-cos(θ)", "(-A)+cos(θ)","A-cos(θ)",
+	"Acos(θ)", "(-A)-cos(θ)","(-A)+cos(θ)", "A-tan(θ)","A+tan(θ)","(-A)-tan(θ)",
+	"(-A)+tan(θ)", "A-tan(θ)", "A+tan(θ)","(-A)-tan(θ)","(-A)+tan(θ)","-sin(θ)",
+	"+sin(θ)", "-tan(θ)")
+
+	multiple_choice = random.sample(possible_answers-{answer},3)
+	multiple_choice.append(answer)
+	return multiple_choice
+
+def get_multiple_choice(q_type):
+	"""takes question type, and returns multiple choices for that question"""
+	return

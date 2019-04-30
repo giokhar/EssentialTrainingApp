@@ -1,7 +1,8 @@
 import random
 import json
-import custom_numbers
-from vector_class import Vector
+from backend.helpers import custom_numbers
+from backend.helpers.vector_class import Vector
+from math import sin, cos
 
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required
 # In this scheme each template is associated with a single function
@@ -9,9 +10,18 @@ dot_prod_direction_template = json.dumps({"inputs":"custom", "outputs":"single v
                      "text":"Let A and B be vectors with angles $ and $ degrees respectively. Is A.B positive,negative or zero?",
                      "output_template":"$","variable_ranges":"custom", "variable_type": "custom"})
 
+
 cross_product_cardinal_directions_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"cross_product_cardinal_directions",
                      "text":"Let A and B be vectors pointing in $ and $ directions respectively. In which direction does their cross product AxB point?",
                      "output_template":"$","variable_ranges":"custom", "variable_type": "custom"})
+
+cross_product_magnitude_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"cross_product_magnitude_direction",
+                     "text":"Let A and B be vectors of magnitude $ and magnitude $ respectively, with a $ angle between them. What is the cross product of these two vectors?",
+                     "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
+
+dot_product_magnitude_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"dot_product_magnitude_direction",
+                     "text":"Let A and B be vectors of magnitude $ and magnitude $ respectively, with a $ angle between them. What is the dot product of these two vectors?",
+                     "output_template":"A = $","variable_ranges":"custom", "variable_type": "custom"})
 
 vector_addition_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_addition_3d",
                      "text":"Let A = $ and B = $. Find the sum A+B ",
@@ -20,6 +30,7 @@ vector_addition_3d_template = json.dumps({"inputs":"custom", "outputs":"single v
 vector_subtraction_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_subtraction_3d",
                      "text":"Let A = $ and B = $. Find the difference A-B ",
                      "output_template":"A-B = $","variable_ranges":"custom", "variable_type": "custom"})
+
 
 vector_cross_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_cross_3d",
                      "text":"Let A = $ and B = $. Find the cross product AxB ",
@@ -34,8 +45,7 @@ vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"s
                      "output_template":"|AxB| = $","variable_ranges":"custom", "variable_type": "custom"})
 
 
-def get_new_question_instance_custom(question_template_json):
-    question_template_dict = load_json(question_template_json)
+def get_new_question_instance_custom(question_template_dict):
     func_name = question_template_dict["input_type"]             #identifying the function's name
     question_json = globals()[func_name](question_template_dict) #executing the function
     return question_json
@@ -78,7 +88,7 @@ def decorator_custom_varlist_soln(custom_func):
 
 @decorator_custom_varlist_soln
 def dot_product_direction():
-	angles = [0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180]
+	angles = ["0","10","20","30","40","50","60","70","80","90","100","110","120","130","140","150","160","170","180"]
 	multiple_choice = tuple(sorted(random.sample(angles,2)))
 	vect1 = multiple_choice[0]
 	vect2 = multiple_choice[1]
@@ -125,6 +135,29 @@ def vector_cross_magnitude_3d():
     solution = round(abs(cross_vec),2)
     return (constants,solution)
 
+@decorator_custom_varlist_soln
+def cross_product_magnitude_direction():
+    angles = ['0','10','20','30','40','50','60','70','80','90','100','110','120'
+                                           ,'130','140','150','160','170','180']
+    vect1_magnitude, vect2_magnitude = custom_numbers.get_numbers(2,[[0,50],[0,50]])
+    angle = random.choice(angles)
+    answer = "A*B*cos(%s)" % (vect1_magnitude,vect2_magnitude,angle,angle)
+    answer=eval(answer_expr)
+    answer=round(answer,2)
+    return ([vect1_magnitude, vect2_magnitude, angle], answer)
+
+@decorator_custom_varlist_soln
+def dot_product_magnitude_direction():
+    angles = ['0','10','20','30','40','50','60','70','80','90','100','110','120'
+                                           ,'130','140','150','160','170','180']
+    [vect1_magnitude, vect2_magnitude] = custom_numbers.get_numbers(2,[[0,50],[0,50]])
+
+    angle = random.choice(angles)
+    answer_expr = "%s*%s*sin(%s)" % (vect1_magnitude,vect2_magnitude,angle)
+    answer=eval(answer_expr)
+    answer=round(answer,2)
+    return ([vect1_magnitude, vect2_magnitude, angle], answer)
+
 #Takes a function that takes two random vectors and returns a vector object and wraps it to create a function that returns (input_var_list,solution)
 def decorator_vector_function_problem(vector_function):
     def padded_function():
@@ -137,6 +170,24 @@ def decorator_vector_function_problem(vector_function):
         solution = solution_vec.__repr__()
         return (constants,solution)
     return padded_function
+
+
+#creating matrix of tuples might be work
+@decorator_custom_varlist_soln
+def dot_product_direction():
+    directions= ["positive","negative","zero"]
+    answer = random.choice(directions)
+    angles = [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180]
+    vect1,vect2 = random.sample(angles, 2)
+    if answer == "zero":
+        vect2 = vect1
+    elif answer == "positive":
+        while vect2 - vect1 >= 90:
+            vect1,vect2 = random.sample(angles, 2)
+    elif answer == "negative":
+        while vect2 - vect1 <= 90:
+            vect1,vect2 = random.sample(angles, 2)
+    return (vect1, vect2), answer
 
 @decorator_custom_varlist_soln
 @decorator_vector_function_problem
@@ -161,11 +212,3 @@ def vector_dot_3d(v1,v2):
 def vector_cross_3d(v1,v2):
     cross_vec = v1.cross(v2)
     return cross_vec
-
-if __name__ == '__main__':
-    print(get_new_question_instance_custom(vector_addition_3d_template))
-    print(get_new_question_instance_custom(vector_subtraction_3d_template))
-    print(get_new_question_instance_custom(vector_dot_3d_template))
-    print(get_new_question_instance_custom(vector_cross_magnitude_3d_template))
-    print(get_new_question_instance_custom(dot_prod_direction_template))
-    print(get_new_question_instance_custom(cross_product_cardinal_directions_template))

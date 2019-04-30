@@ -1,3 +1,4 @@
+from question_maker_custom import *
 from random import randint, choice, uniform
 import math
 import json
@@ -41,6 +42,14 @@ def populate_text(input_constants, question_text):
 	return result_string.strip()
 
 def get_new_question_instance(question_template):
+	input_type = question_template["input_type"]
+	if input_type == "custom":
+		return get_new_question_instance_custom(question_template)
+	else:
+		return get_new_question_instance_uncustom(question_template):
+
+
+def get_new_question_instance_uncustom(question_template):
 	#question_template = get_question_template(question_id)
 	# question_template = {"inputs":["a","b"], "outputs":["a+b", "a-b"],"input_type":"regular","text":"I have $ apples, somebody gave me $ apples. How many apples do I have?","output_template":"A = <$, $>","variable_ranges":[[1,3],[5,7]], "variable_type": "bla"}
 

@@ -1,6 +1,6 @@
-# import math
-# import numpy as np
-# import matplotlib.pyplot as plt
+import math
+import numpy as np
+#import matplotlib.pyplot as plt
 
 class Vector():
     def __init__(self,components=[]):
@@ -73,17 +73,17 @@ class Vector():
                 vec = Vector(comps)
                 return vec
 
-    def plot(self):
-        if self.dimension == 2:
-            comps = self.comps
-            plt.figure()
-            ax = plt.gca()
-            plot = plt.arrow(0,0,comps[0],comps[1],head_width = 0.2,fc='k',ec='k')
-            ax.set_xlim([-10, 10])
-            ax.set_ylim([-10, 10])
-            return ax
-        else :
-            raise ValueError('plotting is currently only supported for 2D vectors')
+    # def plot(self):
+    #     if self.dimension == 2:
+    #         comps = self.comps
+    #         plt.figure()
+    #         ax = plt.gca()
+    #         plot = plt.arrow(0,0,comps[0],comps[1],head_width = 0.2,fc='k',ec='k')
+    #         ax.set_xlim([-10, 10])
+    #         ax.set_ylim([-10, 10])
+    #         return ax
+    #     else :
+    #         raise ValueError('plotting is currently only supported for 2D vectors')
 
 if __name__ == '__main__':
     v = Vector([3,2])

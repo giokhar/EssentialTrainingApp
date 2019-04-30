@@ -1,14 +1,18 @@
 from backend.models import *
 from backend.serializers import *
 from backend.helpers import question_maker as qm
+from backend.helpers.question_maker_custom import *
+
+
 import json, time
 import random
+from backend.helpers import question_maker
 # * ================ *
 # * GET REQUESTS API *
 # * ================ *
 
 def test():
-	return students_took_quiz(7)
+	return question_maker.get_new_question_instance(vector_subtraction_3d_template)
 
 def all_courses():
 	"""Return serialized all Course objects"""

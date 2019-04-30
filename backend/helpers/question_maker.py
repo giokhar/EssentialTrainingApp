@@ -42,11 +42,13 @@ def populate_text(input_constants, question_text):
 
 
 def get_new_question_instance(question_template):
+	question_template = json.loads(question_template)
 	input_type = question_template["input_type"]
-	if input_type == "custom":
-		return qmc.get_new_question_instance_custom(question_template)
-	else:
+	print(input_type)
+	if input_type == "regular":
 		return get_new_question_instance_uncustom(question_template)
+	else:
+		return qmc.get_new_question_instance_custom(question_template)
 
 
 def get_new_question_instance_uncustom(question_template):
@@ -125,7 +127,6 @@ def get_nats(how_many, variable_ranges):
 		lower_bound = next_range[0]
 		if lower_bound < 0 :
 			raise ValueError("Natural numbers may not be negative. Please check the given range.")
-
 	return [randint(*choice(variable_ranges)) for i in range(how_many)]
 
 

@@ -3,6 +3,12 @@ from rest_framework.response import Response
 from backend.helpers import get, post
 
 @api_view(["GET"])
+def test_view(request):
+	"""THIS FUNCTION IS USED ONLY FOR DEVELOPMENT"""
+	return Response(get.test())
+
+
+@api_view(["GET"])
 def quizzes_by_course_view(request, course_id):
 	"""Return JSON response of all quizzes by course_id"""
 	return Response(get.quizzes_by_course(course_id))

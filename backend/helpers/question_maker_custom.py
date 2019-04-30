@@ -1,8 +1,7 @@
 import random
 import json
-from backend.helpers import question_maker as qm
 from backend.helpers import custom_numbers
-#from backend.helpers.vector_class import Vector
+from backend.helpers.vector_class import Vector
 from math import sin, cos
 
 # NOTE: The input_type is the name of the function being called, we could acheive this with a dictionary if required
@@ -10,6 +9,7 @@ from math import sin, cos
 dot_prod_direction_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"dot_product_direction",
                      "text":"Let A and B be vectors with angles $ and $ degrees respectively. Is A.B positive,negative or zero?",
                      "output_template":"$","variable_ranges":"custom", "variable_type": "custom"})
+
 
 cross_product_cardinal_directions_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"cross_product_cardinal_directions",
                      "text":"Let A and B be vectors pointing in $ and $ directions respectively. In which direction does their cross product AxB point?",
@@ -31,6 +31,7 @@ vector_subtraction_3d_template = json.dumps({"inputs":"custom", "outputs":"singl
                      "text":"Let A = $ and B = $. Find the difference A-B ",
                      "output_template":"A-B = $","variable_ranges":"custom", "variable_type": "custom"})
 
+
 vector_cross_3d_template = json.dumps({"inputs":"custom", "outputs":"single value","input_type":"vector_cross_3d",
                      "text":"Let A = $ and B = $. Find the cross product AxB ",
                      "output_template":"AxB = $","variable_ranges":"custom", "variable_type": "custom"})
@@ -44,8 +45,7 @@ vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"s
                      "output_template":"|AxB| = $","variable_ranges":"custom", "variable_type": "custom"})
 
 
-def get_new_question_instance_custom(question_template_json):
-    question_template_dict = load_json(question_template_json)
+def get_new_question_instance_custom(question_template_dict):
     func_name = question_template_dict["input_type"]             #identifying the function's name
     question_json = globals()[func_name](question_template_dict) #executing the function
     return question_json
@@ -150,7 +150,8 @@ def cross_product_magnitude_direction():
 def dot_product_magnitude_direction():
     angles = ['0','10','20','30','40','50','60','70','80','90','100','110','120'
                                            ,'130','140','150','160','170','180']
-    vect1_magnitude, vect2_magnitude = custom_numbers.get_numbers(2,[[0,50],[0,50]])
+    [vect1_magnitude, vect2_magnitude] = custom_numbers.get_numbers(2,[[0,50],[0,50]])
+
     angle = random.choice(angles)
     answer_expr = "%s*%s*sin(%s)" % (vect1_magnitude,vect2_magnitude,angle)
     answer=eval(answer_expr)

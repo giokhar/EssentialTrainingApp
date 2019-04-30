@@ -30,7 +30,6 @@ def num(s):
 def populate_text(input_constants, question_text):
 	result_string = ""
 	input_counter = 0
-
 	for next_word in question_text:
 		#it means that a variable is present
 		if next_word == '$':
@@ -44,7 +43,6 @@ def populate_text(input_constants, question_text):
 def get_new_question_instance(question_template):
 	question_template = json.loads(question_template)
 	input_type = question_template["input_type"]
-	print(input_type)
 	if input_type == "regular":
 		return get_new_question_instance_uncustom(question_template)
 	else:

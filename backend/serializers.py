@@ -27,4 +27,4 @@ class QuizLogSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = QuizLog
 		#fields = "__all__"
-		exclude = ('id')
+		exclude = ('id',)

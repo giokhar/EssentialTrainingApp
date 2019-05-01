@@ -48,7 +48,6 @@ vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"s
 def get_new_question_instance_custom(question_template_dict):
     func_name = question_template_dict["input_type"]             #identifying the function's name
     question_json = globals()[func_name](question_template_dict) #executing the function
-    print(type(question_json))
     return question_json
 
 #############################HELPERS#####################################
@@ -127,8 +126,8 @@ def cross_product_cardinal_directions():
 
 @decorator_custom_varlist_soln
 def vector_cross_magnitude_3d():
-    v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-    v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+    v1_comps = custom_numbers.get_numbers(3,[[1,10],[1,10],[1,10]],variable_type='natural')
+    v2_comps = custom_numbers.get_numbers(3,[[1,10],[1,10],[1,10]],variable_type='natural')
     v1 = Vector(v1_comps)
     v2 = Vector(v2_comps)
     cross_vec = v1.cross(v2)
@@ -162,8 +161,8 @@ def dot_product_magnitude_direction():
 #Takes a function that takes two random vectors and returns a vector object and wraps it to create a function that returns (input_var_list,solution)
 def decorator_vector_function_problem(vector_function):
     def padded_function():
-        v1_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
-        v2_comps = custom_numbers.get_numbers(3,[[0,10],[0,10],[0,10]],variable_type='natural')
+        v1_comps = custom_numbers.get_numbers(3,[[1,10],[1,10],[1,10]],variable_type='natural')
+        v2_comps = custom_numbers.get_numbers(3,[[1,10],[1,10],[1,10]],variable_type='natural')
         v1 = Vector(v1_comps)
         v2 = Vector(v2_comps)
         solution_vec = vector_function(v1,v2)

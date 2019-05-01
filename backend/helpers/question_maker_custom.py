@@ -80,7 +80,7 @@ def decorator_custom_varlist_soln(custom_func):
         output_template = question_template["output_template"]
         (input_const_list,solution) = custom_func()
         updated_text = custom_populate_text(input_const_list,question_text)
-        question_instance_dict = {'text':updated_text,'solution':solution,'output_template':output_template}
+        question_instance_dict = {'text':updated_text,'solution':[solution],'output_template':output_template}
         question_json = dumps_json(question_instance_dict)
         return question_json
     return create_question_instance

@@ -87,20 +87,6 @@ def decorator_custom_varlist_soln(custom_func):
 
 
 @decorator_custom_varlist_soln
-def dot_product_direction():
-	angles = ["0","10","20","30","40","50","60","70","80","90","100","110","120","130","140","150","160","170","180"]
-	multiple_choice = tuple(sorted(random.sample(angles,2)))
-	vect1 = multiple_choice[0]
-	vect2 = multiple_choice[1]
-	if vect2 - vect1 == 90:
-		answer = "zero"
-	elif vect2 - vect1 > 90:
-		answer = "negative"
-	elif vect2 - vect1 < 90:
-		answer = "positive"
-	return ([vect1, vect2], answer)
-
-@decorator_custom_varlist_soln
 def cross_product_cardinal_directions():
 	"""Randomly picks two vector directions and gives their cross product direction"""
 	possible_variables = ( "N", "NW", "W", "SW", "S", "SE", "E", "NE","into the page", "out of page")

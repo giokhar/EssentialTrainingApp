@@ -48,6 +48,7 @@ vector_cross_magnitude_3d_template = json.dumps({"inputs":"custom", "outputs":"s
 def get_new_question_instance_custom(question_template_dict):
     func_name = question_template_dict["input_type"]             #identifying the function's name
     question_json = globals()[func_name](question_template_dict) #executing the function
+    print(type(question_json))
     return question_json
 
 #############################HELPERS#####################################

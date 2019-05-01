@@ -41,7 +41,6 @@ def populate_text(input_constants, question_text):
 
 
 def get_new_question_instance(question_template):
-	question_template = json.loads(question_template)
 	input_type = question_template["input_type"]
 	if input_type == "regular":
 		return get_new_question_instance_uncustom(question_template)

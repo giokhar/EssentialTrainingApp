@@ -114,7 +114,7 @@ def decorator_vector_function_problem(vector_function):
         v2 = Vector(v2_comps)
         solution_vec = vector_function(v1,v2)
         constants = [v1.__repr__(),v2.__repr__()]
-        solution = str(list(solution_vec.comps))
+        solution = list(solution_vec.comps)
         return (constants,solution)
     return padded_function
 
